@@ -43,22 +43,26 @@
                 </div>
                 <ul tabindex="0"
                     class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
-                    <li><a>Item 1</a></li>
-                    <li>
-                        <a>Parent</a>
-                        <ul class="p-2">
-                            <li><a>Submenu 1</a></li>
-                            <li><a>Submenu 2</a></li>
-                        </ul>
-                    </li>
-                    <li><a>Item 3</a></li>
+
+                    {{-- copy --}}
+                    <li><a href="{{route("siswa.index")}}">Home</a></li>
+                    {{-- <li>
+                        <details>
+                            <summary>Parent</summary>
+                            <ul class="p-2">
+                                <li><a>Submenu 1</a></li>
+                                <li><a>Submenu 2</a></li>
+                            </ul>
+                        </details>
+                    </li> --}}
+                    <li><a href="https://github.com/Aspiand">Github</a></li>
                 </ul>
             </div>
             <a class="btn btn-ghost text-xl" href="https://github.com/Aspiand">Aspian</a>
         </div>
         <div class="navbar-center hidden lg:flex">
             <ul class="menu menu-horizontal px-1">
-                <li><a href="/siswa">Home</a></li>
+                <li><a href="{{route("siswa.index")}}">Home</a></li>
                 {{-- <li>
                     <details>
                         <summary>Parent</summary>
@@ -73,7 +77,7 @@
         </div>
 
         <div class="navbar-end pe-5">
-            <a class="btn btn-outline" href="/siswa/create">Tambah</a>
+            <a class="btn btn-outline" href="{{route("siswa.create")}}">Tambah</a>
         </div>
     </div>
 

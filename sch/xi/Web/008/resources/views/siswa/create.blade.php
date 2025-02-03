@@ -6,7 +6,7 @@
             Tambah Data
         </h1>
 
-        <form action="/siswa" method="POST">
+        <form action="{{route("siswa.store")}}" method="POST">
             @csrf
 
             <input type="text" placeholder="Nama" name="nama" class="input input-bordered input-primary w-full mb-2" />
@@ -21,7 +21,6 @@
                                         @endphp
 
                                         <option value="{{$value}}">{{$value}}</option>
-
                                 @endfor
                         @endforeach
                 @endforeach

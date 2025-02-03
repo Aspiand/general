@@ -6,7 +6,7 @@
             Ubah Data
         </h1>
 
-        <form action="/siswa/{{$siswa->id}}" method="POST">
+        <form action="{{route("siswa.update", $siswa->id)}}" method="POST">
             @csrf
             @method("PUT")
 
