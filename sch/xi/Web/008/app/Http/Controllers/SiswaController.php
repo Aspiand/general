@@ -22,7 +22,11 @@ class SiswaController extends Controller
      */
     public function create()
     {
-        return view("siswa.create");
+        return view("siswa.form", [
+            "title" => "Tambah Data",
+            "update" => false,
+            "action" => route("siswa.store"),
+        ]);
     }
 
     /**
@@ -45,8 +49,12 @@ class SiswaController extends Controller
      */
     public function show(string $id)
     {
-        return view("siswa.update", [
-            "siswa" => Siswa::findOrFail($id)
+        $siswa = Siswa::findOrFail($id);
+        return view("siswa.form", [
+            "title" => "Ubah Data",
+            "siswa" => $siswa,
+            "update" => true,
+            "action" => route("siswa.update", $siswa->id),
         ]);
     }
 
