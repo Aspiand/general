@@ -1,28 +1,31 @@
-@extends('app')
+@extends('layout.app')
 @section('content')
-<div>
+<div class="container mx-auto p-5">
+    {{-- by gpt --}}
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+        @foreach ($data as $row)
+            <div class="card bg-gray-800 text-white shadow-lg p-5">
+                <div class="card-body">
+                    <h2 class="card-title text-lg font-bold">Nama: {{$row->nama}}</h2>
+                    <p class="text-gray-300">Kelas: {{$row->kelas}}</p>
 
-    @foreach ($data as $row)
-        <div class="card m-5 bg-slate-600">
-            <div class="card-body">
-                Nama: {{$row->nama}} <br>
-                Kelas: {{$row->kelas}} <br>
+                    <div class="flex gap-3 mt-4">
+                        <a href="{{ route('siswa.show', $row->id) }}" class="btn btn-success text-white px-4 py-2">
+                            Ubah
+                        </a>
 
-                <div class="flex gap-2">
-                    <a href="{{route("siswa.show", $row->id)}}">
-                        <button class="btn btn-success text-white">Ubah</button>
-                    </a>
+                        <form action="{{ route('siswa.destroy', $row->id) }}" method="POST">
+                            @csrf
+                            @method('delete')
 
-                    <form action=" {{route("siswa.destroy", $row->id)}}" method="POST">
-                        @csrf
-                        @method('delete')
-
-                        <button class="btn btn-error w-50 h-10 text-white">Hapus</button>
-                    </form>
+                            <button type="submit" class="btn btn-error text-white px-4 py-2">
+                                Hapus
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
-    @endforeach
-
+        @endforeach
+    </div>
 </div>
 @endsection

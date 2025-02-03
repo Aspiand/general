@@ -24,7 +24,6 @@ class SiswaController extends Controller
     {
         return view("siswa.form", [
             "title" => "Tambah Data",
-            "update" => false,
             "action" => route("siswa.store"),
         ]);
     }
@@ -53,7 +52,6 @@ class SiswaController extends Controller
         return view("siswa.form", [
             "title" => "Ubah Data",
             "siswa" => $siswa,
-            "update" => true,
             "action" => route("siswa.update", $siswa->id),
         ]);
     }
