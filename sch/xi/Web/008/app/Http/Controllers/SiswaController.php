@@ -12,7 +12,9 @@ class SiswaController extends Controller
      */
     public function index()
     {
-        return view("home", ['data' => Siswa::all()]);
+        return view("siswa.index", [
+            'data' => Siswa::all()
+        ]);
     }
 
     /**
@@ -20,7 +22,7 @@ class SiswaController extends Controller
      */
     public function create()
     {
-        //
+        return view("siswa.create");
     }
 
     /**
@@ -28,7 +30,15 @@ class SiswaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            "nama" => "required|max:50",
+            "kelas" => "required"
+        ]);
+
+        $siswa = Siswa::create($request->all());
+
+        return redirect()->route("siswa.index");
+        // return redirect()->route("siswa.index")->with("success", $request->nama . " ditambahkan");
     }
 
     /**
@@ -36,7 +46,10 @@ class SiswaController extends Controller
      */
     public function show(string $id)
     {
-        //
+        return view("siswa.edit", [
+            // "data" => DB::table("siswa")->where("id", $id)
+            "siswa" => Siswa::findOrFail($id)
+        ]);
     }
 
     /**
@@ -44,7 +57,7 @@ class SiswaController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        // Aspian btw
     }
 
     /**
@@ -60,6 +73,7 @@ class SiswaController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        Siswa::findOrFail($id)->delete();
+        return redirect()->route("siswa.index");
     }
 }

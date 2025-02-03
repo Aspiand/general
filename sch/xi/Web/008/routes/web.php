@@ -7,4 +7,4 @@ use Illuminate\Support\Facades\Route;
 //     return view('home');
 // });
 
-Route::resource("/", SiswaController::class);
+Route::resource("siswa", SiswaController::class);
