@@ -30,15 +30,14 @@ class SiswaController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $request->validate([
             "nama" => "required|max:50",
             "kelas" => "required"
         ]);
 
-        $siswa = Siswa::create($request->all());
+        Siswa::create($request->all());
 
-        return redirect()->route("siswa.index");
-        // return redirect()->route("siswa.index")->with("success", $request->nama . " ditambahkan");
+        return redirect()->route("siswa.index")->with("success", $request->nama . " ditambahkan");
     }
 
     /**
@@ -46,8 +45,7 @@ class SiswaController extends Controller
      */
     public function show(string $id)
     {
-        return view("siswa.edit", [
-            // "data" => DB::table("siswa")->where("id", $id)
+        return view("siswa.update", [
             "siswa" => Siswa::findOrFail($id)
         ]);
     }
@@ -65,7 +63,16 @@ class SiswaController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $siswa = Siswa::findOrFail($id);
+
+        $validated = $request->validate([
+            "nama" => "required|max:50",
+            "kelas" => "required"
+        ]);
+
+        $siswa->update($validated);
+
+        return redirect()->route("siswa.index")->with("success", $siswa->nama . " berhasil diubah");
     }
 
     /**
@@ -73,7 +80,8 @@ class SiswaController extends Controller
      */
     public function destroy(string $id)
     {
-        Siswa::findOrFail($id)->delete();
-        return redirect()->route("siswa.index");
+        $siswa = Siswa::findOrFail($id);
+        $siswa->delete();
+        return redirect()->route("siswa.index")->with("success", $siswa->nama . " berhasil dihapus.");
     }
 }

@@ -21,7 +21,7 @@ class SiswaFactory extends Factory
             'kelas' => implode(' ', [
                 $this->faker->randomElement(['X', 'XI', 'XII']),
                 $this->faker->randomElement(['RPL', 'Kecantikan', 'Boga', 'Musik']),
-                $this->faker->randomElement(['1', '2', '3', '4', '5']),
+                $this->faker->randomElement(['1', '2', '3']),
             ])
         ];
     }
