@@ -1,19 +1,67 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 
-/**
- *
- * @author kuro
- */
+
 public class MainForm extends javax.swing.JFrame {
 
-    /**
-     * Creates new form MainForm
-     */
+    String[] makanan = {
+        "Pilih",
+        "Nasi mama habibi",
+        "Nasi kuning galuh",
+        "Mie Ayam gang 5"
+    };
+
+    int[] hargaMakanan = {
+        0,
+        11000,
+        10000,
+        12000
+    };
+
+    String[] minuman = {
+        "Pilih",
+        "Mixue Sundae Strawberry",
+        "Mixue Sundae Chokolatte",
+        "PopAce Strawberry"
+    };
+
+    int[] hargaMinuman = {
+        0,
+        18000,
+        18000,
+        2000
+    };
+
     public MainForm() {
         initComponents();
+
+        makananSelector.removeAllItems();
+        minumanSelector.removeAllItems();
+
+        for (String m : makanan) {
+            makananSelector.addItem(m);
+        }
+
+        for (String m : minuman) {
+            minumanSelector.addItem(m);
+        }
+    }
+
+    public void updateMakanan() {
+        int harga = hargaMakanan[makananSelector.getSelectedIndex()];
+        OhargaMakanan.setText(String.format("Rp %d", harga));
+        totalHargaMakanan.setText(String.valueOf(harga * Integer.parseInt(jumlahMakanan.getText())));
+        updateTotal();
+    }
+
+    public void updateMinuman() {
+        int harga = hargaMinuman[minumanSelector.getSelectedIndex()];
+        OhargaMinuman.setText(String.format("Rp %d", harga));
+        totalHargaMinuman.setText(String.valueOf(harga * Integer.parseInt(jumlahMinuman.getText())));
+        updateTotal();
+    }
+
+    public void updateTotal() {
+        int total = Integer.parseInt(totalHargaMakanan.getText()) + Integer.parseInt(totalHargaMinuman.getText());
+        totalHarga.setText(String.valueOf(total));
     }
 
     /**
@@ -31,7 +79,7 @@ public class MainForm extends javax.swing.JFrame {
         makananSelector = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        hargaMakanan = new javax.swing.JTextField();
+        OhargaMakanan = new javax.swing.JTextField();
         jumlahMakanan = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -40,7 +88,7 @@ public class MainForm extends javax.swing.JFrame {
         minumanSelector = new javax.swing.JComboBox<>();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        hargaMinuman = new javax.swing.JTextField();
+        OhargaMinuman = new javax.swing.JTextField();
         jumlahMinuman = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
@@ -62,17 +110,41 @@ public class MainForm extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(102, 102, 0));
 
-        makananSelector.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        makananSelector.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                makananSelectorItemStateChanged(evt);
+            }
+        });
+        makananSelector.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                makananSelectorActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("Nama Makanan");
 
         jLabel2.setText("Harga Makanan");
 
-        hargaMakanan.setEditable(false);
+        OhargaMakanan.setEditable(false);
+
+        jumlahMakanan.setText("1");
+        jumlahMakanan.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                jumlahMakananCaretUpdate(evt);
+            }
+        });
 
         jLabel3.setText("Jumlah");
 
         jLabel4.setText("Total");
+
+        totalHargaMakanan.setEditable(false);
+        totalHargaMakanan.setText("0");
+        totalHargaMakanan.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                totalHargaMakananCaretUpdate(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -88,7 +160,7 @@ public class MainForm extends javax.swing.JFrame {
                 .addGap(16, 16, 16)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(totalHargaMakanan)
-                    .addComponent(hargaMakanan, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(OhargaMakanan, javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jumlahMakanan, javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(makananSelector, 0, 167, Short.MAX_VALUE))
                 .addGap(37, 37, 37))
@@ -103,7 +175,7 @@ public class MainForm extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(hargaMakanan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(OhargaMakanan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
@@ -117,17 +189,31 @@ public class MainForm extends javax.swing.JFrame {
 
         jPanel3.setBackground(new java.awt.Color(0, 0, 204));
 
-        minumanSelector.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        minumanSelector.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                minumanSelectorItemStateChanged(evt);
+            }
+        });
 
         jLabel9.setText("Nama Makanan");
 
         jLabel10.setText("Harga Makanan");
 
-        hargaMinuman.setEditable(false);
+        OhargaMinuman.setEditable(false);
+
+        jumlahMinuman.setText("1");
+        jumlahMinuman.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                jumlahMinumanCaretUpdate(evt);
+            }
+        });
 
         jLabel11.setText("Jumlah");
 
         jLabel12.setText("Total");
+
+        totalHargaMinuman.setEditable(false);
+        totalHargaMinuman.setText("0");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -143,7 +229,7 @@ public class MainForm extends javax.swing.JFrame {
                 .addGap(16, 16, 16)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(totalHargaMinuman)
-                    .addComponent(hargaMinuman, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(OhargaMinuman, javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jumlahMinuman, javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(minumanSelector, 0, 167, Short.MAX_VALUE))
                 .addGap(37, 37, 37))
@@ -158,7 +244,7 @@ public class MainForm extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10)
-                    .addComponent(hargaMinuman, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(OhargaMinuman, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel11)
@@ -178,6 +264,11 @@ public class MainForm extends javax.swing.JFrame {
 
         jLabel6.setText("Tunai");
 
+        tunai.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                tunaiCaretUpdate(evt);
+            }
+        });
         tunai.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tunaiActionPerformed(evt);
@@ -215,7 +306,7 @@ public class MainForm extends javax.swing.JFrame {
                             .addComponent(tunai, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(totalHarga, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(bayarButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(150, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -244,12 +335,13 @@ public class MainForm extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -273,6 +365,36 @@ public class MainForm extends javax.swing.JFrame {
     private void kembalianActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_kembalianActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_kembalianActionPerformed
+
+    private void makananSelectorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_makananSelectorActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_makananSelectorActionPerformed
+
+    private void makananSelectorItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_makananSelectorItemStateChanged
+        updateMakanan();
+    }//GEN-LAST:event_makananSelectorItemStateChanged
+
+    private void jumlahMakananCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_jumlahMakananCaretUpdate
+        updateMakanan();
+    }//GEN-LAST:event_jumlahMakananCaretUpdate
+
+    private void minumanSelectorItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_minumanSelectorItemStateChanged
+        updateMinuman();
+    }//GEN-LAST:event_minumanSelectorItemStateChanged
+
+    private void jumlahMinumanCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_jumlahMinumanCaretUpdate
+        updateMinuman();
+    }//GEN-LAST:event_jumlahMinumanCaretUpdate
+
+    private void totalHargaMakananCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_totalHargaMakananCaretUpdate
+
+    }//GEN-LAST:event_totalHargaMakananCaretUpdate
+
+    private void tunaiCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_tunaiCaretUpdate
+        int total = Integer.parseInt(totalHarga.getText());
+        int tunai_int = Integer.parseInt(tunai.getText());
+        kembalian.setText(String.valueOf(tunai_int - total));
+    }//GEN-LAST:event_tunaiCaretUpdate
 
     /**
      * @param args the command line arguments
@@ -310,9 +432,9 @@ public class MainForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField OhargaMakanan;
+    private javax.swing.JTextField OhargaMinuman;
     private javax.swing.JButton bayarButton;
-    private javax.swing.JTextField hargaMakanan;
-    private javax.swing.JTextField hargaMinuman;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
