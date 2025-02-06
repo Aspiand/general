@@ -5,27 +5,63 @@
 package id.my.aspian.j005;
 
 import java.sql.SQLException;
+import java.sql.ResultSet;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+
 public class MainFrame extends javax.swing.JFrame {
+
+    DefaultTableModel tabelModel;
+
     public MainFrame() {
         initComponents();
 
         Object[] row = {"Kode", "Nama", "Telepon", "E-Mail", "Alamat", "Status"};
-        DefaultTableModel tabelModel = new DefaultTableModel(null, row);
+        tabelModel = new DefaultTableModel(null, row);
         mainTable.setModel(tabelModel);
+
+        try {
+            showData();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "ehe");
+        }
+    }
+
+    public void showData() throws SQLException {
+        java.sql.Connection conn = Koneksi.koneksi();
+        ResultSet set = conn.createStatement().executeQuery("SELECT * FROM daftar_nomor ORDER BY kode ASC");
+        while (set.next()) {
+            String[] data = {
+                set.getString("kode"),
+                set.getString("nama"),
+                set.getString("telepon"),
+                set.getString("email"),
+                set.getString("alamat"),
+                set.getString("status")
+            };
+
+            tabelModel.addRow(data);
+        }
+    }
+
+    public void deleteAllDataFromTable() {
+        for (int i = 0; i < tabelModel.getRowCount(); i++) {
+            tabelModel.removeRow(i);
+        }
+    }
+
+    public void reload() throws SQLException {
+        deleteAllDataFromTable();
         showData();
     }
 
-    public void showData() {
-        java.sql.Connection conn = Koneksi.koneksi();
-//        ResultSet set = conn.createStatement().executeQuery("SELECT * FROM daftar_nomor ORDER BY kode ASC");
-//        
-//        while (set.next()) {
-//            String[] data = {
-//                set.getString("kode"),
-//                set.getString(),
-//            };
-//        }
+    public void clearInput() {
+        inputKode.setText("");
+        inputNama.setText("");
+        inputNomor.setText("");
+        inputEmail.setText("");
+        inputAlamat.setText("");
+        inputStatus.setSelectedIndex(0);
     }
 
     /**
@@ -62,6 +98,8 @@ public class MainFrame extends javax.swing.JFrame {
 
         jLabel2.setText("Kode");
 
+        inputKode.setEditable(false);
+
         jLabel3.setText("Nama");
 
         jLabel4.setText("Nomor");
@@ -82,10 +120,25 @@ public class MainFrame extends javax.swing.JFrame {
         });
 
         saveButton.setText("Save");
+        saveButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveButtonActionPerformed(evt);
+            }
+        });
 
         deleteButton.setText("Delete");
+        deleteButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteButtonActionPerformed(evt);
+            }
+        });
 
         clearButton.setText("Clear");
+        clearButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clearButtonActionPerformed(evt);
+            }
+        });
 
         githubButton.setText("Github");
 
@@ -183,6 +236,33 @@ public class MainFrame extends javax.swing.JFrame {
     private void editButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editButtonActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_editButtonActionPerformed
+
+    private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
+        try {
+            String query = String.format(
+                    "INSERT INTO daftar_nomor (nama, telepon, email, alamat, status)"
+                    + "VALUES ('%s', '%s', '%s', '%s', '%s')",
+                    inputNama.getText(), inputNomor.getText(), inputEmail.getText(), inputAlamat.getText(), inputStatus.getSelectedItem());
+            Koneksi.koneksi().prepareStatement(query).execute();
+            reload();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Gagal menambah data");
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }//GEN-LAST:event_saveButtonActionPerformed
+
+    private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
+        try {
+            String query = "DELETE FROM daftar_nomor WHERE kode = " + inputKode.getText();
+            Koneksi.koneksi().prepareStatement(query).execute();
+            reload();
+        } catch (SQLException e) {
+        }
+    }//GEN-LAST:event_deleteButtonActionPerformed
+
+    private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearButtonActionPerformed
+        clearInput();
+    }//GEN-LAST:event_clearButtonActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
