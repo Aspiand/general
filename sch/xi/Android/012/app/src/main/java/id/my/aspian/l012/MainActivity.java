@@ -44,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
         editor = preferences.edit();
 
         loadFragment(new ListFragment());
-        getAllVideo();
     }
 
     private void init() {
@@ -67,12 +66,12 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
-    private void loadFragment(Fragment fragment) {
-        getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, fragment).commit();
-    }
-
     public void toast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    private void loadFragment(Fragment fragment) {
+        getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, fragment).commit();
     }
 
     public ArrayList<VideoFiles> getAllVideo() {
