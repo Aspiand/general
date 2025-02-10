@@ -1,8 +1,13 @@
 package id.my.aspian.l012;
 
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,9 +18,12 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
+    public static ArrayList<VideoFiles> videoFiles = new ArrayList<>();
 
     BottomNavigationView bottom_nav;
 
@@ -30,13 +38,18 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
+        init();
+
         preferences = getSharedPreferences("session", MODE_PRIVATE);
         editor = preferences.edit();
 
+        loadFragment(new ListFragment());
+        getAllVideo();
+    }
+
+    private void init() {
         bottom_nav = findViewById(R.id.bottom_navigation);
         bottom_nav.setOnItemSelectedListener(this::navHandler);
-
-        loadFragment(new ListFragment());
     }
 
     private boolean navHandler(MenuItem item) {
@@ -56,5 +69,42 @@ public class MainActivity extends AppCompatActivity {
 
     private void loadFragment(Fragment fragment) {
         getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, fragment).commit();
+    }
+
+    public void toast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    public ArrayList<VideoFiles> getAllVideo() {
+        ArrayList<VideoFiles> tmp = new ArrayList<>();
+        Uri uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+        String[] projection = {
+                MediaStore.Video.Media._ID,
+                MediaStore.Video.Media.DATA,
+                MediaStore.Video.Media.TITLE,
+                MediaStore.Video.Media.DISPLAY_NAME,
+                MediaStore.Video.Media.SIZE,
+                MediaStore.Video.Media.DURATION,
+        };
+
+        Cursor cursor = this.getContentResolver().query(uri, projection, null, null, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                tmp.add(
+                        new VideoFiles(
+                                cursor.getString(0),
+                                cursor.getString(1),
+                                cursor.getString(2),
+                                cursor.getString(3),
+                                cursor.getString(4),
+                                cursor.getString(5)
+                        )
+                );
+            } while (cursor.moveToNext());
+
+            cursor.close();
+        }
+
+        return tmp;
     }
 }

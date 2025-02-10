@@ -13,7 +13,7 @@
         android:dividerHeight="15sp"
         android:padding="15dp"
         android:scrollbars="none"
-        tools:listitem="@layout/list_video_mini" />
+        tools:listitem="@layout/item_video" />
 
     <TextView
         android:id="@+id/list_empty"

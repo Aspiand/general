@@ -38,7 +38,7 @@
         </div>
 
         <div class="navbar-end pe-5">
-            <a class="btn btn-outline" href="{{route("siswa.create")}}">Tambah</a>
+            <a class="btn btn-outline rounded-full" href="{{route("siswa.create")}}">Tambah</a>
         </div>
     </div>
 
