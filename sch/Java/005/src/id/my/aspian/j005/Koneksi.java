@@ -14,7 +14,7 @@ public class Koneksi {
         }
 
         try {
-            DriverManager.registerDriver(new com.mysql.jdbc.Driver());
+            DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
             conn = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/general",
                     "root", "root"

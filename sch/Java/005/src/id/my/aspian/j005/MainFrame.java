@@ -28,8 +28,7 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     public void showData() throws SQLException {
-        java.sql.Connection conn = Koneksi.koneksi();
-        ResultSet set = conn.createStatement().executeQuery("SELECT * FROM daftar_nomor ORDER BY kode ASC");
+        ResultSet set = Koneksi.koneksi().createStatement().executeQuery("SELECT * FROM daftar_nomor ORDER BY kode ASC");
         while (set.next()) {
             String[] data = {
                 set.getString("kode"),
@@ -98,8 +97,6 @@ public class MainFrame extends javax.swing.JFrame {
 
         jLabel2.setText("Kode");
 
-        inputKode.setEditable(false);
-
         jLabel3.setText("Nama");
 
         jLabel4.setText("Nomor");
@@ -111,6 +108,11 @@ public class MainFrame extends javax.swing.JFrame {
         jLabel7.setText("Status");
 
         newButton.setText("New");
+        newButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                newButtonActionPerformed(evt);
+            }
+        });
 
         editButton.setText("Edit");
         editButton.addActionListener(new java.awt.event.ActionListener() {
@@ -244,6 +246,7 @@ public class MainFrame extends javax.swing.JFrame {
                     + "VALUES ('%s', '%s', '%s', '%s', '%s')",
                     inputNama.getText(), inputNomor.getText(), inputEmail.getText(), inputAlamat.getText(), inputStatus.getSelectedItem());
             Koneksi.koneksi().prepareStatement(query).execute();
+            clearInput();
             reload();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Gagal menambah data");
@@ -263,6 +266,10 @@ public class MainFrame extends javax.swing.JFrame {
     private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearButtonActionPerformed
         clearInput();
     }//GEN-LAST:event_clearButtonActionPerformed
+
+    private void newButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newButtonActionPerformed
+        clearInput();
+    }//GEN-LAST:event_newButtonActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
