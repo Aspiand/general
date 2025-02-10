@@ -1,9 +1,9 @@
 package id.my.aspian.l012;
 
-public class VideoFiles {
+public class Video {
     private String id, path, title, fileName, size, duration;
 
-    public VideoFiles(String id, String path, String title, String fileName, String size, String duration) {
+    public Video(String id, String path, String title, String fileName, String size, String duration) {
         this.id = id;
         this.path = path;
         this.title = title;

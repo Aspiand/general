@@ -10,15 +10,17 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
 
 public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHolder> {
     private Context context;
-    private ArrayList<VideoFiles> videoFiles;
+    private ArrayList<Video> videoFiles;
 
     private View view;
 
-    public VideoAdapter(Context context, ArrayList<VideoFiles> videoFiles) {
+    public VideoAdapter(Context context, ArrayList<Video> videoFiles) {
         this.context = context;
         this.videoFiles = videoFiles;
     }
@@ -32,10 +34,16 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
 
     @Override
     public void onBindViewHolder(@NonNull VideoViewHolder holder, int position) {
-        VideoFiles video = videoFiles.get(position);
+        Video video = videoFiles.get(position);
 
         holder.filename.setText(video.getTitle());
         holder.duration.setText(video.getDuration());
+
+        Glide.with(holder.itemView.getContext())
+                .asBitmap()
+                .load(video.getPath())
+                .override(112, 62)
+                .into(holder.thumbnail);
     }
 
     @Override

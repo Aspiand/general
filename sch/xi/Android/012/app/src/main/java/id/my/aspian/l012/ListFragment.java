@@ -35,7 +35,7 @@ public class ListFragment extends Fragment {
     private void init(View view) {
 
         RecyclerView listVideo = view.findViewById(R.id.list_video);
-        ArrayList<VideoFiles> videoFiles = getAllVideo();
+        ArrayList<Video> videoFiles = getAllVideo();
 
         if (videoFiles != null && !videoFiles.isEmpty()) {
             VideoAdapter adapter = new VideoAdapter(getContext(), videoFiles);
@@ -46,8 +46,8 @@ public class ListFragment extends Fragment {
         }
     }
 
-    public ArrayList<VideoFiles> getAllVideo() {
-        ArrayList<VideoFiles> tmp = new ArrayList<>();
+    public ArrayList<Video> getAllVideo() {
+        ArrayList<Video> tmp = new ArrayList<>();
         Uri uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
         String[] projection = {
                 MediaStore.Video.Media._ID,
@@ -62,7 +62,7 @@ public class ListFragment extends Fragment {
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 tmp.add(
-                        new VideoFiles(
+                        new Video(
                                 cursor.getString(0),
                                 cursor.getString(1),
                                 cursor.getString(2),

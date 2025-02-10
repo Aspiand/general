@@ -5,7 +5,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -23,7 +22,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
-    public static ArrayList<VideoFiles> videoFiles = new ArrayList<>();
+    public static ArrayList<Video> videoFiles = new ArrayList<>();
 
     BottomNavigationView bottom_nav;
 
@@ -74,8 +73,8 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, fragment).commit();
     }
 
-    public ArrayList<VideoFiles> getAllVideo() {
-        ArrayList<VideoFiles> tmp = new ArrayList<>();
+    public ArrayList<Video> getAllVideo() {
+        ArrayList<Video> tmp = new ArrayList<>();
         Uri uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
         String[] projection = {
                 MediaStore.Video.Media._ID,
@@ -90,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 tmp.add(
-                        new VideoFiles(
+                        new Video(
                                 cursor.getString(0),
                                 cursor.getString(1),
                                 cursor.getString(2),
