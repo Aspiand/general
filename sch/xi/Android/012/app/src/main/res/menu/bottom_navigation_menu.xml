@@ -9,15 +9,15 @@
         tools:ignore="HardcodedText" />
 
     <item
-        android:id="@+id/nav_favorite"
-        android:icon="@drawable/ic_menu_favorite"
-        android:title="Favorite"
+        android:id="@+id/nav_video"
+        android:icon="@drawable/ic_menu_video"
+        android:title="Videos"
         tools:ignore="HardcodedText" />
 
     <item
-        android:id="@+id/nav_history"
-        android:icon="@drawable/ic_menu_history"
-        android:title="History"
+        android:id="@+id/nav_favorite"
+        android:icon="@drawable/ic_menu_favorite"
+        android:title="Favorite"
         tools:ignore="HardcodedText" />
 
     <item

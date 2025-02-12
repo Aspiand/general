@@ -14,8 +14,7 @@
         android:theme="@style/Theme.AMV">
         <activity
             android:name=".PlayerActivity"
-            android:exported="false"
-            android:launchMode="standard" />
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true">

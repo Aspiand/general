@@ -6,22 +6,35 @@ import android.os.Bundle;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.media3.common.MediaItem;
 import androidx.media3.exoplayer.ExoPlayer;
 import androidx.media3.ui.PlayerView;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import java.util.ArrayList;
 
 public class PlayerActivity extends AppCompatActivity {
     PlayerView playerView;
     ExoPlayer player;
     int position = -1;
+
+    @Override
+    protected void onDestroy() {
+        player.release();
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onStart() {
+        player.setPlayWhenReady(true);
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        player.setPlayWhenReady(false);
+        super.onStop();
+    }
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -53,18 +66,13 @@ public class PlayerActivity extends AppCompatActivity {
 
         player = new ExoPlayer.Builder(this).build();
         playerView = findViewById(R.id.player);
+        playerView.setKeepScreenOn(true);
         playerView.setPlayer(player);
 
         player.setMediaItem(mediaItem);
-        player.prepare();
+//        player.prepare();
+        player.setPlayWhenReady(true);
 
-        // Recyclerview
-        RecyclerView listVideo = findViewById(R.id.video_list);
-        ArrayList<Video> videoFiles = Utils.getAllVideo(this);
-        VideoAdapter adapter = new VideoAdapter(this, videoFiles);
-        listVideo.setAdapter(adapter);
-        listVideo.setLayoutManager(
-                new LinearLayoutManager(this, RecyclerView.VERTICAL, false)
-        );
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment, new ListFragment()).commit();
     }
 }

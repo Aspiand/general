@@ -16,7 +16,7 @@ import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 import java.util.Locale;
 
-public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHolder> {
+public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> {
     private final Context context;
     private final ArrayList<Video> videoFiles;
 
@@ -27,13 +27,13 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
 
     @NonNull
     @Override
-    public VideoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(this.context).inflate(R.layout.item_video, parent, false);
-        return new VideoViewHolder(view);
+        return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull VideoViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Video video = this.videoFiles.get(position);
         int duration = Integer.parseInt(video.getDuration()) / 1000;
 
@@ -53,6 +53,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
         holder.itemView.setOnClickListener(view -> {
             Intent intent = new Intent(this.context, PlayerActivity.class);
             intent.putExtra("position", position);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             this.context.startActivity(intent);
         });
 
@@ -66,12 +67,12 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
         return this.videoFiles.size();
     }
 
-    public static class VideoViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView thumbnail;
         TextView filename, duration;
         View status;
 
-        public VideoViewHolder(@NonNull View itemView) {
+        public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             thumbnail = itemView.findViewById(R.id.thumbnail);

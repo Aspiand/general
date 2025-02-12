@@ -1,11 +1,7 @@
 package id.my.aspian.l012;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -43,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         preferences = getSharedPreferences("session", MODE_PRIVATE);
         editor = preferences.edit();
 
-        loadFragment(new ListFragment());
+        bottom_nav.setSelectedItemId(R.id.nav_video);
     }
 
     private void init() {
@@ -55,13 +51,15 @@ public class MainActivity extends AppCompatActivity {
         int item_id = item.getItemId();
 
         if (item.getItemId() == R.id.nav_home) {
-            loadFragment(new ListFragment());
             return true;
         } else if (item_id == R.id.nav_favorite) {
             return true;
-        } else if (item_id == R.id.nav_history) {
+        } else if (item_id == R.id.nav_video) {
+            loadFragment(new ListFragment());
             return true;
-        } else if (item_id == R.id.nav_settings) {}
+        } else if (item_id == R.id.nav_settings) {
+            return true;
+        }
 
         return false;
     }
