@@ -1,5 +1,6 @@
 package id.my.aspian.l012;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
             return true;
         } else if (item_id == R.id.nav_history) {
             return true;
-        }
+        } else if (item_id == R.id.nav_settings) {}
 
         return false;
     }
@@ -71,38 +72,5 @@ public class MainActivity extends AppCompatActivity {
 
     private void loadFragment(Fragment fragment) {
         getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, fragment).commit();
-    }
-
-    public ArrayList<Video> getAllVideo() {
-        ArrayList<Video> tmp = new ArrayList<>();
-        Uri uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
-        String[] projection = {
-                MediaStore.Video.Media._ID,
-                MediaStore.Video.Media.DATA,
-                MediaStore.Video.Media.TITLE,
-                MediaStore.Video.Media.DISPLAY_NAME,
-                MediaStore.Video.Media.SIZE,
-                MediaStore.Video.Media.DURATION,
-        };
-
-        Cursor cursor = this.getContentResolver().query(uri, projection, null, null, null);
-        if (cursor != null && cursor.moveToFirst()) {
-            do {
-                tmp.add(
-                        new Video(
-                                cursor.getString(0),
-                                cursor.getString(1),
-                                cursor.getString(2),
-                                cursor.getString(3),
-                                cursor.getString(4),
-                                cursor.getString(5)
-                        )
-                );
-            } while (cursor.moveToNext());
-
-            cursor.close();
-        }
-
-        return tmp;
     }
 }

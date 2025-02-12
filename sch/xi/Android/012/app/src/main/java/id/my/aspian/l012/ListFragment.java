@@ -33,49 +33,15 @@ public class ListFragment extends Fragment {
     }
 
     private void init(View view) {
-
         RecyclerView listVideo = view.findViewById(R.id.list_video);
-        ArrayList<Video> videoFiles = getAllVideo();
+        ArrayList<Video> videoFiles = Utils.getAllVideo(requireContext());
 
-        if (videoFiles != null && !videoFiles.isEmpty()) {
+        if (!videoFiles.isEmpty()) {
             VideoAdapter adapter = new VideoAdapter(getContext(), videoFiles);
             listVideo.setAdapter(adapter);
             listVideo.setLayoutManager(
                     new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false)
             );
         }
-    }
-
-    public ArrayList<Video> getAllVideo() {
-        ArrayList<Video> tmp = new ArrayList<>();
-        Uri uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
-        String[] projection = {
-                MediaStore.Video.Media._ID,
-                MediaStore.Video.Media.DATA,
-                MediaStore.Video.Media.TITLE,
-                MediaStore.Video.Media.DISPLAY_NAME,
-                MediaStore.Video.Media.SIZE,
-                MediaStore.Video.Media.DURATION,
-        };
-
-        Cursor cursor = requireContext().getContentResolver().query(uri, projection, null, null, null);
-        if (cursor != null && cursor.moveToFirst()) {
-            do {
-                tmp.add(
-                        new Video(
-                                cursor.getString(0),
-                                cursor.getString(1),
-                                cursor.getString(2),
-                                cursor.getString(3),
-                                cursor.getString(4),
-                                cursor.getString(5)
-                        )
-                );
-            } while (cursor.moveToNext());
-
-            cursor.close();
-        }
-
-        return tmp;
     }
 }
