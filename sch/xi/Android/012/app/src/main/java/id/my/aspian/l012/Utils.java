@@ -11,6 +11,7 @@ public class Utils {
     public static ArrayList<Video> getAllVideo(Context context) {
         ArrayList<Video> tmp = new ArrayList<>();
         Uri uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+        String sort = MediaStore.Video.Media.TITLE + " ASC";
         String[] projection = {
                 MediaStore.Video.Media._ID,
                 MediaStore.Video.Media.DATA,
@@ -20,7 +21,7 @@ public class Utils {
                 MediaStore.Video.Media.DURATION,
         };
 
-        Cursor cursor = context.getContentResolver().query(uri, projection, null, null, null);
+        Cursor cursor = context.getContentResolver().query(uri, projection, null, null, sort);
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 tmp.add(

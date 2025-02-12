@@ -57,20 +57,21 @@ public class PlayerActivity extends AppCompatActivity {
         ActionBar toolbar = getSupportActionBar();
         if (toolbar != null) {
             toolbar.setDisplayHomeAsUpEnabled(true);
+            toolbar.setTitle("");
         }
 
         // Player
-        position = getIntent().getIntExtra("position", -1);
-        String path = Utils.getAllVideo(this).get(position).getPath();
-        MediaItem mediaItem = MediaItem.fromUri(Uri.parse(path));
-
         player = new ExoPlayer.Builder(this).build();
         playerView = findViewById(R.id.player);
         playerView.setKeepScreenOn(true);
         playerView.setPlayer(player);
 
+        position = getIntent().getIntExtra("position", -1);
+        String path = Utils.getAllVideo(this).get(position).getPath();
+        MediaItem mediaItem = MediaItem.fromUri(Uri.parse(path));
+
         player.setMediaItem(mediaItem);
-//        player.prepare();
+        player.prepare();
         player.setPlayWhenReady(true);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment, new ListFragment()).commit();

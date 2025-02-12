@@ -14,12 +14,9 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import java.util.ArrayList;
-
 public class MainActivity extends AppCompatActivity {
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
-    public static ArrayList<Video> videoFiles = new ArrayList<>();
 
     BottomNavigationView bottom_nav;
 
