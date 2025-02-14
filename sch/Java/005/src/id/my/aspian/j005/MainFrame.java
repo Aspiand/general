@@ -106,7 +106,6 @@ public class MainFrame extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         mainTable = new javax.swing.JTable();
         inputStatus = new javax.swing.JComboBox<>();
-        eheButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -177,12 +176,6 @@ public class MainFrame extends javax.swing.JFrame {
 
         inputStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Teman", "Pacar", "Sahabat", "Pasangan", "Musuh", "Simpanan 1", "Simpanan 2" }));
 
-        eheButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                eheButtonActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -210,8 +203,7 @@ public class MainFrame extends javax.swing.JFrame {
                     .addComponent(editButton, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(deleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(refreshButton, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(eheButton, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(refreshButton, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(34, 34, 34))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
@@ -249,8 +241,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
-                    .addComponent(inputStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(eheButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(inputStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
                 .addContainerGap())
@@ -260,7 +251,28 @@ public class MainFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void editButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editButtonActionPerformed
-        // TODO add your handling code here:
+        String sql = "UPDATE daftar_nomor SET "
+                + "nama = ?,"
+                + "telepon = ?,"
+                + "email = ?,"
+                + "alamat = ?,"
+                + "status = ?"
+                + " WHERE kode = ?";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(6, inputKode.getText());
+            stmt.setString(1, inputNama.getText());
+            stmt.setString(2, inputNomor.getText());
+            stmt.setString(3, inputEmail.getText());
+            stmt.setString(4, inputAlamat.getText());
+            stmt.setString(5, inputStatus.getSelectedItem().toString());
+            stmt.executeUpdate();
+
+            clearInput();
+            reload();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }//GEN-LAST:event_editButtonActionPerformed
 
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
@@ -275,7 +287,6 @@ public class MainFrame extends javax.swing.JFrame {
             stmt.setString(5, inputStatus.getSelectedItem().toString());
             stmt.executeUpdate();
 
-            saveButton.setEnabled(false);
             clearInput();
             reload();
         } catch (SQLException e) {
@@ -325,10 +336,6 @@ public class MainFrame extends javax.swing.JFrame {
         inputStatus.setSelectedItem(status != null ? status.toString() : "");
     }//GEN-LAST:event_mainTableMouseClicked
 
-    private void eheButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eheButtonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_eheButtonActionPerformed
-
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -364,7 +371,6 @@ public class MainFrame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton deleteButton;
     private javax.swing.JButton editButton;
-    private javax.swing.JButton eheButton;
     private javax.swing.JTextField inputAlamat;
     private javax.swing.JTextField inputEmail;
     private javax.swing.JTextField inputKode;
