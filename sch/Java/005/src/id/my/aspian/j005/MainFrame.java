@@ -1,22 +1,31 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package id.my.aspian.j005;
 
-import java.sql.SQLException;
-import java.sql.ResultSet;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+
+import java.sql.*;
+import javax.swing.JTextField;
 
 public class MainFrame extends javax.swing.JFrame {
 
     DefaultTableModel tabelModel;
+    Connection conn;
 
     public MainFrame() {
         initComponents();
 
-        Object[] row = {"Kode", "Nama", "Telepon", "E-Mail", "Alamat", "Status"};
+        try {
+            DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
+            conn = DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/general",
+                    "root", "root"
+            );
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Gagal terkoneksi");
+            System.exit(1);
+        }
+
+        String[] row = {"Kode", "Nama", "Telepon", "E-Mail", "Alamat", "Status"};
         tabelModel = new DefaultTableModel(null, row);
         mainTable.setModel(tabelModel);
 
@@ -28,23 +37,28 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     public void showData() throws SQLException {
-        ResultSet set = Koneksi.koneksi().createStatement().executeQuery("SELECT * FROM daftar_nomor ORDER BY kode ASC");
-        while (set.next()) {
-            String[] data = {
-                set.getString("kode"),
-                set.getString("nama"),
-                set.getString("telepon"),
-                set.getString("email"),
-                set.getString("alamat"),
-                set.getString("status")
-            };
+        try {
+            ResultSet set = conn.createStatement().executeQuery("SELECT * FROM daftar_nomor ORDER BY kode ASC");
+            while (set.next()) {
+                String[] data = {
+                    set.getString("kode"),
+                    set.getString("nama"),
+                    set.getString("telepon"),
+                    set.getString("email"),
+                    set.getString("alamat"),
+                    set.getString("status")
+                };
 
-            tabelModel.addRow(data);
+                tabelModel.addRow(data);
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "hadehhh");
         }
     }
 
     public void deleteAllDataFromTable() {
-        for (int i = 0; i < tabelModel.getRowCount(); i++) {
+        int rc = tabelModel.getRowCount();
+        for (int i = rc - 1; i >= 0; i--) {
             tabelModel.removeRow(i);
         }
     }
@@ -61,6 +75,7 @@ public class MainFrame extends javax.swing.JFrame {
         inputEmail.setText("");
         inputAlamat.setText("");
         inputStatus.setSelectedIndex(0);
+        mainTable.setCellSelectionEnabled(false);
     }
 
     /**
@@ -87,7 +102,7 @@ public class MainFrame extends javax.swing.JFrame {
         editButton = new javax.swing.JButton();
         saveButton = new javax.swing.JButton();
         deleteButton = new javax.swing.JButton();
-        clearButton = new javax.swing.JButton();
+        refreshButton = new javax.swing.JButton();
         githubButton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         mainTable = new javax.swing.JTable();
@@ -135,10 +150,10 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
-        clearButton.setText("Clear");
-        clearButton.addActionListener(new java.awt.event.ActionListener() {
+        refreshButton.setText("Refresh");
+        refreshButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                clearButtonActionPerformed(evt);
+                refreshButtonActionPerformed(evt);
             }
         });
 
@@ -155,6 +170,11 @@ public class MainFrame extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        mainTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                mainTableMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(mainTable);
 
         inputStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Teman", "Pacar", "Sahabat", "Pasangan", "Musuh", "Simpanan 1", "Simpanan 2" }));
@@ -186,7 +206,7 @@ public class MainFrame extends javax.swing.JFrame {
                     .addComponent(editButton, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(deleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(clearButton, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(refreshButton, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(githubButton, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(34, 34, 34))
             .addGroup(layout.createSequentialGroup()
@@ -221,7 +241,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(inputAlamat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6)
-                    .addComponent(clearButton))
+                    .addComponent(refreshButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
@@ -240,36 +260,66 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_editButtonActionPerformed
 
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
-        try {
-            String query = String.format(
-                    "INSERT INTO daftar_nomor (nama, telepon, email, alamat, status)"
-                    + "VALUES ('%s', '%s', '%s', '%s', '%s')",
-                    inputNama.getText(), inputNomor.getText(), inputEmail.getText(), inputAlamat.getText(), inputStatus.getSelectedItem());
-            Koneksi.koneksi().prepareStatement(query).execute();
+        String sql = "INSERT INTO daftar_nomor (nama, telepon, email, alamat, status) "
+                + "VALUES (?, ?, ?, ?, ?)";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, inputNama.getText());
+            stmt.setString(2, inputNomor.getText());
+            stmt.setString(3, inputEmail.getText());
+            stmt.setString(4, inputAlamat.getText());
+            stmt.setString(5, inputStatus.getSelectedItem().toString());
+            stmt.executeUpdate();
+
+            saveButton.setEnabled(false);
             clearInput();
             reload();
-        } catch (Exception e) {
+        } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Gagal menambah data");
-            JOptionPane.showMessageDialog(null, e);
         }
     }//GEN-LAST:event_saveButtonActionPerformed
 
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
         try {
             String query = "DELETE FROM daftar_nomor WHERE kode = " + inputKode.getText();
-            Koneksi.koneksi().prepareStatement(query).execute();
+            conn.prepareStatement(query).execute();
             reload();
         } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Gagal menghapus data!");
         }
     }//GEN-LAST:event_deleteButtonActionPerformed
 
-    private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearButtonActionPerformed
+    private void refreshButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshButtonActionPerformed
         clearInput();
-    }//GEN-LAST:event_clearButtonActionPerformed
+    }//GEN-LAST:event_refreshButtonActionPerformed
 
     private void newButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newButtonActionPerformed
         clearInput();
+        try {
+            reload();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "ehe");
+        }
     }//GEN-LAST:event_newButtonActionPerformed
+
+    private void mainTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mainTableMouseClicked
+        int row = mainTable.getSelectedRow();
+        if (row == -1) {
+            return;
+        }
+
+        JTextField[] fields = {
+            inputKode, inputNama, inputNomor, inputEmail, inputAlamat
+        };
+
+        for (int i = 0; i < fields.length; i++) {
+            Object value = mainTable.getValueAt(row, i);
+            fields[i].setText(value != null ? value.toString() : "");
+        }
+
+        Object status = mainTable.getValueAt(row, 5);
+        inputStatus.setSelectedItem(status != null ? status.toString() : "");
+    }//GEN-LAST:event_mainTableMouseClicked
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -304,7 +354,6 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton clearButton;
     private javax.swing.JButton deleteButton;
     private javax.swing.JButton editButton;
     private javax.swing.JButton githubButton;
@@ -323,6 +372,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable mainTable;
     private javax.swing.JButton newButton;
+    private javax.swing.JButton refreshButton;
     private javax.swing.JButton saveButton;
     // End of variables declaration//GEN-END:variables
 }
