@@ -103,10 +103,10 @@ public class MainFrame extends javax.swing.JFrame {
         saveButton = new javax.swing.JButton();
         deleteButton = new javax.swing.JButton();
         refreshButton = new javax.swing.JButton();
-        githubButton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         mainTable = new javax.swing.JTable();
         inputStatus = new javax.swing.JComboBox<>();
+        eheButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -157,8 +157,6 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
-        githubButton.setText("Github");
-
         mainTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -178,6 +176,12 @@ public class MainFrame extends javax.swing.JFrame {
         jScrollPane1.setViewportView(mainTable);
 
         inputStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Teman", "Pacar", "Sahabat", "Pasangan", "Musuh", "Simpanan 1", "Simpanan 2" }));
+
+        eheButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                eheButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -207,7 +211,7 @@ public class MainFrame extends javax.swing.JFrame {
                     .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(deleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(refreshButton, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(githubButton, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(eheButton, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(34, 34, 34))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
@@ -245,8 +249,8 @@ public class MainFrame extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
-                    .addComponent(githubButton)
-                    .addComponent(inputStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(inputStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(eheButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
                 .addContainerGap())
@@ -321,6 +325,10 @@ public class MainFrame extends javax.swing.JFrame {
         inputStatus.setSelectedItem(status != null ? status.toString() : "");
     }//GEN-LAST:event_mainTableMouseClicked
 
+    private void eheButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eheButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_eheButtonActionPerformed
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -356,7 +364,7 @@ public class MainFrame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton deleteButton;
     private javax.swing.JButton editButton;
-    private javax.swing.JButton githubButton;
+    private javax.swing.JButton eheButton;
     private javax.swing.JTextField inputAlamat;
     private javax.swing.JTextField inputEmail;
     private javax.swing.JTextField inputKode;

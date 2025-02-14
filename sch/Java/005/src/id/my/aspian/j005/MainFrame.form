@@ -49,7 +49,7 @@
                   <Component id="saveButton" min="-2" pref="108" max="-2" attributes="0"/>
                   <Component id="deleteButton" min="-2" pref="108" max="-2" attributes="0"/>
                   <Component id="refreshButton" min="-2" pref="108" max="-2" attributes="0"/>
-                  <Component id="githubButton" min="-2" pref="108" max="-2" attributes="0"/>
+                  <Component id="eheButton" min="-2" pref="108" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
           </Group>
@@ -96,8 +96,8 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel7" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="githubButton" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="inputStatus" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="eheButton" alignment="0" max="32767" attributes="0"/>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="jScrollPane1" pref="248" max="32767" attributes="0"/>
@@ -187,11 +187,6 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="refreshButtonActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="githubButton">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Github"/>
-      </Properties>
-    </Component>
     <Container class="javax.swing.JScrollPane" name="jScrollPane1">
       <AuxValues>
         <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
@@ -233,6 +228,11 @@
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
       </AuxValues>
+    </Component>
+    <Component class="javax.swing.JButton" name="eheButton">
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="eheButtonActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>
