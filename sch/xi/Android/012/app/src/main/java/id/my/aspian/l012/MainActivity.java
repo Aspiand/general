@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences.Editor editor;
     private ArrayList<Video> videoFiles;
     private FragmentManager fragmentManager;
-    private Fragment listFragment;
+    private Fragment listVideoFragment, listDirectoryFragment;
 
     BottomNavigationView bottom_nav;
 
@@ -53,20 +53,22 @@ public class MainActivity extends AppCompatActivity {
 
         // Fragment
         fragmentManager = getSupportFragmentManager();
-        listFragment = new ListFragment();
+        listVideoFragment = new ListVideoFragment();
+        listDirectoryFragment = new ListDirectoryFragment();
     }
 
     private boolean navHandler(MenuItem item) {
         int item_id = item.getItemId();
 
         if (item.getItemId() == R.id.nav_home) {
+            loadFragment(listDirectoryFragment);
             return true;
         } else if (item_id == R.id.nav_favorite) {
             return true;
         } else if (item_id == R.id.nav_video) {
-            loadFragment(listFragment);
+            loadFragment(listVideoFragment);
             return true;
-        } else if (item_id == R.id.nav_settings) {
+        } else if (item_id == R.id.nav_history) {
             return true;
         }
 

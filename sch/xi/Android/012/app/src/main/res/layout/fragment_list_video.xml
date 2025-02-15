@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ListFragment">
+    tools:context=".ListVideoFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list_video"
@@ -14,17 +14,5 @@
         android:padding="10dp"
         android:scrollbars="none"
         tools:listitem="@layout/item_video" />
-
-    <TextView
-        android:id="@+id/list_empty"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Empty"
-        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
-        android:textSize="50sp"
-        android:textStyle="bold"
-        android:visibility="gone"
-        tools:ignore="HardcodedText" />
 
 </FrameLayout>

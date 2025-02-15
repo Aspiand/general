@@ -8,7 +8,7 @@
     android:padding="10dp">
 
     <ImageView
-        android:id="@+id/folder_icon"
+        android:id="@+id/directory_icon"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:contentDescription="Folder icon"
@@ -19,7 +19,7 @@
         tools:ignore="HardcodedText" />
 
     <TextView
-        android:id="@+id/folder_name"
+        android:id="@+id/directory_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
@@ -27,21 +27,28 @@
         android:text="Folder name"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/folder_count"
-        app:layout_constraintStart_toEndOf="@+id/folder_icon"
+        app:layout_constraintEnd_toEndOf="@+id/directory_count"
+        app:layout_constraintStart_toEndOf="@+id/directory_icon"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="HardcodedText" />
 
     <TextView
-        android:id="@+id/folder_count"
+        android:id="@+id/directory_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="8 items"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="HardcodedText" />
 
+    <TextView
+        android:id="@+id/directory_size"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1 GB"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:ignore="HardcodedText" />
 
     <!--    <LinearLayout-->
     <!--        android:layout_width="match_parent"-->

@@ -9,15 +9,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class ListFragment extends Fragment {
+public class ListVideoFragment extends Fragment {
     ArrayList<Video> videoFiles;
     VideoAdapter videoAdapter;
 
-    public ListFragment() {}
+    public ListVideoFragment() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -28,14 +27,13 @@ public class ListFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_list_video, container, false);
         init(view);
 
         return view;
     }
 
     private void init(View view) {
-        Toast.makeText(requireContext(), "ehe", Toast.LENGTH_SHORT).show();
         RecyclerView listVideo = view.findViewById(R.id.list_video);
 
         if (!videoFiles.isEmpty()) {
