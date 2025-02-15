@@ -10,6 +10,7 @@ activity = "1.10.0"
 constraintlayout = "2.2.0"
 media3Exoplayer = "1.5.1"
 roomVersion = "2.6.1"
+fragment = "1.8.6"
 
 [libraries]
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
@@ -24,6 +25,7 @@ media3-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = 
 media3-exoplayer-dash = { module = "androidx.media3:media3-exoplayer-dash", version.ref = "media3Exoplayer" }
 media3-ui = { module = "androidx.media3:media3-ui", version.ref = "media3Exoplayer" }
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomVersion" }
+fragment = { group = "androidx.fragment", name = "fragment", version.ref = "fragment" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

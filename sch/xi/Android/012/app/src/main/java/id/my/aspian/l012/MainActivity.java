@@ -11,12 +11,18 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
+    private ArrayList<Video> videoFiles;
+    private FragmentManager fragmentManager;
+    private Fragment listFragment;
 
     BottomNavigationView bottom_nav;
 
@@ -33,15 +39,21 @@ public class MainActivity extends AppCompatActivity {
 
         init();
 
-        preferences = getSharedPreferences("session", MODE_PRIVATE);
-        editor = preferences.edit();
-
         bottom_nav.setSelectedItemId(R.id.nav_video);
     }
 
     private void init() {
         bottom_nav = findViewById(R.id.bottom_navigation);
         bottom_nav.setOnItemSelectedListener(this::navHandler);
+
+        preferences = getSharedPreferences("session", MODE_PRIVATE);
+        editor = preferences.edit();
+
+        videoFiles = Utils.getAllVideo(this);
+
+        // Fragment
+        fragmentManager = getSupportFragmentManager();
+        listFragment = new ListFragment();
     }
 
     private boolean navHandler(MenuItem item) {
@@ -52,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         } else if (item_id == R.id.nav_favorite) {
             return true;
         } else if (item_id == R.id.nav_video) {
-            loadFragment(new ListFragment());
+            loadFragment(listFragment);
             return true;
         } else if (item_id == R.id.nav_settings) {
             return true;
@@ -66,6 +78,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadFragment(Fragment fragment) {
-        getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, fragment).commit();
+        fragmentManager.beginTransaction()
+                .replace(R.id.main_frame, fragment)
+                .setReorderingAllowed(true)
+                .commit();
     }
 }
