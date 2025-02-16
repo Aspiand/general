@@ -18,11 +18,11 @@ import java.util.Locale;
 
 public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> {
     private final Context context;
-    private final ArrayList<Video> videoFiles;
+    private final ArrayList<Video> videos;
 
-    public VideoAdapter(Context context, ArrayList<Video> videoFiles) {
+    public VideoAdapter(Context context, ArrayList<Video> videos) {
         this.context = context;
-        this.videoFiles = videoFiles;
+        this.videos = videos;
     }
 
     @NonNull
@@ -34,7 +34,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Video video = this.videoFiles.get(position);
+        Video video = this.videos.get(position);
         int duration = Integer.parseInt(video.getDuration()) / 1000;
 
         holder.filename.setText(video.getTitle());
@@ -64,7 +64,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> 
 
     @Override
     public int getItemCount() {
-        return this.videoFiles.size();
+        return this.videos.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

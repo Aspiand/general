@@ -13,13 +13,11 @@ import java.util.ArrayList;
 
 public class DirectoryAdapter extends RecyclerView.Adapter<DirectoryAdapter.ViewHolder> {
     private final Context context;
-    private final ArrayList<Directory> directories; // semua directory
-    private final ArrayList<Directory> listDirectory; // directory yang ditampilkan
+    private final ArrayList<Directory> directories;
 
     public DirectoryAdapter(Context context, ArrayList<Directory> directories) {
         this.context = context;
         this.directories = directories;
-        this.listDirectory = directories;
     }
 
     @NonNull
@@ -31,16 +29,17 @@ public class DirectoryAdapter extends RecyclerView.Adapter<DirectoryAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull DirectoryAdapter.ViewHolder holder, int position) {
-        Directory directory = this.listDirectory.get(position);
+        Directory directory = this.directories.get(position);
 
         holder.directoryName.setText(directory.getName());
         holder.itemCount.setText(String.format("%s items", directory.getCount()));
         holder.directorySize.setText(directory.getSize());
+//        holder.position.setText(String.valueOf(position));
     }
 
     @Override
     public int getItemCount() {
-        return listDirectory.size();
+        return directories.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

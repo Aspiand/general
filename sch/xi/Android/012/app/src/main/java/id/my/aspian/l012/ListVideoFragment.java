@@ -1,5 +1,6 @@
 package id.my.aspian.l012;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ListVideoFragment extends Fragment {
     ArrayList<Video> videos;
@@ -20,8 +22,7 @@ public class ListVideoFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        MainActivity activity = (MainActivity) getActivity();
-        videos = activity != null ? activity.videos : Utils.getAllVideo(requireContext());
+        videos = Utils.getAllVideo(requireContext());
         videoAdapter = new VideoAdapter(getContext(), videos);
     }
 
@@ -44,9 +45,10 @@ public class ListVideoFragment extends Fragment {
         }
     }
 
-    private void updateVideoFiles() {
+    @SuppressLint("NotifyDataSetChanged")
+    public void updateVideoFiles(List<Video> newVideos) {
         videos.clear();
-        videos.addAll(Utils.getAllVideo(requireContext()));
-//        videoAdapter.notifyDataSetChanged();
+        videos.addAll(newVideos);
+        videoAdapter.notifyDataSetChanged();
     }
 }

@@ -18,8 +18,7 @@ public class ListDirectoryFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        MainActivity activity = (MainActivity) getActivity();
-        ArrayList<Video> videos = activity != null ? activity.videos : Utils.getAllVideo(requireContext());
+        ArrayList<Video> videos = Utils.getAllVideo(requireContext());
         directories = Utils.getAllVideoDirectory(videos);
         directoryAdapter = new DirectoryAdapter(requireContext(), directories);
     }

@@ -20,9 +20,8 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
-    public ArrayList<Video> videos;
     private FragmentManager fragmentManager;
-    private Fragment listVideoFragment, listDirectoryFragment;
+    public Fragment listVideoFragment, listDirectoryFragment;
 
     BottomNavigationView bottom_nav;
 
@@ -49,8 +48,6 @@ public class MainActivity extends AppCompatActivity {
 
         preferences = getSharedPreferences("session", MODE_PRIVATE);
         editor = preferences.edit();
-
-        videos = Utils.getAllVideo(this);
 
         // Fragment
         fragmentManager = getSupportFragmentManager();
