@@ -13,6 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AMV">
         <activity
+            android:name=".ListVideoActivity"
+            android:exported="false" />
+        <activity
             android:name=".PlayerActivity"
             android:exported="false" />
         <activity

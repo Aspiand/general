@@ -1,6 +1,7 @@
 package id.my.aspian.l012;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +35,11 @@ public class DirectoryAdapter extends RecyclerView.Adapter<DirectoryAdapter.View
         holder.directoryName.setText(directory.getName());
         holder.itemCount.setText(String.format("%s items", directory.getCount()));
         holder.directorySize.setText(directory.getSize());
-//        holder.position.setText(String.valueOf(position));
+        holder.itemView.setOnClickListener(view -> {
+            Intent intent = new Intent(this.context, ListVideoActivity.class);
+            intent.putExtra("position", position);
+            this.context.startActivity(intent);
+        });
     }
 
     @Override

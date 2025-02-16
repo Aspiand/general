@@ -11,11 +11,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class ListVideoFragment extends Fragment {
     ArrayList<Video> videos;
     VideoAdapter videoAdapter;
+    ArrayList<Directory> directories;
 
     public ListVideoFragment() {}
 
@@ -24,6 +24,7 @@ public class ListVideoFragment extends Fragment {
         super.onCreate(savedInstanceState);
         videos = Utils.getAllVideo(requireContext());
         videoAdapter = new VideoAdapter(getContext(), videos);
+        directories = Utils.getAllVideoDirectory(videos);
     }
 
     @Override
@@ -46,9 +47,11 @@ public class ListVideoFragment extends Fragment {
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    public void updateVideoFiles(List<Video> newVideos) {
-        videos.clear();
-        videos.addAll(newVideos);
-        videoAdapter.notifyDataSetChanged();
+    public void updateVideoFiles(int position) {
+        if (videos != null) {
+            videos.clear();
+            videos.addAll(directories.get(position).getVideoOnDirectory());
+            videoAdapter.notifyDataSetChanged();
+        }
     }
 }

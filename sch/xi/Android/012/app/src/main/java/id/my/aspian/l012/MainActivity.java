@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
     private FragmentManager fragmentManager;
-    public Fragment listVideoFragment, listDirectoryFragment;
+    public static Fragment listVideoFragment, listDirectoryFragment;
 
     BottomNavigationView bottom_nav;
 
