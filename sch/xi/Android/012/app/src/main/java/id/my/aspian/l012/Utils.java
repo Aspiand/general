@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.provider.MediaStore;
 
 import java.io.File;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -63,21 +64,12 @@ public class Utils {
 
         return data;
     }
-}
 
-//        Set<String> set = new HashSet<>();
-//        for (Video video : videos) {
-//            String path = video.getPath();
-//
-//            set.add(
-//                    new File(path).getParent()
-//            );
-//        }
-//
-//        return set;
-//        HashMap<String, HashMap<String, Integer>> data = new HashMap<>();
-//        videos.forEach(video -> {
-//            HashMap<String, Integer> value = new HashMap<>();
-//            value.put("size");
-//            data.put(video.getPath(), value);
-//        });
+    // https://stackoverflow.com/a/5599842/29457100
+    public static String readableFileSize(long size) {
+        if (size <= 0) return "0";
+        final String[] units = new String[]{"B", "kB", "MB", "GB", "TB", "PB", "EB"};
+        int digitGroups = (int) (Math.log10(size) / Math.log10(1024));
+        return new DecimalFormat("#,##0.#").format(size / Math.pow(1024, digitGroups)) + " " + units[digitGroups];
+    }
+}

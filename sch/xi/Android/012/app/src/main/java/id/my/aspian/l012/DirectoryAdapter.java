@@ -1,12 +1,10 @@
 package id.my.aspian.l012;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -37,6 +35,7 @@ public class DirectoryAdapter extends RecyclerView.Adapter<DirectoryAdapter.View
 
         holder.directoryName.setText(directory.getName());
         holder.itemCount.setText(String.format("%s items", directory.getCount()));
+        holder.directorySize.setText(directory.getSize());
     }
 
     @Override
@@ -44,14 +43,15 @@ public class DirectoryAdapter extends RecyclerView.Adapter<DirectoryAdapter.View
         return listDirectory.size();
     }
 
-    public static class ViewHolder extends  RecyclerView.ViewHolder {
-        TextView directoryName, itemCount;
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        TextView directoryName, itemCount, directorySize;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             directoryName = itemView.findViewById(R.id.directory_name);
             itemCount = itemView.findViewById(R.id.directory_count);
+            directorySize = itemView.findViewById(R.id.directory_size);
         }
     }
 }

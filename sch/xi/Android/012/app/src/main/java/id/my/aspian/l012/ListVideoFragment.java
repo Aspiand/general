@@ -1,19 +1,18 @@
 package id.my.aspian.l012;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
 import java.util.ArrayList;
 
 public class ListVideoFragment extends Fragment {
-    ArrayList<Video> videoFiles;
+    ArrayList<Video> videos;
     VideoAdapter videoAdapter;
 
     public ListVideoFragment() {}
@@ -21,8 +20,9 @@ public class ListVideoFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        videoFiles = Utils.getAllVideo(requireContext());
-        videoAdapter = new VideoAdapter(getContext(), videoFiles);
+        MainActivity activity = (MainActivity) getActivity();
+        videos = activity != null ? activity.videos : Utils.getAllVideo(requireContext());
+        videoAdapter = new VideoAdapter(getContext(), videos);
     }
 
     @Override
@@ -36,7 +36,7 @@ public class ListVideoFragment extends Fragment {
     private void init(View view) {
         RecyclerView listVideo = view.findViewById(R.id.list_video);
 
-        if (!videoFiles.isEmpty()) {
+        if (!videos.isEmpty()) {
             listVideo.setAdapter(videoAdapter);
             listVideo.setLayoutManager(
                     new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false)
@@ -45,8 +45,8 @@ public class ListVideoFragment extends Fragment {
     }
 
     private void updateVideoFiles() {
-        videoFiles.clear();
-        videoFiles.addAll(Utils.getAllVideo(requireContext()));
+        videos.clear();
+        videos.addAll(Utils.getAllVideo(requireContext()));
 //        videoAdapter.notifyDataSetChanged();
     }
 }

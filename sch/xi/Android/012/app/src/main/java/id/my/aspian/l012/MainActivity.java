@@ -20,7 +20,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
-    private ArrayList<Video> videoFiles;
+    public ArrayList<Video> videos;
     private FragmentManager fragmentManager;
     private Fragment listVideoFragment, listDirectoryFragment;
 
@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         init();
 
         // dev
-        bottom_nav.setSelectedItemId(R.id.nav_video);
+        bottom_nav.setSelectedItemId(R.id.nav_home);
     }
 
     private void init() {
@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         preferences = getSharedPreferences("session", MODE_PRIVATE);
         editor = preferences.edit();
 
-        videoFiles = Utils.getAllVideo(this);
+        videos = Utils.getAllVideo(this);
 
         // Fragment
         fragmentManager = getSupportFragmentManager();

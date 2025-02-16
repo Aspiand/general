@@ -28,7 +28,7 @@ public class Directory {
     }
 
     public String getSize() {
-        return String.valueOf(size);
+        return Utils.readableFileSize(size);
     }
 
     public List<Video> getVideoOnDirectory() {

@@ -9,9 +9,9 @@
         android:id="@+id/list_directory"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="8dp"
         android:divider="@android:color/transparent"
         android:dividerHeight="15sp"
-        android:padding="10dp"
         android:scrollbars="none"
         tools:listitem="@layout/item_directory" />
 
