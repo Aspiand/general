@@ -44,8 +44,8 @@ public class Video {
         this.fileName = fileName;
     }
 
-    public String getSize() {
-        return size;
+    public int getSize() {
+        return Integer.parseInt(size);
     }
 
     public void setSize(String size) {

@@ -5,7 +5,11 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Utils {
     public static ArrayList<Video> getAllVideo(Context context) {
@@ -41,4 +45,39 @@ public class Utils {
 
         return tmp;
     }
+
+    public static ArrayList<Directory> getAllVideoDirectory(ArrayList<Video> videos) {
+        ArrayList<Directory> data = new ArrayList<>();
+        Map<String, List<Video>> groupedVideos = videos.stream()
+                .collect(Collectors.groupingBy(
+                                video -> new File(video.getPath()).getParent()
+                        )
+                );
+
+        groupedVideos.forEach((path, listVideo) -> {
+            String name = new File(path).getName();
+            int count = listVideo.size();
+            int size = listVideo.stream().mapToInt(Video::getSize).sum();
+            data.add(new Directory(name, path, count, size, listVideo));
+        });
+
+        return data;
+    }
 }
+
+//        Set<String> set = new HashSet<>();
+//        for (Video video : videos) {
+//            String path = video.getPath();
+//
+//            set.add(
+//                    new File(path).getParent()
+//            );
+//        }
+//
+//        return set;
+//        HashMap<String, HashMap<String, Integer>> data = new HashMap<>();
+//        videos.forEach(video -> {
+//            HashMap<String, Integer> value = new HashMap<>();
+//            value.put("size");
+//            data.put(video.getPath(), value);
+//        });

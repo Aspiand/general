@@ -1,10 +1,12 @@
 package id.my.aspian.l012;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,11 +15,13 @@ import java.util.ArrayList;
 
 public class DirectoryAdapter extends RecyclerView.Adapter<DirectoryAdapter.ViewHolder> {
     private final Context context;
-    private final ArrayList<String> directoryList;
+    private final ArrayList<Directory> directories; // semua directory
+    private final ArrayList<Directory> listDirectory; // directory yang ditampilkan
 
-    public DirectoryAdapter(Context context, ArrayList<String> directoryList) {
+    public DirectoryAdapter(Context context, ArrayList<Directory> directories) {
         this.context = context;
-        this.directoryList = directoryList;
+        this.directories = directories;
+        this.listDirectory = directories;
     }
 
     @NonNull
@@ -29,14 +33,15 @@ public class DirectoryAdapter extends RecyclerView.Adapter<DirectoryAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull DirectoryAdapter.ViewHolder holder, int position) {
-        String directory = this.directoryList.get(position);
+        Directory directory = this.listDirectory.get(position);
 
-        holder.directoryName.setText(directory);
+        holder.directoryName.setText(directory.getName());
+        holder.itemCount.setText(String.format("%s items", directory.getCount()));
     }
 
     @Override
     public int getItemCount() {
-        return directoryList.size();
+        return listDirectory.size();
     }
 
     public static class ViewHolder extends  RecyclerView.ViewHolder {
