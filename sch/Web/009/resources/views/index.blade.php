@@ -20,14 +20,14 @@
 
                 <tbody>
                     @foreach ($products as $product)
-                        <tr class="text-center">
-                            <th>{{$loop->iteration}}</th>
-                            <td class="text-left">{{$product->name}}</td>
-                            <td class="text-left">{{$product->price}}</td>
-                            <td>{{$product->stock}}</td>
+                        <tr class="text-left">
+                            <th class="text-center">{{$loop->iteration}}</th>
+                            <td>{{$product->name}}</td>
+                            <td>{{$product->price}}</td>
+                            <td class="text-center">{{$product->stock}}</td>
                             <td>{{$product->description}}</td>
-                            <td>
-                                <button value="{{$product->id}}"
+                            <td class="text-center">
+                                <button value="{{$loop->index}}"
                                     class="modify-button btn rounded-3xl outline outline-1 bg-gray-800 hover:outline-0">
                                     Modify
                                 </button>
@@ -142,19 +142,18 @@
 
         document.getElementById("add-button").addEventListener("click", function () {
             delete_button.classList.add("hidden")
-            modal_title.innerHTML = "Add Product"
 
             input_name.value = ""
             input_price.value = ""
             input_stock.value = ""
             input_description.innerHTML = ""
+            modal_title.innerHTML = "Add Product"
             form_method.value = "POST"
 
             main_form.setAttribute("action", "{{route("product.store")}}")
         })
 
         delete_button.addEventListener("click", function () {
-            // delete_value.value = this.value
             delete_form.setAttribute("action", "{{route("product.destroy", ":id")}}".replace(":id", this.value))
             delete_form.submit()
         })
@@ -163,8 +162,6 @@
             button.addEventListener("click", function () {
                 modal.showModal()
                 delete_button.classList.remove("hidden")
-                delete_button.value = this.value
-                modal_title.innerHTML = "Modify Product"
 
                 row = this.closest("tr")
                 name = row.cells[1].textContent.trim()
@@ -177,10 +174,11 @@
                 input_price.value = price
                 input_stock.value = stock
                 input_description.innerHTML = description
-
-                console.log(this.value)
-                main_form.setAttribute("action", "{{route('product.update', ":id")}}".replace(":id", this.value))
+                delete_button.value = this.value
+                modal_title.innerHTML = "Modify Product"
                 form_method.value = "PUT"
+
+                main_form.setAttribute("action", "{{route('product.update', ":id")}}".replace(":id", this.value))
             })
         })
     </script>

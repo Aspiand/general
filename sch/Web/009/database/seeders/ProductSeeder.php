@@ -13,6 +13,8 @@ class ProductSeeder extends Seeder
      */
     public function run(): void
     {
+        Product::truncate();
+
         foreach ([
             [
                 "name" => "Flashdisk 16GiB",
@@ -49,7 +51,5 @@ class ProductSeeder extends Seeder
                 "description" => "Garansi 8 Tahun"
             ],
         ] as $product) Product::create($product);
-
-        // Product::truncate();
     }
 }

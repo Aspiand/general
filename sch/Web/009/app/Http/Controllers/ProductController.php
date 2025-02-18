@@ -60,7 +60,8 @@ class ProductController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        Product::all()[$id - 1]->update($request->validate([
+        $product = Product::all()[$id];
+        $product->update($request->validate([
             "name" => "required|string|max:255",
             "price" => "required|integer",
             "stock" => "required|integer",
@@ -75,7 +76,7 @@ class ProductController extends Controller
      */
     public function destroy(string $id)
     {
-        Product::findOrFail($id)->delete();
+        Product::all()[$id]->delete();
         return redirect()->route("index");
     }
 }
