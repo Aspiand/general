@@ -10,13 +10,12 @@
 </head>
 
 <body>
-    {{-- <div class="navbar bg-base-100"> --}}
     <div class="navbar bg-gray-800">
         <div class="flex-1">
             <a class="btn btn-ghost text-xl">Aspiand</a>
         </div>
         <div class="flex-none">
-            <div class="dropdown dropdown-end">
+            <div id="cart" class="dropdown dropdown-end">
                 <div tabindex="0" role="button" class="btn btn-ghost btn-circle"">
                     <div class="indicator">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
@@ -37,6 +36,7 @@
                     </div>
                 </div> --}}
             </div>
+
             <div class="dropdown dropdown-end">
                 <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
                     <div class="w-10 rounded-full">
@@ -44,6 +44,7 @@
                             src="https://avatars.githubusercontent.com/u/146807024?v=4" />
                     </div>
                 </div>
+
                 <ul tabindex="0"
                     class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
                     <li>

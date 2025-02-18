@@ -1,9 +1,5 @@
 @extends("layout.app")
 @section("content")
-    <div class="m-8">
-        <button id="add-button" class="btn w-full bg-gray-800" onclick="modal.showModal()">Add</button>
-    </div>
-
     <div class="bg-gray-800 m-8 card">
         <div class="overflow-x-auto">
             <table class="table">
@@ -140,7 +136,8 @@
         input_stock = document.getElementById("stock")
         input_description = document.getElementById("description")
 
-        document.getElementById("add-button").addEventListener("click", function () {
+        document.getElementById("cart").addEventListener("click", () => {
+            modal.showModal()
             delete_button.classList.add("hidden")
 
             input_name.value = ""
