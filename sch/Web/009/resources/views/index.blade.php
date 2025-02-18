@@ -27,7 +27,8 @@
                             <td>{{$product->stock}}</td>
                             <td>{{$product->description}}</td>
                             <td>
-                                <button class="modify-button btn rounded-3xl outline outline-1 bg-gray-800 hover:outline-0">
+                                <button value="{{$product->id}}"
+                                    class="modify-button btn rounded-3xl outline outline-1 bg-gray-800 hover:outline-0">
                                     Modify
                                 </button>
                             </td>
@@ -52,8 +53,11 @@
                 </div>
 
                 <!-- Modal body -->
-                <form action="{{route("product.store")}}" method="POST">
+                <form method="POST" id="main-form">
                     @csrf
+
+                    <input id="id" type="hidden" name="id">
+                    <input id="form-method" type="hidden" name="_method">
 
                     <div class="mb-5">
                         <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
@@ -88,29 +92,35 @@
                         </div>
                     </div>
 
-                    <div class="flex justify-between">
-                        <button class="btn rounded-3xl outline outline-1 bg-gray-800 hover:outline-0">
-                            <svg class="mr-1 -ml-1 w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd"
-                                    d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-                                    clip-rule="evenodd"></path>
-                            </svg>
-                            Save
-                        </button>
+                    <button class="btn w-full mb-3 rounded-3xl outline outline-1 bg-gray-800 hover:outline-0">
+                        <svg class="mr-1 -ml-1 w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd"
+                                d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                        Save
+                    </button>
 
-                        <button type="button" id="delete-button"
-                            class="btn rounded-3xl inline-flex items-center text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium text-sm px-5 py-2.5 text-center dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900">
-                            <svg aria-hidden="true" class="w-5 h-5 mr-1.5 -ml-1" fill="currentColor" viewBox="0 0 20 20"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd"
-                                    d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                                    clip-rule="evenodd"></path>
-                            </svg>
-                            Delete
-                        </button>
-                    </div>
                 </form>
+
+                <form id="delete-form" method="POST">
+                    @csrf
+                    @method("DELETE")
+
+                    <button type="button" id="delete-button"
+                        class="btn w-full rounded-3xl inline-flex items-center text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium text-sm px-5 py-2.5 text-center dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900">
+                        <svg aria-hidden="true" class="w-5 h-5 mr-1.5 -ml-1" fill="currentColor" viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd"
+                                d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                        Delete
+                    </button>
+
+                </form>
+
             </div>
         </div>
         <form method="dialog" class="modal-backdrop">
@@ -119,18 +129,58 @@
     </dialog>
 
     <script>
+        main_form = document.getElementById("main-form")
+        form_method = document.getElementById("form-method")
         modal_title = document.getElementById("modal-title")
         delete_button = document.getElementById("delete-button")
+        delete_value = document.getElementById("delete-value")
+        delete_form = document.getElementById("delete-form")
+        input_name = document.getElementById("name")
+        input_price = document.getElementById("price")
+        input_stock = document.getElementById("stock")
+        input_description = document.getElementById("description")
+
         document.getElementById("add-button").addEventListener("click", function () {
             delete_button.classList.add("hidden")
             modal_title.innerHTML = "Add Product"
+
+            input_name.value = ""
+            input_price.value = ""
+            input_stock.value = ""
+            input_description.innerHTML = ""
+            form_method.value = "POST"
+
+            main_form.setAttribute("action", "{{route("product.store")}}")
+        })
+
+        delete_button.addEventListener("click", function () {
+            // delete_value.value = this.value
+            delete_form.setAttribute("action", "{{route("product.destroy", ":id")}}".replace(":id", this.value))
+            delete_form.submit()
         })
 
         Array.from(document.getElementsByClassName("modify-button")).forEach((button) => {
             button.addEventListener("click", function () {
                 modal.showModal()
                 delete_button.classList.remove("hidden")
+                delete_button.value = this.value
                 modal_title.innerHTML = "Modify Product"
+
+                row = this.closest("tr")
+                name = row.cells[1].textContent.trim()
+                price = row.cells[2].textContent.trim()
+                stock = row.cells[3].textContent.trim()
+                description = row.cells[4].textContent.trim()
+
+                id.value = this.value
+                input_name.value = name
+                input_price.value = price
+                input_stock.value = stock
+                input_description.innerHTML = description
+
+                console.log(this.value)
+                main_form.setAttribute("action", "{{route('product.update', ":id")}}".replace(":id", this.value))
+                form_method.value = "PUT"
             })
         })
     </script>
