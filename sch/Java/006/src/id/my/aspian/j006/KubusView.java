@@ -67,12 +67,14 @@ public class KubusView extends javax.swing.JInternalFrame {
             }
         });
 
+        luas.setEditable(false);
         luas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 luasActionPerformed(evt);
             }
         });
 
+        volume.setEditable(false);
         volume.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 volumeActionPerformed(evt);

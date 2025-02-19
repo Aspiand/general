@@ -90,11 +90,17 @@
     <Component class="javax.swing.JTextField" name="sisi">
     </Component>
     <Component class="javax.swing.JTextField" name="luas">
+      <Properties>
+        <Property name="editable" type="boolean" value="false"/>
+      </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="luasActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="volume">
+      <Properties>
+        <Property name="editable" type="boolean" value="false"/>
+      </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="volumeActionPerformed"/>
       </Events>

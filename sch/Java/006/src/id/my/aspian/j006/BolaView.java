@@ -47,6 +47,10 @@ public class BolaView extends javax.swing.JInternalFrame {
 
         setClosable(true);
 
+        volume.setEditable(false);
+
+        alas.setEditable(false);
+
         calculate.setText("Hitung");
         calculate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

@@ -63,6 +63,10 @@ public class TabungView extends javax.swing.JInternalFrame {
             }
         });
 
+        volume.setEditable(false);
+
+        alas.setEditable(false);
+
         reset.setText("Reset");
         reset.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
