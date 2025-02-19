@@ -17,7 +17,7 @@ public class DBHelper extends SQLiteOpenHelper {
                     "path TEXT," +
                     "is_starred BOOLEAN DEFAULT NULL," +
                     "timestamp INTEGER DEFAULT NULL" +
-                    ")";
+            ")";
 
     public DBHelper(@Nullable Context context) {
         super(context, "apcb", null, 3);
@@ -92,7 +92,19 @@ public class DBHelper extends SQLiteOpenHelper {
         return getAllFavorite(db, Utils.getAllVideo(context));
     }
 
-    public void getHistory(SQLiteDatabase db) {
+//    public ArrayList<Video> getAllHistory(Context context, SQLiteDatabase db, List<Video> videos) {
+//        List<String> history = new ArrayList<>();
+//        Cursor cursor = db.rawQuery("SELECT path, timestamp FROM videos WHERE timestamp != NULL", null);
+//        if (cursor.moveToFirst()) {
+//            do {
+//                history.add(cursor.);
+//            } while (cursor.moveToNext());
+//
+//            cursor.close();
+//        }
+//    }
+
+//    public void getHistory(SQLiteDatabase db) {
 //        List<Video> videos = new ArrayList<>();
 //        Cursor cursor = db.rawQuery("SELECT * FROM history DESC", null);
 //        if (cursor.moveToFirst()) {
@@ -103,5 +115,5 @@ public class DBHelper extends SQLiteOpenHelper {
 //            } while (cursor.moveToNext());
 //            cursor.close();
 //        }
-    }
+//    }
 }
