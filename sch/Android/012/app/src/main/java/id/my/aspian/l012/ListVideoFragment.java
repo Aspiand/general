@@ -19,10 +19,13 @@ public class ListVideoFragment extends Fragment {
 
     public ListVideoFragment() {}
 
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        videos = Utils.getAllVideo(requireContext());
+//        videos = Utils.getAllVideoByDirectory(requireContext(), "/storage/emulated/0/Share");
+        videos = Utils.getAllVideoByDirectory(requireContext(), "/storage/emulated/0/Share/YouTube/Linux/20190216 IPv6 penggunaan ufw firewall.mkv");
         videoAdapter = new VideoAdapter(getContext(), videos);
     }
 

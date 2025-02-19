@@ -1,5 +1,6 @@
 package id.my.aspian.l012;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -9,18 +10,24 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.media3.common.MediaItem;
+import androidx.media3.common.util.Log;
 import androidx.media3.exoplayer.ExoPlayer;
 import androidx.media3.ui.PlayerView;
 
 import java.util.Objects;
 
 public class PlayerActivity extends AppCompatActivity {
+    DBHelper conn;
+    SQLiteDatabase db;
     PlayerView playerView;
     ExoPlayer player;
-    int position = -1;
+    String path;
 
     @Override
     protected void onDestroy() {
+        conn.addToHistory(db, path, player.getCurrentPosition());
+        db.close();
+        conn.close();
         player.release();
         super.onDestroy();
     }
@@ -55,14 +62,17 @@ public class PlayerActivity extends AppCompatActivity {
             return insets;
         });
 
+        // Database
+        conn = new DBHelper(this);
+        db = conn.getWritableDatabase();
+
         // Player
         player = new ExoPlayer.Builder(this).build();
         playerView = findViewById(R.id.player);
         playerView.setKeepScreenOn(true);
         playerView.setPlayer(player);
 
-        position = getIntent().getIntExtra("position", -1);
-        String path = Utils.getAllVideo(this).get(position).getPath();
+        path = getIntent().getStringExtra("path");
         MediaItem mediaItem = MediaItem.fromUri(Uri.parse(path));
 
         player.setMediaItem(mediaItem);

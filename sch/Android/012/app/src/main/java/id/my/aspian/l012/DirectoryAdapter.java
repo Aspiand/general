@@ -35,6 +35,19 @@ public class DirectoryAdapter extends RecyclerView.Adapter<DirectoryAdapter.View
         holder.itemCount.setText(String.format("%s items", directory.getCount()));
         holder.directorySize.setText(directory.getSize());
 //        holder.position.setText(String.valueOf(position));
+
+//        holder.itemView.setOnClickListener(view -> {
+//            if (this.context instanceof MainActivity) {
+//                MainActivity activity = (MainActivity) this.context;
+//                ListVideoFragment fragment = new ListVideoFragment();
+//                activity.getSupportFragmentManager()
+//                        .beginTransaction()
+//                        .replace(R.layout.fragment_list_video, fragment)
+//                        .commit();
+
+//                activity.getSupportFragmentManager().beginTransaction().replace(R.id.fragment, new ListVideoFragment()).commit();
+//            }
+//        });
     }
 
     @Override
