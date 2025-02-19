@@ -11,5 +11,5 @@ Route::get('/', function () {
     ]);
 })->name("index");
 
-Route::resource('cart', CartController::class);
+// Route::resource('cart', CartController::class);
 Route::resource('product', ProductController::class);

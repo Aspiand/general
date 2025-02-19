@@ -60,8 +60,7 @@ class ProductController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $product = Product::all()[$id];
-        $product->update($request->validate([
+        Product::all()[$id]->update($request->validate([
             "name" => "required|string|max:255",
             "price" => "required|integer",
             "stock" => "required|integer",
