@@ -12,44 +12,88 @@ import java.util.List;
 
 public class DBHelper extends SQLiteOpenHelper {
 
-
     private final String VIDEO_TABLE =
             "CREATE TABLE IF NOT EXISTS videos (" +
                     "path TEXT," +
-                    "description TEXT," +
-                    "is_starred BOOLEAN" +
-            ")";
-    private final String HISTORY_TABLE =
-            "CREATE TABLE IF NOT EXISTS history (" +
-                    "path TEXT," +
-                    "timestamp INTEGER" +
+                    "is_starred BOOLEAN DEFAULT NULL," +
+                    "timestamp INTEGER DEFAULT NULL" +
             ")";
 
     public DBHelper(@Nullable Context context) {
-        super(context, "apcb", null, 2);
+        super(context, "apcb", null, 3);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(this.VIDEO_TABLE);
-        db.execSQL(this.HISTORY_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int i, int i1) {
-        for (String tableName : new String[]{"videos", "history"}) {
-            db.execSQL("DROP TABLE IF EXISTS " + tableName);
-        }
-
+        db.execSQL("DROP TABLE IF EXISTS videos");
         this.onCreate(db);
     }
 
+    public void delete(SQLiteDatabase db) {
+        db.execSQL("DELETE FROM videos");
+    }
+
+    public void addAll(SQLiteDatabase db, List<Video> videos) {
+        for (Video v : videos) {
+            db.execSQL("INSERT INTO videos (path) VALUES (?)", new String[]{v.getPath()});
+        }
+    }
+
+    public boolean isTableEmpty(SQLiteDatabase db) {
+        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM videos", null);
+        if (cursor.moveToFirst()) {
+            boolean v = cursor.getInt(0) == 0;;
+            cursor.close();
+            return v;
+        }
+
+        return false;
+    }
+
     public void addToHistory(SQLiteDatabase db, String path, String time) {
-        db.execSQL("INSERT INTO history VALUES (?, ?)", new String[]{path, time});
+        db.execSQL("UPDATE videos SET timestamp = ? WHERE path = ?", new String[]{time, path});
     }
 
     public void addToHistory(SQLiteDatabase db, String path, long time) {
         addToHistory(db, path, String.valueOf(time));
+    }
+
+    public void addToFavorite(SQLiteDatabase db, String path) {
+        db.execSQL("UPDATE videos SET is_starred = TRUE WHERE path = ?", new String[]{path});
+    }
+
+    public void deleteFavorite(SQLiteDatabase db, String path) {
+        db.execSQL("UPDATE videos SET is_starred = FALSE WHERE path = ?", new String[]{path});
+    }
+
+    public ArrayList<Video> getAllFavorite(SQLiteDatabase db, List<Video> videos) {
+        List<String> favorite = new ArrayList<>();
+        Cursor cursor = db.rawQuery("SELECT path FROM videos WHERE is_starred = 1", null);
+        if (cursor.moveToFirst()) {
+            do {
+                favorite.add(cursor.getString(0));
+            } while (cursor.moveToNext());
+
+            cursor.close();
+        }
+
+        ArrayList<Video> videoList = new ArrayList<>();
+        for (Video v : videos) {
+            if (favorite.contains(v.getPath())) {
+                videoList.add(v);
+            }
+        }
+
+        return videoList;
+    }
+
+    public ArrayList<Video> getAllFavorite(Context context, SQLiteDatabase db) {
+        return getAllFavorite(db, Utils.getAllVideo(context));
     }
 
     public void getHistory(SQLiteDatabase db) {

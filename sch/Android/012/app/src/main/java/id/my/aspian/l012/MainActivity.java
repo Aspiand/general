@@ -1,6 +1,7 @@
 package id.my.aspian.l012;
 
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -18,10 +19,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    private SharedPreferences preferences;
-    private SharedPreferences.Editor editor;
     private FragmentManager fragmentManager;
-    public Fragment listVideoFragment, listDirectoryFragment;
+    public Fragment listVideoFragment, listDirectoryFragment, listFavoriteFragment;
 
     BottomNavigationView bottom_nav;
 
@@ -46,13 +45,11 @@ public class MainActivity extends AppCompatActivity {
         bottom_nav = findViewById(R.id.bottom_navigation);
         bottom_nav.setOnItemSelectedListener(this::navHandler);
 
-        preferences = getSharedPreferences("session", MODE_PRIVATE);
-        editor = preferences.edit();
-
         // Fragment
         fragmentManager = getSupportFragmentManager();
         listVideoFragment = new ListVideoFragment();
         listDirectoryFragment = new ListDirectoryFragment();
+        listFavoriteFragment = new ListFavoriteFragment();
     }
 
     private boolean navHandler(MenuItem item) {
@@ -62,11 +59,13 @@ public class MainActivity extends AppCompatActivity {
             loadFragment(listDirectoryFragment);
             return true;
         } else if (item_id == R.id.nav_favorite) {
+            loadFragment(listFavoriteFragment);
             return true;
         } else if (item_id == R.id.nav_video) {
             loadFragment(listVideoFragment);
             return true;
         } else if (item_id == R.id.nav_history) {
+//            loadFragment(listVideoFragment);
             return true;
         }
 

@@ -58,12 +58,6 @@ public class Utils {
         return getVideo(context, selection, selectionArgs);
     }
 
-    public static Video getVideoByPath(Context context, String path) {
-        String selection = MediaStore.Video.Media.DATA + " LIKE ?";
-        String[] selectionArgs = new String[]{path};
-        return getVideo(context, selection, selectionArgs).getFirst();
-    }
-
     public static ArrayList<Directory> getAllVideoDirectory(ArrayList<Video> videos) {
         ArrayList<Directory> data = new ArrayList<>();
         Map<String, List<Video>> groupedVideos = videos.stream()
