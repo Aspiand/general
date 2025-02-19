@@ -40,7 +40,6 @@ public class ListFavoriteFragment extends Fragment {
 
         videos = conn.getAllFavorite(requireContext(), db);
         videoAdapter = new VideoAdapter(getContext(), videos);
-
     }
 
     @Override

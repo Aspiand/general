@@ -56,10 +56,6 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> 
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             this.context.startActivity(intent);
         });
-
-//        if (position % 2 == 0) {
-//            holder.status.setBackgroundColor(0xFFFFFF);
-//        }
     }
 
     @Override

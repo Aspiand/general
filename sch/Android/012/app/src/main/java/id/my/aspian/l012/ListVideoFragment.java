@@ -56,7 +56,7 @@ public class ListVideoFragment extends Fragment {
     private void init(View view) {
         RecyclerView listVideo = view.findViewById(R.id.list_video);
 
-        ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+        ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
             public boolean onMove(@NonNull RecyclerView recyclerView,
                                   @NonNull RecyclerView.ViewHolder viewHolder,
@@ -69,10 +69,8 @@ public class ListVideoFragment extends Fragment {
                 int position = viewHolder.getAdapterPosition();
                 Video video = videos.get(position);
 
-                conn.addToFavorite(db, video.getPath());
-
-                Toast.makeText(requireContext(), "Added to favorite", Toast.LENGTH_SHORT).show();
-
+                String add = (direction == ItemTouchHelper.LEFT) ? "1" : "0";
+                conn.favorite(db, video.getPath(), add);
                 videoAdapter.notifyItemChanged(position);
             }
 

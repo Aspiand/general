@@ -17,7 +17,7 @@ public class DBHelper extends SQLiteOpenHelper {
                     "path TEXT," +
                     "is_starred BOOLEAN DEFAULT NULL," +
                     "timestamp INTEGER DEFAULT NULL" +
-            ")";
+                    ")";
 
     public DBHelper(@Nullable Context context) {
         super(context, "apcb", null, 3);
@@ -47,7 +47,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public boolean isTableEmpty(SQLiteDatabase db) {
         Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM videos", null);
         if (cursor.moveToFirst()) {
-            boolean v = cursor.getInt(0) == 0;;
+            boolean v = cursor.getInt(0) == 0;
             cursor.close();
             return v;
         }
@@ -63,17 +63,13 @@ public class DBHelper extends SQLiteOpenHelper {
         addToHistory(db, path, String.valueOf(time));
     }
 
-    public void addToFavorite(SQLiteDatabase db, String path) {
-        db.execSQL("UPDATE videos SET is_starred = TRUE WHERE path = ?", new String[]{path});
-    }
-
-    public void deleteFavorite(SQLiteDatabase db, String path) {
-        db.execSQL("UPDATE videos SET is_starred = FALSE WHERE path = ?", new String[]{path});
+    public void favorite(SQLiteDatabase db, String path, String bool) {
+        db.execSQL("UPDATE videos SET is_starred = ? WHERE path = ?", new String[]{bool, path});
     }
 
     public ArrayList<Video> getAllFavorite(SQLiteDatabase db, List<Video> videos) {
         List<String> favorite = new ArrayList<>();
-        Cursor cursor = db.rawQuery("SELECT path FROM videos WHERE is_starred = 1", null);
+        Cursor cursor = db.rawQuery("SELECT path FROM videos WHERE is_starred = TRUE", null);
         if (cursor.moveToFirst()) {
             do {
                 favorite.add(cursor.getString(0));
