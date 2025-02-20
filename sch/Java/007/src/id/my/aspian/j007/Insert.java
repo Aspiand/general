@@ -5,6 +5,7 @@
 package id.my.aspian.j007;
 
 import java.sql.*;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -20,7 +21,7 @@ public class Insert extends javax.swing.JFrame {
         initComponents();
 
         try {
-            DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
+//            DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
             conn = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/general",
                     "root", "root"
@@ -32,11 +33,15 @@ public class Insert extends javax.swing.JFrame {
         String[] rows = {"Kode Barang", "Nama Barang", "Harga Barang"};
         tabelModel = new DefaultTableModel(null, rows);
         Table.setModel(tabelModel);
-        
+
         refresh();
     }
 
     void refresh() {
+        for (int i = tabelModel.getRowCount() - 1; i >= 0; i--) {
+            tabelModel.removeRow(i);
+        }
+
         try {
             ResultSet result = conn.createStatement().executeQuery("SELECT * FROM barang");
             while (result.next()) {
@@ -68,12 +73,17 @@ public class Insert extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        clearButton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         Table = new javax.swing.JTable();
         jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
 
         jLabel1.setText("Kode Barang");
 
@@ -82,12 +92,32 @@ public class Insert extends javax.swing.JFrame {
         jLabel3.setText("Harga Barang");
 
         jButton1.setText("Save");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Edit");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setText("Delete");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
-        jButton4.setText("C");
+        clearButton.setText("C");
+        clearButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clearButtonActionPerformed(evt);
+            }
+        });
 
         Table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -100,6 +130,11 @@ public class Insert extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        Table.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                TableMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(Table);
 
         jLabel4.setFont(new java.awt.Font("sansserif", 0, 24)); // NOI18N
@@ -131,7 +166,7 @@ public class Insert extends javax.swing.JFrame {
                                 .addComponent(jButton1)
                                 .addComponent(jButton2))
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(clearButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(152, 152, 152)
                         .addComponent(jLabel4)))
@@ -161,7 +196,7 @@ public class Insert extends javax.swing.JFrame {
                             .addComponent(jButton3)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(21, 21, 21)
-                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(clearButton, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -169,6 +204,71 @@ public class Insert extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        try {
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_formWindowClosed
+
+    private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearButtonActionPerformed
+        for (JTextField i : new JTextField[]{kodeBarang, namaBarang, hargaBarang}) {
+            i.setText("");
+        }
+        Table.setCellSelectionEnabled(false);
+    }//GEN-LAST:event_clearButtonActionPerformed
+
+    private void TableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TableMouseClicked
+        int row = Table.getSelectedRow();
+        if (row == -1) {
+            return;
+        }
+
+        JTextField[] fields = {kodeBarang, namaBarang, hargaBarang};
+        for (int i = 0; i < fields.length; i++) {
+            Object value = Table.getValueAt(row, i);
+            fields[i].setText(value != null ? value.toString() : "");
+        }
+    }//GEN-LAST:event_TableMouseClicked
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        try (PreparedStatement stmt = conn.prepareStatement("INSERT INTO barang VALUES (?, ?, ?)")) {
+            JTextField[] fields = {kodeBarang, namaBarang, hargaBarang};
+            for (int i = 0; i < fields.length; i++) {
+                stmt.setString(i + 1, fields[i].getText());
+            }
+
+            stmt.executeUpdate();
+            refresh();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        try {
+            conn.prepareStatement("DELETE FROM barang WHERE kode = " + kodeBarang.getText()).execute();
+            refresh();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        try (PreparedStatement stmt = conn.prepareStatement("UPDATE barang SET nama = ?, harga = ? WHERE kode = ?")) {
+            JTextField[] fields = {namaBarang, hargaBarang, kodeBarang};
+            for (int i = 0; i < fields.length; i++) {
+                stmt.setString(i + 1, fields[i].getText());
+            }
+
+            stmt.executeUpdate();
+            refresh();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -207,11 +307,11 @@ public class Insert extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable Table;
+    private javax.swing.JButton clearButton;
     private javax.swing.JTextField hargaBarang;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
