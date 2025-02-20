@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Utils {
-    public static ArrayList<Video> getAllVideo(Context context) {
+    public static ArrayList<Video> getVideo(Context context, String selection, String[] selectionArgs) {
         ArrayList<Video> tmp = new ArrayList<>();
         Uri uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
         String sort = MediaStore.Video.Media.TITLE + " ASC";
@@ -26,7 +26,7 @@ public class Utils {
                 MediaStore.Video.Media.DURATION,
         };
 
-        Cursor cursor = context.getContentResolver().query(uri, projection, null, null, sort);
+        Cursor cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs, sort);
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 tmp.add(
@@ -47,6 +47,17 @@ public class Utils {
         return tmp;
     }
 
+    public static ArrayList<Video> getAllVideo(Context context) {
+        return getVideo(context, null, null);
+    }
+
+    public static ArrayList<Video> getAllVideoByDirectory(Context context, String directory) {
+        String selection = MediaStore.Video.Media.DATA + " LIKE ?";
+        String[] selectionArgs = new String[]{directory + "%"};
+
+        return getVideo(context, selection, selectionArgs);
+    }
+
     public static ArrayList<Directory> getAllVideoDirectory(ArrayList<Video> videos) {
         ArrayList<Directory> data = new ArrayList<>();
         Map<String, List<Video>> groupedVideos = videos.stream()
@@ -64,6 +75,14 @@ public class Utils {
 
         return data;
     }
+
+//    public static ArrayList<Directory> getAllVideoDirectory(Context context) {
+//        return getAllVideoDirectory(getAllVideo(context));
+//    }
+
+//    public static ArrayList<Video> getAllVideoFromDirectory(String directoryName) {
+//        return new ArrayList<>();
+//    }
 
     // https://stackoverflow.com/a/5599842/29457100
     public static String readableFileSize(long size) {

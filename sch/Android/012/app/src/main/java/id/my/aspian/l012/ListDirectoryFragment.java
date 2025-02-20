@@ -33,6 +33,7 @@ public class ListDirectoryFragment extends Fragment {
     private void init(View view) {
         RecyclerView listDirectory = view.findViewById(R.id.list_directory);
 
+
         if (directories != null && !directories.isEmpty()) {
             listDirectory.setAdapter(directoryAdapter);
             listDirectory.setLayoutManager(

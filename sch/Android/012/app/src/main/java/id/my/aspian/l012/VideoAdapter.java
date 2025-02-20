@@ -37,7 +37,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> 
         Video video = this.videos.get(position);
         int duration = Integer.parseInt(video.getDuration()) / 1000;
 
-        holder.filename.setText(video.getTitle());
+        holder.filename.setText(video.getFileName());
         holder.duration.setText(String.format(
                 Locale.getDefault(), "%02d:%02d", duration / 60, duration % 60
         ));
@@ -52,14 +52,10 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> 
         // Event
         holder.itemView.setOnClickListener(view -> {
             Intent intent = new Intent(this.context, PlayerActivity.class);
-            intent.putExtra("position", position);
+            intent.putExtra("path", video.getPath());
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             this.context.startActivity(intent);
         });
-
-//        if (position % 2 == 0) {
-//            holder.status.setBackgroundColor(0xFFFFFF);
-//        }
     }
 
     @Override

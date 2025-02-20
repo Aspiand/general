@@ -1,11 +1,13 @@
 package id.my.aspian.l012;
 
-import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -15,13 +17,11 @@ import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import java.util.ArrayList;
-
 public class MainActivity extends AppCompatActivity {
-    private SharedPreferences preferences;
-    private SharedPreferences.Editor editor;
     private FragmentManager fragmentManager;
-    public Fragment listVideoFragment, listDirectoryFragment;
+    public Fragment listVideoFragment, listDirectoryFragment, listFavoriteFragment;
+    DBHelper conn;
+    SQLiteDatabase db;
 
     BottomNavigationView bottom_nav;
 
@@ -36,23 +36,45 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
+        conn = new DBHelper(this);
+        db = conn.getWritableDatabase();
+
         init();
 
         // dev
-        bottom_nav.setSelectedItemId(R.id.nav_home);
+        bottom_nav.setSelectedItemId(R.id.nav_video);
     }
 
     private void init() {
         bottom_nav = findViewById(R.id.bottom_navigation);
         bottom_nav.setOnItemSelectedListener(this::navHandler);
 
-        preferences = getSharedPreferences("session", MODE_PRIVATE);
-        editor = preferences.edit();
-
         // Fragment
         fragmentManager = getSupportFragmentManager();
         listVideoFragment = new ListVideoFragment();
         listDirectoryFragment = new ListDirectoryFragment();
+        listFavoriteFragment = new ListFavoriteFragment();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int itemId = item.getItemId();
+        if (itemId == R.id.delete_favorite) {
+            conn.clearFavorite(db);
+            toast("Favorite dihapus");
+        } else if (itemId == R.id.delete_history) {
+            conn.clearHistory(db);
+            toast("History dihapus");
+        } else {
+            throw new IllegalStateException("Unexpected value: " + item.getItemId());
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
     private boolean navHandler(MenuItem item) {
@@ -62,11 +84,13 @@ public class MainActivity extends AppCompatActivity {
             loadFragment(listDirectoryFragment);
             return true;
         } else if (item_id == R.id.nav_favorite) {
+            loadFragment(listFavoriteFragment);
             return true;
         } else if (item_id == R.id.nav_video) {
             loadFragment(listVideoFragment);
             return true;
         } else if (item_id == R.id.nav_history) {
+//            loadFragment(listVideoFragment);
             return true;
         }
 
