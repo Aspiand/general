@@ -4,13 +4,13 @@
 
     <item
         android:id="@+id/delete_history"
-        android:icon="@drawable/ic_menu_delete"
+        android:icon="@drawable/ic_menu_delete_history"
         android:title="Delete history"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/delete_favorite"
-        android:icon="@drawable/ic_menu_delete"
+        android:icon="@drawable/ic_menu_delete_favorite"
         android:title="Delete Favorite"
         app:showAsAction="ifRoom" />
 

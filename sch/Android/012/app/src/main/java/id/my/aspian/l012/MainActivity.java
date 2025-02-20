@@ -1,6 +1,5 @@
 package id.my.aspian.l012;
 
-import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.Menu;
@@ -18,11 +17,11 @@ import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import java.util.ArrayList;
-
 public class MainActivity extends AppCompatActivity {
     private FragmentManager fragmentManager;
     public Fragment listVideoFragment, listDirectoryFragment, listFavoriteFragment;
+    DBHelper conn;
+    SQLiteDatabase db;
 
     BottomNavigationView bottom_nav;
 
@@ -36,6 +35,9 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0);
             return insets;
         });
+
+        conn = new DBHelper(this);
+        db = conn.getWritableDatabase();
 
         init();
 
@@ -56,7 +58,23 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int itemId = item.getItemId();
+        if (itemId == R.id.delete_favorite) {
+            conn.clearFavorite(db);
+            toast("Favorite dihapus");
+        } else if (itemId == R.id.delete_history) {
+            conn.clearHistory(db);
+            toast("History dihapus");
+        } else {
+            throw new IllegalStateException("Unexpected value: " + item.getItemId());
+        }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
     private boolean navHandler(MenuItem item) {
@@ -77,12 +95,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return false;
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
-        return super.onCreateOptionsMenu(menu);
     }
 
     public void toast(String message) {

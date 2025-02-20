@@ -38,6 +38,14 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("DELETE FROM videos");
     }
 
+    public void clearHistory(SQLiteDatabase db) {
+        db.execSQL("UPDATE videos SET timestamp = NULL");
+    }
+
+    public void clearFavorite(SQLiteDatabase db) {
+        db.execSQL("UPDATE videos SET is_starred = NULL");
+    }
+
     public void addAll(SQLiteDatabase db, List<Video> videos) {
         for (Video v : videos) {
             db.execSQL("INSERT INTO videos (path) VALUES (?)", new String[]{v.getPath()});
