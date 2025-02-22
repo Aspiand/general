@@ -15,12 +15,12 @@ public class DBHelper extends SQLiteOpenHelper {
     private final String VIDEO_TABLE =
             "CREATE TABLE IF NOT EXISTS videos (" +
                     "path TEXT," +
-                    "is_starred BOOLEAN DEFAULT NULL," +
-                    "timestamp INTEGER DEFAULT NULL" +
+                    "is_starred BOOLEAN DEFAULT FALSE," +
+                    "timestamp BIGINT DEFAULT NULL" +
             ")";
 
     public DBHelper(@Nullable Context context) {
-        super(context, "apcb", null, 3);
+        super(context, "apcb", null, 4);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public void clearFavorite(SQLiteDatabase db) {
-        db.execSQL("UPDATE videos SET is_starred = NULL");
+        db.execSQL("UPDATE videos SET is_starred = FALSE");
     }
 
     public void addAll(SQLiteDatabase db, List<Video> videos) {
@@ -71,12 +71,12 @@ public class DBHelper extends SQLiteOpenHelper {
         addToHistory(db, path, String.valueOf(time));
     }
 
-    public void favorite(SQLiteDatabase db, String path, String bool) {
-        db.execSQL("UPDATE videos SET is_starred = ? WHERE path = ?", new String[]{bool, path});
+    public void favorite(SQLiteDatabase db, String path) {
+        db.execSQL("UPDATE videos SET is_starred = NOT is_starred WHERE path = ?", new String[]{path});
     }
 
-    public ArrayList<Video> getAllFavorite(SQLiteDatabase db, List<Video> videos) {
-        List<String> favorite = new ArrayList<>();
+    public ArrayList<Video> getAllFavorite(SQLiteDatabase db, ArrayList<Video> videos) {
+        ArrayList<String> favorite = new ArrayList<>();
         Cursor cursor = db.rawQuery("SELECT path FROM videos WHERE is_starred = TRUE", null);
         if (cursor.moveToFirst()) {
             do {
@@ -96,7 +96,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return videoList;
     }
 
-    public ArrayList<Video> getAllFavorite(Context context, SQLiteDatabase db) {
+    public ArrayList<Video> getAllFavorite(SQLiteDatabase db, Context context) {
         return getAllFavorite(db, Utils.getAllVideo(context));
     }
 

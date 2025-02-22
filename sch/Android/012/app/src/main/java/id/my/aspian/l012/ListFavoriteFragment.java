@@ -1,16 +1,12 @@
 package id.my.aspian.l012;
 
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Canvas;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -38,7 +34,7 @@ public class ListFavoriteFragment extends Fragment {
         conn = new DBHelper(requireContext());
         db = conn.getWritableDatabase();
 
-        videos = conn.getAllFavorite(requireContext(), db);
+        videos = conn.getAllFavorite(db, requireContext());
         videoAdapter = new VideoAdapter(getContext(), videos);
     }
 

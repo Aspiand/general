@@ -4,10 +4,11 @@ import java.util.List;
 
 public class Directory {
     private final String name, path;
-    private final int count, size;
+    private final int count;
+    private final long size;
     private final List<Video> videoOnDirectory;
 
-    public Directory(String name, String path, int count, int size, List<Video> videoOnDirectory) {
+    public Directory(String name, String path, int count, long size, List<Video> videoOnDirectory) {
         this.name = name;
         this.path = path;
         this.count = count;
@@ -28,7 +29,7 @@ public class Directory {
     }
 
     public String getSize() {
-        return Utils.readableFileSize(size);
+        return Utils.humanReadableByteCountBin(size);
     }
 
     public List<Video> getVideoOnDirectory() {

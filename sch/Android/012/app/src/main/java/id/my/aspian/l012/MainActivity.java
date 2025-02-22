@@ -17,7 +17,10 @@ import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
+    public static ArrayList<Video> videos;
     private FragmentManager fragmentManager;
     public Fragment listVideoFragment, listDirectoryFragment, listFavoriteFragment;
     DBHelper conn;
@@ -36,6 +39,10 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
+        //
+        videos = Utils.getAllVideo(this);
+        //
+
         conn = new DBHelper(this);
         db = conn.getWritableDatabase();
 
@@ -53,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         fragmentManager = getSupportFragmentManager();
         listVideoFragment = new ListVideoFragment();
         listDirectoryFragment = new ListDirectoryFragment();
-        listFavoriteFragment = new ListFavoriteFragment();
+        listFavoriteFragment = ListVideoFragment.newInstanceByFavorite();
     }
 
     @Override
@@ -61,10 +68,10 @@ public class MainActivity extends AppCompatActivity {
         int itemId = item.getItemId();
         if (itemId == R.id.delete_favorite) {
             conn.clearFavorite(db);
-            toast("Favorite dihapus");
+            toast("Semua favorite dihapus");
         } else if (itemId == R.id.delete_history) {
             conn.clearHistory(db);
-            toast("History dihapus");
+            toast("Semua history dihapus");
         } else {
             throw new IllegalStateException("Unexpected value: " + item.getItemId());
         }

@@ -32,8 +32,6 @@ android {
 }
 
 dependencies {
-//    implementation(libs.room.runtime)
-
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)

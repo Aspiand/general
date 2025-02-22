@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -22,7 +21,27 @@ public class ListVideoFragment extends Fragment {
     DBHelper conn;
     SQLiteDatabase db;
 
-    public ListVideoFragment() {
+    public ListVideoFragment() {}
+
+    public static ListVideoFragment newInstanceByFavorite() {
+        ListVideoFragment fragment = new ListVideoFragment();
+        Bundle args = new Bundle();
+        args.putString("show", "favorite");
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static ListVideoFragment newInstanceByDirectory(String directory) {
+        ListVideoFragment fragment = new ListVideoFragment();
+        Bundle args = new Bundle();
+        args.putString("show", "directory");
+        args.putString("directory", directory);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static ListVideoFragment newInstanceByDirectory() {
+        return newInstanceByDirectory("/storage/emulated/0/Share");
     }
 
     @Override
@@ -35,14 +54,31 @@ public class ListVideoFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        videos = Utils.getAllVideoByDirectory(requireContext(), "/storage/emulated/0/Share");
-        videoAdapter = new VideoAdapter(getContext(), videos);
 
         conn = new DBHelper(requireContext());
         db = conn.getWritableDatabase();
         if (conn.isTableEmpty(db)) {
             conn.addAll(db, videos);
         }
+
+        if (getArguments() != null) {
+            switch (getArguments().getString("show")) {
+                case "favorite":
+                    videos = conn.getAllFavorite(db, MainActivity.videos);
+                    break;
+                case "directory":
+                    videos = Utils.getAllVideoByDirectory(
+                            requireContext(),
+                            getArguments().getString("directory")
+                    );
+
+                    break;
+            }
+        } else {
+            videos = MainActivity.videos;
+        }
+
+        videoAdapter = new VideoAdapter(getContext(), videos);
     }
 
     @Override
@@ -69,8 +105,7 @@ public class ListVideoFragment extends Fragment {
                 int position = viewHolder.getAdapterPosition();
                 Video video = videos.get(position);
 
-                String add = (direction == ItemTouchHelper.LEFT) ? "1" : "0";
-                conn.favorite(db, video.getPath(), add);
+                conn.favorite(db, video.getPath());
                 videoAdapter.notifyItemChanged(position);
             }
 
