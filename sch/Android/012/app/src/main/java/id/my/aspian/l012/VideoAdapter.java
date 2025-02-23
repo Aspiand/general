@@ -53,6 +53,9 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> 
         holder.itemView.setOnClickListener(view -> {
             Intent intent = new Intent(this.context, PlayerActivity.class);
             intent.putExtra("path", video.getPath());
+            intent.putExtra("title", video.getTitle());
+            intent.putExtra("size", video.getReadableSize());
+            intent.putExtra("path", video.getPath());
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             this.context.startActivity(intent);
         });

@@ -29,7 +29,7 @@ public class Directory {
     }
 
     public String getSize() {
-        return Utils.humanReadableByteCountBin(size);
+        return Utils.readableFileSize(size);
     }
 
     public List<Video> getVideoOnDirectory() {

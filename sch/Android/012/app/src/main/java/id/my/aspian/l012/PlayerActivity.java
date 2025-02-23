@@ -3,6 +3,7 @@ package id.my.aspian.l012;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,7 +11,6 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.media3.common.MediaItem;
-import androidx.media3.common.util.Log;
 import androidx.media3.exoplayer.ExoPlayer;
 import androidx.media3.ui.PlayerView;
 
@@ -21,7 +21,7 @@ public class PlayerActivity extends AppCompatActivity {
     SQLiteDatabase db;
     PlayerView playerView;
     ExoPlayer player;
-    String path;
+    String path, title, size;
 
     @Override
     protected void onDestroy() {
@@ -62,6 +62,11 @@ public class PlayerActivity extends AppCompatActivity {
             return insets;
         });
 
+        // Get intent data
+        path = getIntent().getStringExtra("path");
+        title = getIntent().getStringExtra("title");
+        size = getIntent().getStringExtra("size");
+
         // Database
         conn = new DBHelper(this);
         db = conn.getWritableDatabase();
@@ -72,13 +77,15 @@ public class PlayerActivity extends AppCompatActivity {
         playerView.setKeepScreenOn(true);
         playerView.setPlayer(player);
 
-        path = getIntent().getStringExtra("path");
         MediaItem mediaItem = MediaItem.fromUri(Uri.parse(path));
 
         player.setMediaItem(mediaItem);
         player.prepare();
         player.setPlayWhenReady(true);
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment, new ListVideoFragment()).commit();
+        ((TextView) findViewById(R.id.title)).setText(title);
+        ((TextView) findViewById(R.id.size)).setText(size);
+
+//        getSupportFragmentManager().beginTransaction().replace(R.id.fragment, new ListVideoFragment()).commit();
     }
 }

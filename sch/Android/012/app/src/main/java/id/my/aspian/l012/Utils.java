@@ -134,6 +134,10 @@ public class Utils {
         return new DecimalFormat("#,##0.#").format(size / Math.pow(1024, digitGroups)) + " " + units[digitGroups];
     }
 
+    public static String readableFileSize(String size) {
+        return readableFileSize(Long.parseLong(size));
+    }
+
 //    https://stackoverflow.com/a/3758880/29457100
     public static String humanReadableByteCountBin(long bytes) {
         long absB = bytes == Long.MIN_VALUE ? Long.MAX_VALUE : Math.abs(bytes);

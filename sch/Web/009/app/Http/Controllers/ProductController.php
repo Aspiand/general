@@ -7,20 +7,14 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        return redirect()->route("index");
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return redirect()->route("index");
     }
 
     /**
@@ -39,12 +33,9 @@ class ProductController extends Controller
         return redirect()->route("index", ["products" => Product::all()]);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
-        //
+        return redirect()->route("index");
     }
 
     /**
@@ -52,7 +43,7 @@ class ProductController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        return redirect()->route("index");
     }
 
     /**

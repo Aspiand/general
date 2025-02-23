@@ -48,6 +48,10 @@ public class Video {
         return Integer.parseInt(size);
     }
 
+    public String getReadableSize() {
+        return Utils.readableFileSize(size);
+    }
+
     public void setSize(String size) {
         this.size = size;
     }

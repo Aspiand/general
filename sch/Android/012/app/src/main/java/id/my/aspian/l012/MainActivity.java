@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         init();
 
         // dev
-        bottom_nav.setSelectedItemId(R.id.nav_video);
+        bottom_nav.setSelectedItemId(R.id.nav_home);
     }
 
     private void init() {
