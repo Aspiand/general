@@ -18,15 +18,13 @@ import java.util.Objects;
 
 public class PlayerActivity extends AppCompatActivity {
     DBHelper conn;
-    SQLiteDatabase db;
     PlayerView playerView;
     ExoPlayer player;
     String path, title, size;
 
     @Override
     protected void onDestroy() {
-        conn.addToHistory(db, path, player.getCurrentPosition());
-        db.close();
+        conn.addToHistory(path, player.getCurrentPosition());
         conn.close();
         player.release();
         super.onDestroy();
@@ -68,8 +66,7 @@ public class PlayerActivity extends AppCompatActivity {
         size = getIntent().getStringExtra("size");
 
         // Database
-        conn = new DBHelper(this);
-        db = conn.getWritableDatabase();
+        conn = DBHelper.getInstance(this);
 
         // Player
         player = new ExoPlayer.Builder(this).build();

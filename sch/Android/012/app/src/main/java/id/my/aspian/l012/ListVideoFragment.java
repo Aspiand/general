@@ -19,7 +19,6 @@ public class ListVideoFragment extends Fragment {
     ArrayList<Video> videos;
     public VideoAdapter videoAdapter;
     DBHelper conn;
-    SQLiteDatabase db;
 
     public ListVideoFragment() {}
 
@@ -46,7 +45,6 @@ public class ListVideoFragment extends Fragment {
 
     @Override
     public void onDestroy() {
-        db.close();
         conn.close();
         super.onDestroy();
     }
@@ -55,16 +53,12 @@ public class ListVideoFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        conn = new DBHelper(requireContext());
-        db = conn.getWritableDatabase();
-        if (conn.isTableEmpty(db)) {
-            conn.addAll(db, videos);
-        }
+        conn = DBHelper.getInstance(requireContext());
 
         if (getArguments() != null) {
             switch (getArguments().getString("show")) {
                 case "favorite":
-                    videos = conn.getAllFavorite(db, MainActivity.videos);
+                    videos = conn.getAllFavorite(MainActivity.videos);
                     break;
                 case "directory":
                     videos = Utils.getAllVideoByDirectory(
@@ -105,7 +99,7 @@ public class ListVideoFragment extends Fragment {
                 int position = viewHolder.getAdapterPosition();
                 Video video = videos.get(position);
 
-                conn.favorite(db, video.getPath());
+                conn.favorite(video.getPath());
                 videoAdapter.notifyItemChanged(position);
             }
 

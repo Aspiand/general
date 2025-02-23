@@ -16,14 +16,12 @@ public class ListFavoriteFragment extends Fragment {
     ArrayList<Video> videos;
     public VideoAdapter videoAdapter;
     DBHelper conn;
-    SQLiteDatabase db;
 
     public ListFavoriteFragment() {
     }
 
     @Override
     public void onDestroyView() {
-        db.close();
         conn.close();
         super.onDestroyView();
     }
@@ -31,10 +29,9 @@ public class ListFavoriteFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        conn = new DBHelper(requireContext());
-        db = conn.getWritableDatabase();
+        conn = DBHelper.getInstance(requireContext());
 
-        videos = conn.getAllFavorite(db, requireContext());
+        videos = conn.getAllFavorite(requireContext());
         videoAdapter = new VideoAdapter(getContext(), videos);
     }
 

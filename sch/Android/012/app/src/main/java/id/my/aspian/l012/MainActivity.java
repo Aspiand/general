@@ -24,7 +24,6 @@ public class MainActivity extends AppCompatActivity {
     private FragmentManager fragmentManager;
     public Fragment listVideoFragment, listDirectoryFragment, listFavoriteFragment;
     DBHelper conn;
-    SQLiteDatabase db;
 
     BottomNavigationView bottom_nav;
 
@@ -39,13 +38,6 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        //
-        videos = Utils.getAllVideo(this);
-        //
-
-        conn = new DBHelper(this);
-        db = conn.getWritableDatabase();
-
         init();
 
         // dev
@@ -53,6 +45,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void init() {
+        // Database
+        conn = DBHelper.getInstance(this);
+        if (conn.isTableEmpty()) {
+            conn.addAll(videos);
+        }
+
+        videos = Utils.getAllVideo(this);
+
+        // Navigation
         bottom_nav = findViewById(R.id.bottom_navigation);
         bottom_nav.setOnItemSelectedListener(this::navHandler);
 
@@ -67,10 +68,10 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int itemId = item.getItemId();
         if (itemId == R.id.delete_favorite) {
-            conn.clearFavorite(db);
+            conn.clearFavorite();
             toast("Semua favorite dihapus");
         } else if (itemId == R.id.delete_history) {
-            conn.clearHistory(db);
+            conn.clearHistory();
             toast("Semua history dihapus");
         } else {
             throw new IllegalStateException("Unexpected value: " + item.getItemId());

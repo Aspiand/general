@@ -6,9 +6,7 @@ import android.net.Uri;
 import android.provider.MediaStore;
 
 import java.io.File;
-import java.text.CharacterIterator;
 import java.text.DecimalFormat;
-import java.text.StringCharacterIterator;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -136,22 +134,5 @@ public class Utils {
 
     public static String readableFileSize(String size) {
         return readableFileSize(Long.parseLong(size));
-    }
-
-//    https://stackoverflow.com/a/3758880/29457100
-    public static String humanReadableByteCountBin(long bytes) {
-        long absB = bytes == Long.MIN_VALUE ? Long.MAX_VALUE : Math.abs(bytes);
-        if (absB < 1024) {
-            return bytes + " B";
-        }
-        long value = absB;
-        CharacterIterator ci = new StringCharacterIterator("KMGTPE");
-        for (int i = 40; i >= 0 && absB > 0xfffccccccccccccL >> i; i -= 10) {
-            value >>= 10;
-            ci.next();
-        }
-
-        value *= Long.signum(bytes);
-        return String.format("%.1f %ciB", value / 1024.0, ci.current());
     }
 }
