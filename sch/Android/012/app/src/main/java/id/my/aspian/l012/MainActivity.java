@@ -1,6 +1,5 @@
 package id.my.aspian.l012;
 
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -45,13 +44,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void init() {
+        videos = Utils.getAllVideo(this);
+
         // Database
         conn = DBHelper.getInstance(this);
         if (conn.isTableEmpty()) {
             conn.addAll(videos);
         }
-
-        videos = Utils.getAllVideo(this);
 
         // Navigation
         bottom_nav = findViewById(R.id.bottom_navigation);
