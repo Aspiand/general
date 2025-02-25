@@ -1,10 +1,7 @@
 package id.my.aspian.l012;
 
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -38,7 +35,6 @@ public class PlayerActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
-        Toast.makeText(this, "Alamak", Toast.LENGTH_SHORT).show();
         conn.addToHistory(path, player.getCurrentPosition());
         player.setPlayWhenReady(false);
         super.onStop();

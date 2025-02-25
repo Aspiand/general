@@ -38,7 +38,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public DBHelper(@Nullable Context context) {
-        super(context, "apcb", null, 11);
+        super(context, "apcb", null, 12);
     }
 
     @Override
@@ -154,9 +154,9 @@ public class DBHelper extends SQLiteOpenHelper {
         try (Cursor cursor = db.rawQuery(query, null)) {
             while (cursor.moveToNext()) {
                 paths.put(cursor.getString(0), cursor.getString(1));
-                Log.d("data", cursor.getString(0));
-                Log.d("data", cursor.getString(1));
-                Log.d("huh", "----");
+//                Log.d("data", cursor.getString(0));
+//                Log.d("data", cursor.getString(1));
+//                Log.d("huh", "----");
             }
         }
 
