@@ -4,6 +4,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,7 +25,6 @@ public class PlayerActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        conn.addToHistory(path, player.getCurrentPosition());
         conn.close();
         player.release();
         super.onDestroy();
@@ -38,6 +38,8 @@ public class PlayerActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
+        Toast.makeText(this, "Alamak", Toast.LENGTH_SHORT).show();
+        conn.addToHistory(path, player.getCurrentPosition());
         player.setPlayWhenReady(false);
         super.onStop();
     }
@@ -80,9 +82,9 @@ public class PlayerActivity extends AppCompatActivity {
         player.prepare();
         player.setPlayWhenReady(true);
 
-        ((TextView) findViewById(R.id.title)).setText(title);
-        ((TextView) findViewById(R.id.size)).setText(size);
+//        ((TextView) findViewById(R.id.title)).setText(title);
+//        ((TextView) findViewById(R.id.size)).setText(size);
 
-//        getSupportFragmentManager().beginTransaction().replace(R.id.fragment, new ListVideoFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment, new ListVideoFragment()).commit();
     }
 }

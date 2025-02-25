@@ -4,10 +4,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.provider.MediaStore;
 
 import androidx.annotation.Nullable;
+import androidx.media3.common.util.Log;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -16,16 +19,11 @@ public class DBHelper extends SQLiteOpenHelper {
 
     private final String VIDEO_TABLE =
             "CREATE TABLE IF NOT EXISTS videos (" +
-                    "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+//                    "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "path TEXT," +
                     "is_starred BOOLEAN DEFAULT FALSE," +
-                    "timestamp BIGINT DEFAULT NULL" +
-                    ")";
-    private final String COMMENT_TABLE =
-            "CREATE TABLE IF NOT EXISTS comments (" +
-                    "id INTEGER," +
-                    "comment TEXT," +
-                    "FOREIGN KEY (id) REFERENCES videos (id) ON UPDATE CASCADE ON DELETE CASCADE" +
+                    "timestamp BIGINT DEFAULT NULL," +
+                    "watched_at BIGINT DEFAULT NULL" +
                     ")";
 
     private static DBHelper instance;
@@ -39,13 +37,12 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public DBHelper(@Nullable Context context) {
-        super(context, "apcb", null, 6);
+        super(context, "apcb", null, 11);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(this.VIDEO_TABLE);
-        db.execSQL(this.COMMENT_TABLE);
     }
 
     @Override
@@ -58,7 +55,6 @@ public class DBHelper extends SQLiteOpenHelper {
     public void deletes() {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("DELETE FROM videos");
-        db.execSQL("DELETE FROM comments");
     }
 
     public void clearHistory() {
@@ -87,7 +83,9 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public void addToHistory(String path, String time) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("UPDATE videos SET timestamp = ? WHERE path = ?", new String[]{time, path});
+        String query = "UPDATE videos SET timestamp = ?, watched_at = ? WHERE path = ?";
+        String[] args = new String[]{time, String.valueOf(System.currentTimeMillis() / 1000L), path};
+        db.execSQL(query, args);
     }
 
     public void addToHistory(String path, long time) {
@@ -120,8 +118,58 @@ public class DBHelper extends SQLiteOpenHelper {
         return videoList;
     }
 
-    public ArrayList<Video> getAllFavorite(Context context) {
-        return getAllFavorite(Utils.getAllVideo(context));
+    public ArrayList<Video> getAllHistory(ArrayList<Video> videos) {
+        ArrayList<String> path = new ArrayList<>();
+        ArrayList<String> timestamp = new ArrayList<>();
+        ArrayList<Video> videoList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT path, timestamp FROM videos " +
+                "WHERE timestamp IS NOT NULL ORDER BY path ASC";
+
+        try (Cursor cursor = db.rawQuery(query, null)) {
+            while (cursor.moveToNext()) {
+                path.add(cursor.getString(0));
+                timestamp.add(cursor.getString(1));
+            }
+        }
+
+        for (int i = 0; i < videos.size() && i < timestamp.size(); i++) {
+            Video video = videos.get(i);
+            if (path.contains(video.getPath())) {
+                video.setWatchedAt(timestamp.get(i));
+                videoList.add(video);
+            }
+        }
+
+        videoList.sort(Comparator.comparing(Video::getWatchedAt));
+        return videoList;
+    }
+
+    public ArrayList<Video> getAllHistory(Context context) {
+        ArrayList<String> path = new ArrayList<>();
+        ArrayList<String> timestamp = new ArrayList<>();
+        ArrayList<Video> videoList;
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT path, timestamp FROM videos " +
+                "WHERE timestamp IS NOT NULL ORDER BY path ASC";
+
+        try (Cursor cursor = db.rawQuery(query, null)) {
+            while (cursor.moveToNext()) {
+                path.add(cursor.getString(0));
+                timestamp.add(cursor.getString(1));
+            }
+        }
+
+        if (path.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        String selection = MediaStore.Video.Media.DATA + " IN (" + Utils.generatePlaceholders(path.size()) + ")";
+        videoList = Utils.getVideos(context, selection, path.toArray(new String[0]));
+        videoList.forEach(video -> {
+        });
+
+        return videoList;
     }
 
 //    public ArrayList<Video> getAllHistory(Context context, SQLiteDatabase db, List<Video> videos) {

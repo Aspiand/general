@@ -21,7 +21,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
     public static ArrayList<Video> videos;
     private FragmentManager fragmentManager;
-    public Fragment listVideoFragment, listDirectoryFragment, listFavoriteFragment;
+    public Fragment listVideoFragment, listDirectoryFragment, listFavoriteFragment, listHistoryFragment;
     DBHelper conn;
 
     BottomNavigationView bottom_nav;
@@ -60,7 +60,8 @@ public class MainActivity extends AppCompatActivity {
         fragmentManager = getSupportFragmentManager();
         listVideoFragment = new ListVideoFragment();
         listDirectoryFragment = new ListDirectoryFragment();
-        listFavoriteFragment = ListVideoFragment.newInstanceByFavorite();
+        listFavoriteFragment = ListVideoFragment.newInstance("favorite");
+        listHistoryFragment = ListVideoFragment.newInstance("history");
     }
 
     @Override
@@ -97,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
             loadFragment(listVideoFragment);
             return true;
         } else if (item_id == R.id.nav_history) {
-//            loadFragment(listVideoFragment);
+            loadFragment(listHistoryFragment);
             return true;
         }
 

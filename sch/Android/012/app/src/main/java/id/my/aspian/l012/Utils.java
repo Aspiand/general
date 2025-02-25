@@ -116,14 +116,6 @@ public class Utils {
         return data;
     }
 
-//    public static ArrayList<Directory> getAllVideoDirectory(Context context) {
-//        return getAllVideoDirectory(getAllVideo(context));
-//    }
-
-//    public static ArrayList<Video> getAllVideoFromDirectory(String directoryName) {
-//        return new ArrayList<>();
-//    }
-
     // https://stackoverflow.com/a/5599842/29457100
     public static String readableFileSize(long size) {
         if (size <= 0) return "0";
@@ -134,5 +126,16 @@ public class Utils {
 
     public static String readableFileSize(String size) {
         return readableFileSize(Long.parseLong(size));
+    }
+
+    public static String generatePlaceholders(int len) {
+        if (len < 1) throw new IllegalArgumentException("Invalid argument");
+
+        StringBuilder str = new StringBuilder(len * 2 -1);
+        str.append("?");
+
+        for (int i = 0; i < len; i++) str.append(", ?");
+
+        return str.toString();
     }
 }

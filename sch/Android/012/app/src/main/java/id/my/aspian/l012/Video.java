@@ -1,7 +1,7 @@
 package id.my.aspian.l012;
 
 public class Video {
-    private String id, path, title, fileName, size, duration;
+    private String id, path, title, fileName, size, duration, watchedAt;
 
     public Video(String id, String path, String title, String fileName, String size, String duration) {
         this.id = id;
@@ -62,5 +62,13 @@ public class Video {
 
     public void setDuration(String duration) {
         this.duration = duration;
+    }
+
+    public void setWatchedAt(String value) {
+        this.watchedAt = value;
+    }
+
+    public String getWatchedAt() {
+        return this.watchedAt;
     }
 }

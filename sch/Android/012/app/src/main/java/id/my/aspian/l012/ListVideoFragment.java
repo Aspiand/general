@@ -1,7 +1,5 @@
 package id.my.aspian.l012;
 
-import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Canvas;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,15 +15,15 @@ import java.util.ArrayList;
 
 public class ListVideoFragment extends Fragment {
     ArrayList<Video> videos;
-    public VideoAdapter videoAdapter;
+    VideoAdapter videoAdapter;
     DBHelper conn;
 
     public ListVideoFragment() {}
 
-    public static ListVideoFragment newInstanceByFavorite() {
+    public static ListVideoFragment newInstance(String action) {
         ListVideoFragment fragment = new ListVideoFragment();
         Bundle args = new Bundle();
-        args.putString("show", "favorite");
+        args.putString("show", action);
         fragment.setArguments(args);
         return fragment;
     }
@@ -65,7 +63,9 @@ public class ListVideoFragment extends Fragment {
                             requireContext(),
                             getArguments().getString("directory")
                     );
-
+                    break;
+                case "history":
+                    videos = conn.getAllHistory(requireContext());
                     break;
             }
         } else {
@@ -85,29 +85,19 @@ public class ListVideoFragment extends Fragment {
 
     private void init(View view) {
         RecyclerView listVideo = view.findViewById(R.id.list_video);
-
-        ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+        ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0,
+//                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+                ItemTouchHelper.LEFT) {
             @Override
-            public boolean onMove(@NonNull RecyclerView recyclerView,
-                                  @NonNull RecyclerView.ViewHolder viewHolder,
-                                  @NonNull RecyclerView.ViewHolder target) {
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
                 return false;
             }
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 int position = viewHolder.getAdapterPosition();
-                Video video = videos.get(position);
-
-                conn.favorite(video.getPath());
+                conn.favorite(videos.get(position).getPath());
                 videoAdapter.notifyItemChanged(position);
-            }
-
-            @Override
-            public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView,
-                                    @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY,
-                                    int actionState, boolean isCurrentlyActive) {
-                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
             }
         };
 
