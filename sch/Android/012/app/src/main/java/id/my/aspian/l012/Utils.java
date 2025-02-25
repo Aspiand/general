@@ -17,7 +17,7 @@ public class Utils {
     public static ArrayList<Video> getVideos(Context context, String selection, String[] selectionArgs) {
         ArrayList<Video> tmp = new ArrayList<>();
         Uri uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
-        String sort = MediaStore.Video.Media.TITLE + " ASC";
+        String sort = MediaStore.Video.Media.DATA + " ASC";
         String[] projection = {
                 MediaStore.Video.Media._ID,
                 MediaStore.Video.Media.DATA,

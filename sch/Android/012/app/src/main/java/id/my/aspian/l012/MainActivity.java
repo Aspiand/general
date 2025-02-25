@@ -58,8 +58,8 @@ public class MainActivity extends AppCompatActivity {
 
         // Fragment
         fragmentManager = getSupportFragmentManager();
-        listVideoFragment = new ListVideoFragment();
         listDirectoryFragment = new ListDirectoryFragment();
+        listVideoFragment = new ListVideoFragment();
         listFavoriteFragment = ListVideoFragment.newInstance("favorite");
         listHistoryFragment = ListVideoFragment.newInstance("history");
     }
@@ -87,15 +87,14 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean navHandler(MenuItem item) {
         int item_id = item.getItemId();
-
         if (item.getItemId() == R.id.nav_home) {
             loadFragment(listDirectoryFragment);
             return true;
-        } else if (item_id == R.id.nav_favorite) {
-            loadFragment(listFavoriteFragment);
-            return true;
         } else if (item_id == R.id.nav_video) {
             loadFragment(listVideoFragment);
+            return true;
+        } else if (item_id == R.id.nav_favorite) {
+            loadFragment(listFavoriteFragment);
             return true;
         } else if (item_id == R.id.nav_history) {
             loadFragment(listHistoryFragment);
@@ -111,7 +110,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void loadFragment(Fragment fragment) {
         fragmentManager.beginTransaction()
-                .replace(R.id.main_frame, fragment)
+                .setCustomAnimations(
+                        R.anim.fade_in,
+                        R.anim.fade_out
+                ).replace(R.id.main_frame, fragment)
                 .setReorderingAllowed(true)
                 .commit();
     }

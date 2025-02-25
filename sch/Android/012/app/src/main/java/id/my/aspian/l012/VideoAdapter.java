@@ -55,7 +55,6 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> 
             intent.putExtra("path", video.getPath());
             intent.putExtra("title", video.getTitle());
             intent.putExtra("size", video.getReadableSize());
-            intent.putExtra("path", video.getPath());
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             this.context.startActivity(intent);
         });

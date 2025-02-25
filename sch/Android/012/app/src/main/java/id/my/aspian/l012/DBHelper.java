@@ -11,6 +11,7 @@ import androidx.media3.common.util.Log;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -136,40 +137,52 @@ public class DBHelper extends SQLiteOpenHelper {
         for (int i = 0; i < videos.size() && i < timestamp.size(); i++) {
             Video video = videos.get(i);
             if (path.contains(video.getPath())) {
-                video.setWatchedAt(timestamp.get(i));
                 videoList.add(video);
             }
         }
 
-        videoList.sort(Comparator.comparing(Video::getWatchedAt));
         return videoList;
     }
 
     public ArrayList<Video> getAllHistory(Context context) {
-        ArrayList<String> path = new ArrayList<>();
-        ArrayList<String> timestamp = new ArrayList<>();
+        HashMap<String, String> paths = new HashMap<>();
         ArrayList<Video> videoList;
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "SELECT path, timestamp FROM videos " +
-                "WHERE timestamp IS NOT NULL ORDER BY path ASC";
+                "WHERE timestamp IS NOT NULL ORDER BY watched_at DESC";
 
         try (Cursor cursor = db.rawQuery(query, null)) {
             while (cursor.moveToNext()) {
-                path.add(cursor.getString(0));
-                timestamp.add(cursor.getString(1));
+                paths.put(cursor.getString(0), cursor.getString(1));
+                Log.d("data", cursor.getString(0));
+                Log.d("data", cursor.getString(1));
+                Log.d("huh", "----");
             }
         }
 
-        if (path.isEmpty()) {
+        if (paths.isEmpty()) {
             return new ArrayList<>();
         }
 
-        String selection = MediaStore.Video.Media.DATA + " IN (" + Utils.generatePlaceholders(path.size()) + ")";
-        videoList = Utils.getVideos(context, selection, path.toArray(new String[0]));
-        videoList.forEach(video -> {
-        });
-
+        String selection = MediaStore.Video.Media.DATA + " IN (" + Utils.generatePlaceholders(paths.size()) + ")";
+        String[] args = paths.keySet().toArray(new String[0]);
+        videoList = Utils.getVideos(context, selection, args);
+//        videoList.forEach(video -> {
+//            video.setWatchedAt(
+//                    paths.get(video.getPath())
+//            );
+//        });
+//
+//        videoList.sort(Comparator.comparing(Video::getWatched).reversed());
         return videoList;
+    }
+
+    public long getLastPlayed(String path) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        try (Cursor cursor = db.rawQuery("SELECT timestamp FROM videos WHERE path = ?", new String[]{path})) {
+            cursor.moveToNext();
+            return cursor.getLong(0);
+        }
     }
 
 //    public ArrayList<Video> getAllHistory(Context context, SQLiteDatabase db, List<Video> videos) {

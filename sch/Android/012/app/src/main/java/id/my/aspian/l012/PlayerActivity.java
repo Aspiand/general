@@ -80,10 +80,8 @@ public class PlayerActivity extends AppCompatActivity {
 
         player.setMediaItem(mediaItem);
         player.prepare();
+        player.seekTo(conn.getLastPlayed(path));
         player.setPlayWhenReady(true);
-
-//        ((TextView) findViewById(R.id.title)).setText(title);
-//        ((TextView) findViewById(R.id.size)).setText(size);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment, new ListVideoFragment()).commit();
     }
