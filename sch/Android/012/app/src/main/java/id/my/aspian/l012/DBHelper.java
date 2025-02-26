@@ -20,7 +20,6 @@ public class DBHelper extends SQLiteOpenHelper {
 
     private final String VIDEO_TABLE =
             "CREATE TABLE IF NOT EXISTS videos (" +
-//                    "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "path TEXT," +
                     "is_starred BOOLEAN DEFAULT FALSE," +
                     "timestamp BIGINT DEFAULT NULL," +
@@ -154,9 +153,6 @@ public class DBHelper extends SQLiteOpenHelper {
         try (Cursor cursor = db.rawQuery(query, null)) {
             while (cursor.moveToNext()) {
                 paths.put(cursor.getString(0), cursor.getString(1));
-//                Log.d("data", cursor.getString(0));
-//                Log.d("data", cursor.getString(1));
-//                Log.d("huh", "----");
             }
         }
 
@@ -167,13 +163,6 @@ public class DBHelper extends SQLiteOpenHelper {
         String selection = MediaStore.Video.Media.DATA + " IN (" + Utils.generatePlaceholders(paths.size()) + ")";
         String[] args = paths.keySet().toArray(new String[0]);
         videoList = Utils.getVideos(context, selection, args);
-//        videoList.forEach(video -> {
-//            video.setWatchedAt(
-//                    paths.get(video.getPath())
-//            );
-//        });
-//
-//        videoList.sort(Comparator.comparing(Video::getWatched).reversed());
         return videoList;
     }
 
@@ -184,29 +173,4 @@ public class DBHelper extends SQLiteOpenHelper {
             return cursor.getLong(0);
         }
     }
-
-//    public ArrayList<Video> getAllHistory(Context context, SQLiteDatabase db, List<Video> videos) {
-//        List<String> history = new ArrayList<>();
-//        Cursor cursor = db.rawQuery("SELECT path, timestamp FROM videos WHERE timestamp != NULL", null);
-//        if (cursor.moveToFirst()) {
-//            do {
-//                history.add(cursor.);
-//            } while (cursor.moveToNext());
-//
-//            cursor.close();
-//        }
-//    }
-
-//    public void getHistory(SQLiteDatabase db) {
-//        List<Video> videos = new ArrayList<>();
-//        Cursor cursor = db.rawQuery("SELECT * FROM history DESC", null);
-//        if (cursor.moveToFirst()) {
-//            do {
-//                videos.add(
-//                        new Video()
-//                );
-//            } while (cursor.moveToNext());
-//            cursor.close();
-//        }
-//    }
 }

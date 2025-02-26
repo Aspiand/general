@@ -39,6 +39,9 @@ public class DirectoryAdapter extends RecyclerView.Adapter<DirectoryAdapter.View
                 ListVideoFragment fragment = ListVideoFragment.newInstanceByDirectory(directory.getPath());
                 ((MainActivity) this.context).getSupportFragmentManager()
                         .beginTransaction()
+                        .setCustomAnimations(
+                                R.anim.fade_in,
+                                R.anim.fade_out)
                         .replace(R.id.main_frame, fragment)
                         .addToBackStack(null)
                         .commit();

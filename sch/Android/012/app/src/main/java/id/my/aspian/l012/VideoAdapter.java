@@ -38,6 +38,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> 
         int duration = Integer.parseInt(video.getDuration()) / 1000;
 
         holder.filename.setText(video.getFileName());
+        holder.size.setText(video.getReadableSize());
         holder.duration.setText(String.format(
                 Locale.getDefault(), "%02d:%02d", duration / 60, duration % 60
         ));
@@ -67,7 +68,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView thumbnail;
-        TextView filename, duration;
+        TextView filename, duration, size;
         View status;
 
         public ViewHolder(@NonNull View itemView) {
@@ -77,6 +78,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> 
             filename = itemView.findViewById(R.id.filename);
             duration = itemView.findViewById(R.id.duration);
             status = itemView.findViewById(R.id.status);
+            size = itemView.findViewById(R.id.size);
         }
     }
 }
