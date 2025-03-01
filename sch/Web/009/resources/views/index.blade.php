@@ -23,7 +23,7 @@
                             <td class="text-center">{{$product->stock}}</td>
                             <td>{{$product->description}}</td>
                             <td class="text-center">
-                                <button value="{{$loop->index}}"
+                                <button value="{{$product->id}}"
                                     class="modify-button btn rounded-3xl outline outline-1 bg-gray-800 hover:outline-0">
                                     Modify
                                 </button>
