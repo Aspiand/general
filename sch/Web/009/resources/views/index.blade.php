@@ -126,58 +126,60 @@
     </dialog>
 
     <script>
-        main_form = document.getElementById("main-form")
-        form_method = document.getElementById("form-method")
-        modal_title = document.getElementById("modal-title")
-        delete_button = document.getElementById("delete-button")
-        delete_value = document.getElementById("delete-value")
-        delete_form = document.getElementById("delete-form")
-        input_name = document.getElementById("name")
-        input_price = document.getElementById("price")
-        input_stock = document.getElementById("stock")
-        input_description = document.getElementById("description")
+        document.addEventListener("DOMContentLoaded", () => {
+            const mainForm = document.getElementById("main-form");
+            const formMethod = document.getElementById("form-method");
+            const modalTitle = document.getElementById("modal-title");
+            const deleteButton = document.getElementById("delete-button");
+            const deleteForm = document.getElementById("delete-form");
+            const inputName = document.getElementById("name");
+            const inputPrice = document.getElementById("price");
+            const inputStock = document.getElementById("stock");
+            const inputDescription = document.getElementById("description");
+            const createRoute = "{{route('product.store')}}";
+            const updateRoute = "{{route('product.update', ':id')}}";
+            const deleteRoute = "{{route('product.destroy', ':id')}}";
 
-        document.getElementById("cart").addEventListener("click", () => {
-            modal.showModal()
-            delete_button.classList.add("hidden")
+            const showModal = (title, method, action, product = {}) => {
+                modal.showModal();
+                modalTitle.innerHTML = title;
+                formMethod.value = method;
+                mainForm.action = action;
 
-            input_name.value = ""
-            input_price.value = ""
-            input_stock.value = ""
-            input_description.innerHTML = ""
-            modal_title.innerHTML = "Add Product"
-            form_method.value = "POST"
+                inputName.value = product.name || "";
+                inputPrice.value = product.price || "";
+                inputStock.value = product.stock || "";
+                inputDescription.value = product.description || "";
 
-            main_form.setAttribute("action", "{{route("product.store")}}")
-        })
+                if (method === "POST") {
+                    deleteButton.classList.add("hidden");
+                } else {
+                    deleteButton.classList.remove("hidden");
+                    deleteButton.value = product.id;
+                }
+            };
 
-        delete_button.addEventListener("click", function () {
-            delete_form.setAttribute("action", "{{route("product.destroy", ":id")}}".replace(":id", this.value))
-            delete_form.submit()
-        })
+            document.getElementById("cart").addEventListener("click", () => {
+                showModal("Add Product", "POST", createRoute);
+            });
 
-        Array.from(document.getElementsByClassName("modify-button")).forEach((button) => {
-            button.addEventListener("click", function () {
-                modal.showModal()
-                delete_button.classList.remove("hidden")
+            deleteButton.addEventListener("click", function () {
+                deleteForm.action = deleteRoute.replace(':id', this.value);
+                deleteForm.submit();
+            });
 
-                row = this.closest("tr")
-                name = row.cells[1].textContent.trim()
-                price = row.cells[2].textContent.trim()
-                stock = row.cells[3].textContent.trim()
-                description = row.cells[4].textContent.trim()
-
-                id.value = this.value
-                input_name.value = name
-                input_price.value = price
-                input_stock.value = stock
-                input_description.innerHTML = description
-                delete_button.value = this.value
-                modal_title.innerHTML = "Modify Product"
-                form_method.value = "PUT"
-
-                main_form.setAttribute("action", "{{route('product.update', ":id")}}".replace(":id", this.value))
-            })
-        })
+            document.querySelectorAll(".modify-button").forEach(button => {
+                button.addEventListener("click", function () {
+                    const row = this.closest("tr");
+                    showModal("Modify Product", "PUT", updateRoute.replace(':id', product.id), {
+                        id: this.value,
+                        name: row.cells[1].textContent.trim(),
+                        price: row.cells[2].textContent.trim(),
+                        stock: row.cells[3].textContent.trim(),
+                        description: row.cells[4].textContent.trim()
+                    });
+                });
+            });
+        });
     </script>
 @endsection
