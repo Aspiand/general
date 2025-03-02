@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -55,7 +56,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> 
             Intent intent = new Intent(this.context, PlayerActivity.class);
             intent.putExtra("path", video.getPath());
             intent.putExtra("title", video.getTitle());
-            intent.putExtra("size", video.getReadableSize());
+            intent.putExtra("directory", new File(video.getPath()).getParentFile().getName());
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             this.context.startActivity(intent);
         });

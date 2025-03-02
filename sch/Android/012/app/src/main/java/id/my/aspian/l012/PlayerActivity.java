@@ -2,6 +2,7 @@ package id.my.aspian.l012;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,7 +19,7 @@ public class PlayerActivity extends AppCompatActivity {
     DBHelper conn;
     PlayerView playerView;
     ExoPlayer player;
-    String path, title, size;
+    String path, title, directory;
 
     @Override
     protected void onDestroy() {
@@ -61,7 +62,7 @@ public class PlayerActivity extends AppCompatActivity {
         // Get intent data
         path = getIntent().getStringExtra("path");
         title = getIntent().getStringExtra("title");
-        size = getIntent().getStringExtra("size");
+        directory = getIntent().getStringExtra("directory");
 
         // Database
         conn = DBHelper.getInstance(this);
@@ -79,6 +80,8 @@ public class PlayerActivity extends AppCompatActivity {
         player.seekTo(conn.getLastPlayed(path));
         player.setPlayWhenReady(true);
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment, new ListVideoFragment()).commit();
+        ((TextView) findViewById(R.id.title)).setText(title);
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment, ListVideoFragment.newInstanceByDirectory(directory)).commit();
     }
 }

@@ -3,7 +3,7 @@
     <div class="bg-gray-800 m-8 card">
         <div class="overflow-x-auto">
             <table class="table">
-                <thead>
+                <thead class="text-white font-bold">
                     <tr class="text-center">
                         <th>No</th>
                         <th>Name</th>

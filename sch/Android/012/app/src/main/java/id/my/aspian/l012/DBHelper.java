@@ -48,7 +48,6 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int i, int i1) {
         db.execSQL("DROP TABLE IF EXISTS videos");
-        db.execSQL("DROP TABLE IF EXISTS comments");
         this.onCreate(db);
     }
 
