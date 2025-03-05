@@ -3,6 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/reset"
+        android:icon="@drawable/ic_menu_reset"
+        android:title="Refresh Database"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/delete_history"
         android:icon="@drawable/ic_menu_delete_history"
         android:title="Delete history"

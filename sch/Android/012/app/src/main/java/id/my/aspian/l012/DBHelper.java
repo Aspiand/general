@@ -7,10 +7,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.MediaStore;
 
 import androidx.annotation.Nullable;
-import androidx.media3.common.util.Log;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -80,15 +78,16 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
-    public void addToHistory(String path, String time) {
+    public void addToHistory(String path, long time) {
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "UPDATE videos SET timestamp = ?, watched_at = ? WHERE path = ?";
-        String[] args = new String[]{time, String.valueOf(System.currentTimeMillis() / 1000L), path};
-        db.execSQL(query, args);
-    }
+        String[] args = new String[]{
+                String.valueOf(time),
+                String.valueOf(System.currentTimeMillis() / 1000L),
+                path
+        };
 
-    public void addToHistory(String path, long time) {
-        addToHistory(path, String.valueOf(time));
+        db.execSQL(query, args);
     }
 
     public void favorite(String path) {
@@ -168,8 +167,11 @@ public class DBHelper extends SQLiteOpenHelper {
     public long getLastPlayed(String path) {
         SQLiteDatabase db = this.getReadableDatabase();
         try (Cursor cursor = db.rawQuery("SELECT timestamp FROM videos WHERE path = ?", new String[]{path})) {
-            cursor.moveToNext();
-            return cursor.getLong(0);
+            if (cursor.moveToFirst()) {
+                return cursor.getLong(0);
+            }
         }
+
+        return 0;
     }
 }

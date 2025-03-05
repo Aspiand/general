@@ -82,6 +82,6 @@ public class PlayerActivity extends AppCompatActivity {
 
         ((TextView) findViewById(R.id.title)).setText(title);
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment, ListVideoFragment.newInstanceByDirectory(directory)).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment, ListVideoFragment.newInstanceByDirectory("PZN")).commit();
     }
 }

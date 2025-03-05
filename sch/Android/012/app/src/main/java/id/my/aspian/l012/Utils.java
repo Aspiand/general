@@ -54,7 +54,7 @@ public class Utils {
 
     public static ArrayList<Video> getAllVideoByDirectory(Context context, String directory) {
         String selection = MediaStore.Video.Media.DATA + " LIKE ?";
-        String[] selectionArgs = new String[]{directory + "%"};
+        String[] selectionArgs = new String[]{"%" + directory + "%"};
 
         return getVideos(context, selection, selectionArgs);
     }

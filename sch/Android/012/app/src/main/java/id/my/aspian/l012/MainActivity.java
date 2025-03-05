@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
     public static ArrayList<Video> videos;
     private FragmentManager fragmentManager;
     public Fragment listVideoFragment, listDirectoryFragment, listFavoriteFragment, listHistoryFragment;
-    DBHelper conn;
+    private DBHelper conn;
 
     BottomNavigationView bottom_nav;
 
@@ -38,8 +38,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
         init();
-
-        // dev
         bottom_nav.setSelectedItemId(R.id.nav_home);
     }
 
@@ -73,6 +71,11 @@ public class MainActivity extends AppCompatActivity {
         } else if (itemId == R.id.delete_history) {
             conn.clearHistory();
             toast("Semua history dihapus");
+        } else if (itemId == R.id.reset) {
+            videos = Utils.getAllVideo(this);
+            conn.deletes();
+            conn.addAll(videos);
+            toast("Database diperbarui");
         } else {
             throw new IllegalStateException("Unexpected value: " + item.getItemId());
         }

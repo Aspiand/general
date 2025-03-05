@@ -79,7 +79,6 @@ public class ListVideoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_list_video, container, false);
         init(view);
-
         return view;
     }
 
