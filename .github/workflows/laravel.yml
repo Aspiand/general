@@ -9,8 +9,8 @@ jobs:
     strategy:
       matrix:
         project:
-          - 007-gt
-          - 009
+          - "007-gt"
+          - "009"
 
     steps:
       - name: Login to GitHub Container Registry
@@ -26,7 +26,7 @@ jobs:
       - name: Build image
         uses: docker/build-push-action@v3
         with:
-          context: ./sch/Web/${{ matrix.project }}
-          dockerfile: ./sch/Web/docker/Dockerfile.laravel
+          context: ${{ github.workspace }}/sch/Web/${{ matrix.project }}
+          dockerfile: ${{ github.workspace }}/sch/Web/docker/Dockerfile.laravel
           push: true
           tags: ghcr.io/aspiand/web:${{ matrix.project }}
