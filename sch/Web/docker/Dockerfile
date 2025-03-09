@@ -1,0 +1,38 @@
+FROM composer:lts AS composer
+
+WORKDIR /app
+
+COPY . .
+
+RUN composer install --no-dev --optimize-autoloader
+
+FROM node:latest AS node
+
+WORKDIR /app
+
+COPY --from=composer /app .
+
+RUN npm install && npm run build
+
+FROM php:8.2-fpm AS php
+
+WORKDIR /var/www/html
+
+COPY --from=node /app .
+
+RUN apt-get update && apt-get install -y libsqlite3-dev && \
+    docker-php-ext-install pdo pdo_sqlite
+
+RUN cp .env.example .env && \
+    php artisan key:generate && \
+    php artisan config:cache && \
+    php artisan route:cache && \
+    php artisan view:cache && \
+    php artisan event:cache && \
+    php artisan storage:link && \
+    php artisan migrate --force && \
+    chown -R www-data:www-data /var/www/html
+
+EXPOSE 8000
+
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
