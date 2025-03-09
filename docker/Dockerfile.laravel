@@ -1,4 +1,4 @@
-FROM composer:lts AS composer
+FROM --platform=$BUILDPLATFORM composer:latest AS composer
 
 WORKDIR /app
 
@@ -6,7 +6,7 @@ COPY . .
 
 RUN composer install --no-dev --optimize-autoloader
 
-FROM node:latest AS node
+FROM --platform=$BUILDPLATFORM node:latest AS node
 
 WORKDIR /app
 
@@ -14,7 +14,7 @@ COPY --from=composer /app .
 
 RUN npm install && npm run build
 
-FROM php:8.2-fpm AS php
+FROM --platform=$BUILDPLATFORM php:8.2-fpm AS php
 
 WORKDIR /var/www/html
 
