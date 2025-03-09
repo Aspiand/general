@@ -27,6 +27,6 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: ./sch/Web/${{ matrix.project }}
-          dockerfile: ./sch/Web/Dockerfile
+          dockerfile: ./sch/Web/docker/Dockerfile.laravel
           push: true
           tags: ghcr.io/aspiand/web:${{ matrix.project }}
