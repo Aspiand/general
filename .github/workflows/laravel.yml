@@ -9,7 +9,6 @@ jobs:
     strategy:
       matrix:
         project:
-          - "007-gt"
           - "009"
 
     steps:
