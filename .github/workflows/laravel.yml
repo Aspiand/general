@@ -29,4 +29,4 @@ jobs:
           context: ./sch/Web/${{ matrix.project }}
           dockerfile: ./sch/Web/Dockerfile
           push: true
-          tags: ghcr.io/${{ github.repository_owner }}/web:${{ matrix.project }}
+          tags: ghcr.io/aspiand/web:${{ matrix.project }}
