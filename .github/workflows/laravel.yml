@@ -16,6 +16,9 @@ jobs:
         project:
           - "007-gt"
           - "009"
+        platform:
+          - linux/amd64
+          - linux/arm64
 
     steps:
       - name: Login to GitHub Container Registry
@@ -34,5 +37,5 @@ jobs:
           context: ${{ github.workspace }}/sch/Web/${{ matrix.project }}
           file: ${{ github.workspace }}/docker/Dockerfile.laravel
           tags: ghcr.io/aspiand/web:${{ matrix.project }}
+          platforms: ${{ matrix.platform }}
           push: true
-          platforms: linux/amd64,linux/arm64
