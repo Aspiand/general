@@ -53,7 +53,6 @@
                             <span class="badge">New</span>
                         </a>
                     </li>
-                    {{-- <li><a>Logout</a></li> --}}
                 </ul>
             </div>
         </div>
