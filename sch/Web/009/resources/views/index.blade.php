@@ -10,6 +10,8 @@
                         <th>Price</th>
                         <th>Stock</th>
                         <th>Description</th>
+                        <th>Created</th>
+                        <th>Updated</th>
                         <th>-</th>
                     </tr>
                 </thead>
@@ -22,12 +24,16 @@
                             <td>{{$product->price}}</td>
                             <td class="text-center">{{$product->stock}}</td>
                             <td>{{$product->description}}</td>
+                            <td class="text-center">{{$product->created_at}}</td>
+                            <td class="text-center">{{$product->updated_at}}</td>
                             <td class="text-center">
                                 <button value="{{$product->id}}"
                                     class="modify-button btn rounded-3xl outline outline-1 bg-gray-800 hover:outline-0">
                                     <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20"
                                         xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828zM6 12v2H4v-2h2zm-1 3h2v2H5v-2z"></path>
+                                        <path
+                                            d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828zM6 12v2H4v-2h2zm-1 3h2v2H5v-2z">
+                                        </path>
                                     </svg>
                                 </button>
                             </td>
