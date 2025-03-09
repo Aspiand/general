@@ -33,5 +33,6 @@ jobs:
         with:
           context: ${{ github.workspace }}/sch/Web/${{ matrix.project }}
           file: ${{ github.workspace }}/docker/Dockerfile.laravel
-          push: true
           tags: ghcr.io/aspiand/web:${{ matrix.project }}
+          push: true
+          platforms: linux/amd64,linux/arm64
