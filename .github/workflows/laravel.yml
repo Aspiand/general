@@ -14,6 +14,7 @@ jobs:
     strategy:
       matrix:
         project:
+          - "007-gt"
           - "009"
 
     steps:
@@ -31,6 +32,6 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: ${{ github.workspace }}/sch/Web/${{ matrix.project }}
-          file: ${{ github.workspace }}/sch/Web/docker/Dockerfile.laravel
+          file: ${{ github.workspace }}/docker/Dockerfile.laravel
           push: true
           tags: ghcr.io/aspiand/web:${{ matrix.project }}
