@@ -4,8 +4,13 @@ on:
       - main
 
 jobs:
-  build-and-push:
+  build_and_push:
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
+
     strategy:
       matrix:
         project:
@@ -26,6 +31,6 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: ${{ github.workspace }}/sch/Web/${{ matrix.project }}
-          dockerfile: ${{ github.workspace }}/sch/Web/docker/Dockerfile.laravel
+          file: ${{ github.workspace }}/sch/Web/docker/Dockerfile.laravel
           push: true
           tags: ghcr.io/aspiand/web:${{ matrix.project }}
