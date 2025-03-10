@@ -19,29 +19,17 @@ public class Insert extends javax.swing.JFrame {
 
     public Insert() {
         initComponents();
-
-        try {
-//            DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
-            conn = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/general",
-                    "root", "root"
-            );
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
+        conn = Utils.getDatabaseConnection();
         String[] rows = {"Kode Barang", "Nama Barang", "Harga Barang"};
         tabelModel = new DefaultTableModel(null, rows);
         Table.setModel(tabelModel);
-
         refresh();
+        Utils.integerField(kodeBarang, hargaBarang);
+        Utils.stringField(namaBarang);
     }
 
     void refresh() {
-        for (int i = tabelModel.getRowCount() - 1; i >= 0; i--) {
-            tabelModel.removeRow(i);
-        }
-
+        Utils.clearTable(tabelModel);
         try {
             ResultSet result = conn.createStatement().executeQuery("SELECT * FROM barang");
             while (result.next()) {
@@ -204,11 +192,7 @@ public class Insert extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
-        try {
-            conn.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        Utils.closeDatabaseConnection();
     }//GEN-LAST:event_formWindowClosed
 
     private void TableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TableMouseClicked
@@ -262,9 +246,7 @@ public class Insert extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        for (JTextField i : new JTextField[]{kodeBarang, namaBarang, hargaBarang}) {
-            i.setText("");
-        }
+        Utils.clearInputs(new JTextField[]{kodeBarang, namaBarang, hargaBarang});
         Table.setCellSelectionEnabled(false);
     }//GEN-LAST:event_jButton4ActionPerformed
 
