@@ -43,7 +43,7 @@ public class Detail extends javax.swing.JFrame {
         try {
             ResultSet result = conn.createStatement().executeQuery("SELECT "
                     + "barang.kode AS kode_barang,"
-                    + "barang.nama AS nama_barang,"
+                    + "barang.nama AS nama_barang," // aspian btw
                     + "barang.harga AS  harga_barang,"
                     + "detail.qty AS kuantitas,"
                     + "detail.no_faktur AS no_faktur "
@@ -221,6 +221,7 @@ public class Detail extends javax.swing.JFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         Utils.clearInputs(noFaktur, namaBarang, hargaBarang, kuantitas);
+        kodeBarang.setSelectedIndex(-1);
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void kodeBarangItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_kodeBarangItemStateChanged
@@ -249,7 +250,12 @@ public class Detail extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseClicked
-        // aspian btw
+        int row = table.getSelectedRow();
+        noFaktur.setText(tabelModel.getValueAt(row, 0).toString());
+        kodeBarang.setSelectedItem(tabelModel.getValueAt(row, 1).toString());
+        namaBarang.setText(tabelModel.getValueAt(row, 2).toString());
+        hargaBarang.setText(tabelModel.getValueAt(row, 3).toString());
+        kuantitas.setText(tabelModel.getValueAt(row, 4).toString());
     }//GEN-LAST:event_tableMouseClicked
 
     /**

@@ -17,8 +17,8 @@ public class Utils {
                         "root", "root");
             } catch (SQLException e) {
                 showErrorDialog("Can't connect to database");
-                System.exit(1);
                 e.printStackTrace();
+                System.exit(1);
             }
         }
 
