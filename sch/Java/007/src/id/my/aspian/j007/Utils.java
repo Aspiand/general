@@ -16,9 +16,12 @@ public class Utils {
                         "jdbc:mysql://localhost:3306/general",
                         "root", "root");
             } catch (SQLException e) {
+                showErrorDialog("Can't connect to database");
+                System.exit(1);
                 e.printStackTrace();
             }
         }
+
         return connection;
     }
 
@@ -32,7 +35,7 @@ public class Utils {
         }
     }
 
-    public static void clearInputs(JTextField[] inputs) {
+    public static void clearInputs(JTextField... inputs) {
         for (JTextField input : inputs) {
             input.setText("");
         }

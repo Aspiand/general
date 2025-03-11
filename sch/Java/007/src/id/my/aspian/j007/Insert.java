@@ -24,8 +24,9 @@ public class Insert extends javax.swing.JFrame {
         tabelModel = new DefaultTableModel(null, rows);
         Table.setModel(tabelModel);
         refresh();
-        Utils.integerField(kodeBarang, hargaBarang);
+
         Utils.stringField(namaBarang);
+        Utils.integerField(kodeBarang, hargaBarang);
     }
 
     void refresh() {
