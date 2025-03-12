@@ -120,3 +120,27 @@ CREATE TABLE `transaksi` (
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2025-02-20  1:25:44
+
+
+
+
+
+
+-- CREATE TABLE `detail` (
+--   `no_faktur` varchar(5) DEFAULT NULL,
+--   `kode_barang` varchar(5) DEFAULT NULL,
+--   `qty` varchar(50) DEFAULT NULL,
+--   PRIMARY KEY (`no_faktur`),
+--   KEY `kode_barang` (`kode_barang`),
+--   CONSTRAINT `detail_ibfk_1` FOREIGN KEY (`kode_barang`) REFERENCES `barang` (`kode`) ON DELETE CASCADE ON UPDATE CASCADE
+--   CONSTRAINT `detail_ibfk_2` FOREIGN KEY (`no_faktur`) REFERENCES `transaksi` (`no_faktur`) ON DELETE CASCADE ON UPDATE CASCADE,
+-- ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- CREATE TABLE `transaksi` (
+--   `no_faktur` varchar(5) DEFAULT NULL,
+--   `tanggal` date DEFAULT NULL,
+--   `kode_pelanggan` varchar(5) DEFAULT NULL,
+--   KEY `no_faktur` (`no_faktur`),
+--   KEY `kode_pelanggan` (`kode_pelanggan`),
+--   CONSTRAINT `transaksi_ibfk_2` FOREIGN KEY (`kode_pelanggan`) REFERENCES `pelanggan` (`kode`) ON DELETE CASCADE ON UPDATE CASCADE
+-- ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
