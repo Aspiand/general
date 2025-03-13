@@ -7,7 +7,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 public class Utils {
-    public static Connection connection = null;
+    private static Connection connection = null;
 
     public static synchronized Connection getDatabaseConnection() {
         if (connection == null) {
