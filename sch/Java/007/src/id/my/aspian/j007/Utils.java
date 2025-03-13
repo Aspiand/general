@@ -3,6 +3,7 @@ package id.my.aspian.j007;
 import java.sql.*;
 import javax.swing.JTextField;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
@@ -41,7 +42,7 @@ public class Utils {
         }
     }
 
-    public static void clearTable(javax.swing.table.DefaultTableModel model) {
+    public static void clearTable(DefaultTableModel model) {
         for (int i = model.getRowCount() - 1; i >= 0; i--) {
             model.removeRow(i);
         }
