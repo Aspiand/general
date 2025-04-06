@@ -1,5 +1,7 @@
-# Important
-- https://stackoverflow.com/questions/64382564/how-i-fix-nothing-to-show-in-my-vector-asset-in-android-studio
+[!IMPORTANT]
+Useful information
+- [How I fix NOTHING TO SHOW in my vector asset](https://stackoverflow.com/questions/64382564/how-i-fix-nothing-to-show-in-my-vector-asset-in-android-studio)
+- [Scanning files to index never ends](https://stackoverflow.com/a/66333452/29457100)
 
 # Style
 ## Atribut Style
