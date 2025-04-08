@@ -12,8 +12,10 @@ public class Main {
     public static void main(String[] args) {
         Insert insert = new Insert();
         Detail detail = new Detail();
+        Pelanggan pelanggan = new Pelanggan();
 
         insert.setVisible(true);
         detail.setVisible(true);
+        pelanggan.setVisible(true);
     }
 }

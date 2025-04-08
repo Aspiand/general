@@ -48,12 +48,12 @@ public class Detail extends javax.swing.JFrame {
                     + "detail.no_faktur AS no_faktur "
                     + "FROM detail INNER JOIN barang ON barang.kode=detail.kode_barang");
             while (result.next()) {
-                tabelModel.addRow(new String[] {
-                        result.getString("no_faktur"),
-                        result.getString("kode_barang"),
-                        result.getString("nama_barang"),
-                        result.getString("harga_barang"),
-                        result.getString("kuantitas")
+                tabelModel.addRow(new String[]{
+                    result.getString("no_faktur"),
+                    result.getString("kode_barang"),
+                    result.getString("nama_barang"),
+                    result.getString("harga_barang"),
+                    result.getString("kuantitas")
                 });
             }
         } catch (SQLException e) {
@@ -244,7 +244,7 @@ public class Detail extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evtcode ) {// GEN-FIRST:event_jButton4ActionPerformed
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evtcode) {// GEN-FIRST:event_jButton4ActionPerformed
         Utils.clearInputs(noFaktur, namaBarang, hargaBarang, kuantitas);
         kodeBarang.setSelectedIndex(-1);
         refresh();
@@ -260,7 +260,8 @@ public class Detail extends javax.swing.JFrame {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } catch (NullPointerException e) {}
+        } catch (NullPointerException e) {
+        }
     }// GEN-LAST:event_kodeBarangItemStateChanged
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton1ActionPerformed
