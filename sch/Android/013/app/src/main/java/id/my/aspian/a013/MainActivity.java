@@ -1,8 +1,6 @@
 package id.my.aspian.a013;
 
 import android.os.Bundle;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,7 +8,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import id.my.aspian.a013.question.BasicQuestion;
+import id.my.aspian.a013.fragment.MainMenuFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,5 +25,10 @@ public class MainActivity extends AppCompatActivity {
 
         AudioManager audio = AudioManager.getInstance(this);
 //        audio.playBackground(R.raw.shooting_stars);
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.main_frame, MainMenuFragment.class, null)
+                .commit();
     }
 }

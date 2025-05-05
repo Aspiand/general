@@ -4,46 +4,52 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/gradient_dark_card"
     tools:context=".fragment.MainMenuFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
         android:padding="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <!-- Mathematics -->
-        <androidx.cardview.widget.CardView
+        <!-- Mathematics Card -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:translationZ="8dp"
             app:cardCornerRadius="30dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:cardElevation="12dp"
+            app:strokeColor="#181830"
+            app:strokeWidth="0.8dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="180dp"
-                android:layout_height="180dp"
-                android:layout_gravity="center">
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                tools:ignore="TextSizeCheck">
 
                 <ImageView
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:background="@color/material_dynamic_neutral20"
-                    android:contentDescription="Gambar Aja"
-                    app:layout_constraintBottom_toTopOf="@+id/view"
+                    android:background="@drawable/gradient_dark_card"
+                    android:contentDescription="Meh"
+                    android:src="@drawable/ic_math"
+                    app:layout_constraintBottom_toTopOf="@+id/math_view"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:ignore="HardcodedText" />
 
                 <View
-                    android:id="@+id/view"
+                    android:id="@+id/math_view"
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:background="@color/cardview_dark_background"
+                    android:layout_height="50dp"
+                    android:background="#231E34"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
@@ -58,31 +64,28 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/view"
+                    app:layout_constraintTop_toTopOf="@+id/math_view"
                     tools:ignore="HardcodedText" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
 
-        </androidx.cardview.widget.CardView>
-
+        <!-- Mathematics Card -->
         <androidx.cardview.widget.CardView
-            android:id="@+id/cardView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="30dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_marginEnd="8dp"
+            app:cardCornerRadius="30dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="180dp"
-                android:layout_height="180dp"
-                android:layout_gravity="center">
+                android:layout_width="160dp"
+                android:layout_height="160dp">
 
                 <ImageView
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:background="@color/material_dynamic_neutral20"
-                    android:contentDescription="Gambar Aja"
+                    android:contentDescription="Meh"
                     app:layout_constraintBottom_toTopOf="@+id/general_view"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -92,8 +95,7 @@
                 <View
                     android:id="@+id/general_view"
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:background="@color/cardview_dark_background"
+                    android:layout_height="50dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
@@ -112,9 +114,9 @@
                     tools:ignore="HardcodedText" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-
         </androidx.cardview.widget.CardView>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
