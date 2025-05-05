@@ -24,5 +24,8 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        AudioManager audio = AudioManager.getInstance(this);
+//        audio.playBackground(R.raw.shooting_stars);
     }
 }
