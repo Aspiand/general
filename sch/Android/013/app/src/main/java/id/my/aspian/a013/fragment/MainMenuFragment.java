@@ -36,7 +36,7 @@ public class MainMenuFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         view.findViewById(R.id.math).setOnClickListener(v -> {
-            Fragment stage = StageFragment.newmathinstance();
+            Fragment stage = StageFragment.newMathInstance();
             Utils.move(requireActivity().getSupportFragmentManager(), R.id.main_frame, stage, false);
         });
     }
