@@ -24,11 +24,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         AudioManager audio = AudioManager.getInstance(this);
-//        audio.playBackground(R.raw.shooting_stars);
+        audio.playBackground(R.raw.shooting_stars);
 
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.main_frame, MainMenuFragment.class, null)
-                .commit();
+        Utils.move(getSupportFragmentManager(), R.id.main_frame, MainMenuFragment.newInstance(), true);
     }
 }

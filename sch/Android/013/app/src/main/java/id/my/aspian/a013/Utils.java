@@ -4,6 +4,10 @@ import android.annotation.SuppressLint;
 import android.os.CountDownTimer;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+
 public class Utils {
     public static CountDownTimer makeTimer(TextView mTextField, long start, Callback callback) {
         // Start in second
@@ -22,5 +26,15 @@ public class Utils {
                 callback.onDone();
             }
         };
+    }
+
+    public static void move(FragmentManager fm, int container, Fragment instance, boolean addToBackStack) {
+        fm.beginTransaction()
+                .setCustomAnimations(
+                        R.anim.slide_in_right, R.anim.slide_out_left,
+                        R.anim.slide_in_left, R.anim.slide_out_right)
+                .replace(R.id.main_frame, instance)
+                .addToBackStack(null)
+                .commit();
     }
 }
