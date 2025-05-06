@@ -68,7 +68,8 @@
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/question">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -89,14 +90,18 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
                     android:layout_weight="1"
-                    android:text="A" />
+                    android:backgroundTint="@color/secondary"
+                    android:text="A"
+                    android:textColor="@color/white" />
 
                 <Button
                     android:id="@+id/button_b"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="B" />
+                    android:backgroundTint="@color/secondary"
+                    android:text="B"
+                    android:textColor="@color/white" />
             </LinearLayout>
 
             <LinearLayout
@@ -111,14 +116,18 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
                     android:layout_weight="1"
-                    android:text="C" />
+                    android:backgroundTint="@color/secondary"
+                    android:text="C"
+                    android:textColor="@color/white" />
 
                 <Button
                     android:id="@+id/button_d"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="D" />
+                    android:backgroundTint="@color/secondary"
+                    android:text="D"
+                    android:textColor="@color/white" />
             </LinearLayout>
 
         </LinearLayout>
