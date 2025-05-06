@@ -49,7 +49,20 @@
 
     </com.google.android.material.appbar.MaterialToolbar>
 
+    <TextView
+        android:id="@+id/question"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Questions"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@id/answer"
+        app:layout_constraintTop_toBottomOf="@id/bar"
+        tools:ignore="HardcodedText" />
+
     <LinearLayout
+        android:id="@+id/answer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"

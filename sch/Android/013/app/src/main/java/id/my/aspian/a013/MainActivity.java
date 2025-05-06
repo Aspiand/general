@@ -26,6 +26,6 @@ public class MainActivity extends AppCompatActivity {
         AudioManager audio = AudioManager.getInstance(this);
         audio.playBackground(R.raw.shooting_stars);
 
-        Utils.move(getSupportFragmentManager(), R.id.main_frame, MainMenuFragment.newInstance(), true);
+        Utils.move(getSupportFragmentManager(), MainMenuFragment.newInstance());
     }
 }

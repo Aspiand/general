@@ -10,6 +10,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="42dp"
         android:gravity="center"
         android:orientation="horizontal"
         android:padding="20dp"
@@ -73,6 +74,7 @@
 
         <!-- Mathematics Card -->
         <androidx.cardview.widget.CardView
+            android:id="@+id/comming_soon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
@@ -104,7 +106,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="General"
+                    android:text="Cooming Soon"
                     android:textAlignment="center"
                     android:textAppearance="@style/TextAppearance.AppCompat.Title"
                     android:textColor="@color/white"

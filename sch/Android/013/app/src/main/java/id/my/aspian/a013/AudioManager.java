@@ -12,7 +12,6 @@ public class AudioManager {
     private MediaPlayer backgroundPlayer;
     private final Map<Integer, MediaPlayer> effects = new HashMap<>();
 
-
     private AudioManager(Context ctx) {
         this.context = ctx.getApplicationContext();
     }
@@ -26,7 +25,9 @@ public class AudioManager {
     }
 
     public void playBackground(int resId) {
+        float volume = .2f;
         backgroundPlayer = MediaPlayer.create(context, resId);
+        backgroundPlayer.setVolume(volume, volume);
         backgroundPlayer.setLooping(true);
         backgroundPlayer.start();
     }

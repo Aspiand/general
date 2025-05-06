@@ -18,10 +18,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="16dp"
-            android:text="Timeout"
+            android:text="Gameover"
             android:textAlignment="center"
-            android:textSize="24dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:textSize="24dp" />
 
         <TextView
             android:id="@+id/best_score"
@@ -41,6 +41,13 @@
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
             tools:layout_editor_absoluteX="20dp" />
+
+        <Button
+            android:id="@+id/restart_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Play Again"
+            tools:ignore="HardcodedText" />
 
         <Button
             android:id="@+id/back_button"
