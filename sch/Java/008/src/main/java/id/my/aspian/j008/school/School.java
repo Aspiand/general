@@ -3,7 +3,7 @@
  */
 package id.my.aspian.j008.school;
 
-import id.my.aspian.j008.school.home.HomeView;
+import id.my.aspian.j008.school.view.HomeView;
 import id.my.aspian.j008.school.utils.DBConnection;
 
 /**
