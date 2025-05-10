@@ -17,34 +17,38 @@ public class StudentTableModel extends AbstractTableModel {
 
     private List<Student> students = new ArrayList<>();
 
+    public void setList(List<Student> ls) {
+        this.students = ls;
+        fireTableDataChanged();
+    }
+
     public Student get(int row) {
         return this.students.get(row);
     }
 
-    public void set(List<Student> ls) {
-        this.students = ls;
-    }
-
     public void insert(Student s) {
         this.students.add(s);
+        fireTableDataChanged();
     }
 
     public void update(int row, Student s) {
         this.students.set(row, s);
+        fireTableDataChanged();
     }
 
     public void delete(int row) {
         this.students.remove(row);
+        fireTableDataChanged();
     }
 
     @Override
     public int getRowCount() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return this.students.size();
     }
 
     @Override
     public int getColumnCount() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return 7;
     }
 
     @Override
@@ -82,7 +86,5 @@ public class StudentTableModel extends AbstractTableModel {
                 put("6", "Address");
             }
         }.get(column);
-
     }
-
 }
