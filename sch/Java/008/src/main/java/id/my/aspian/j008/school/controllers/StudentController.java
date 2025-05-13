@@ -9,11 +9,13 @@ import id.my.aspian.j008.school.models.StudentTableModel;
 import id.my.aspian.j008.school.utils.DBConnection;
 import id.my.aspian.j008.school.view.StudentView;
 import java.beans.PropertyVetoException;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JTextField;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
 
 /**
@@ -23,6 +25,7 @@ import javax.swing.plaf.basic.BasicInternalFrameUI;
 public class StudentController {
 
     private final StudentTableModel tableModel = new StudentTableModel();
+    public boolean saveButtonStatus; // true if add else false
 
     public void setMaximumFrame(StudentView sv) {
         try {
@@ -51,12 +54,41 @@ public class StudentController {
 
         return students;
     }
-    
-    public void loadToTable() {
+
+    public void refresh() {
         this.tableModel.setList(getAllStudent());
+        for (JTextField field : new JTextField[]{
+            StudentView.inputSin,
+            StudentView.inputName,
+            StudentView.inputSearch
+        }) {
+            field.setText("");
+        }
+
+        StudentView.inputAddress.setText("");
+        StudentView.inputGenderMan.setSelected(true);
+        StudentView.inputMajor.setSelectedIndex(0);
+        StudentView.inputClass.setSelectedIndex(0);
+        StudentView.inputSearchBy.setSelectedIndex(0);
     }
-    
-    public void reset() {
-        loadToTable();
+
+    public void search() {
+        String searchBy = StudentView.inputSearchBy.getSelectedItem().toString();
+        String searchInput = StudentView.inputSearch.getText().toString();
+
+        String query = "SELECT * FROM ? WHERE ? LIKE %?%";
+        String[] params = new String[]{Student.TABLE_NAME, searchBy.toLowerCase(), searchInput};
+
+        List<Student> students = new ArrayList<>();
+        try (PreparedStatement stmt = DBConnection.getDatabaseConnection().prepareStatement(query, params)) {
+            ResultSet results = stmt.executeQuery();
+            while (results.next()) {
+                students.add(Student.newInstance(results));
+            }
+
+            this.tableModel.setList(students);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

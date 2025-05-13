@@ -12,7 +12,7 @@ import id.my.aspian.j008.school.controllers.StudentController;
  */
 public class StudentView extends javax.swing.JInternalFrame {
 
-    StudentController controller  = new StudentController();
+    StudentController controller = new StudentController();
 
     /**
      * Creates new form StudentView
@@ -161,6 +161,11 @@ public class StudentView extends javax.swing.JInternalFrame {
         jScrollPane2.setViewportView(jTable2);
 
         jButton4.setText("Add");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         jButton5.setText("Update");
         jButton5.addActionListener(new java.awt.event.ActionListener() {
@@ -324,7 +329,7 @@ public class StudentView extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        // TODO add your handling code here:
+        controller.saveButtonStatus = false;
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
@@ -332,7 +337,7 @@ public class StudentView extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-        // TODO add your handling code here:
+        controller.refresh();
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
@@ -340,13 +345,17 @@ public class StudentView extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void inputSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputSearchActionPerformed
-        // TODO add your handling code here:
+        controller.search();
     }//GEN-LAST:event_inputSearchActionPerformed
 
     private void formInternalFrameOpened(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameOpened
         controller.setMaximumFrame(this);
         controller.setUndecorated(this);
     }//GEN-LAST:event_formInternalFrameOpened
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        controller.saveButtonStatus = true;
+    }//GEN-LAST:event_jButton4ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
