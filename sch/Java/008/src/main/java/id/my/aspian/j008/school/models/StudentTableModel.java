@@ -69,7 +69,7 @@ public class StudentTableModel extends AbstractTableModel {
             case 6:
                 return students.get(rowIndex).getAddress();
             default:
-                return null;
+                throw new RuntimeException("getValueAt: out of index");
         }
     }
 
