@@ -4,8 +4,14 @@
  */
 package id.my.aspian.j008.school.models;
 
+import id.my.aspian.j008.school.utils.DBConnection;
+import id.my.aspian.j008.school.view.StudentView;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -41,28 +47,51 @@ public class Student {
         );
     }
 
-    public void setSin(String sin) {
-        this.sin = sin;
+    public static List<Student> getAll() {
+        List<Student> students = new ArrayList<>();
+        String query = "SELECT * FROM " + Student.TABLE_NAME + " ORDER BY sin ASC";
+        try (Statement stmt = DBConnection.getDatabaseConnection().createStatement()) {
+            ResultSet rs = stmt.executeQuery(query);
+            while (rs.next()) {
+                students.add(Student.newInstance(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return students;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void insert() {
+        String query = "INSERT INTO " + this.TABLE_NAME + " VALUES (?, ?, ?, ?, ?, ?)";
+        String[] params = getArray();
+        try (PreparedStatement stmt = DBConnection.getDatabaseConnection().prepareStatement(query)) {
+            for (int i = 0; i < params.length; i++) {
+                stmt.setString(i + 1, params[i]);
+            }
+
+            System.out.println(stmt.executeUpdate());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void setGender(String gender) {
-        this.gender = gender;
+    public void update() {
+        String query = "UPDATE " + this.TABLE_NAME + " SET name = ?, gender = ?, grade = ?, major = ?, address = ?";
+        String[] params = getArray();
+        try (PreparedStatement stmt = DBConnection.getDatabaseConnection().prepareCall(query)) {
+            for (int i = 0; i < params.length; i++) {
+                stmt.setString(i + 1, params[i]);
+            }
+
+            System.out.println(stmt.executeUpdate());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void setGrade(String grade) {
-        this.grade = grade;
-    }
-
-    public void setMajor(String major) {
-        this.major = major;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
+    public String[] getArray() {
+        return new String[]{this.sin, this.name, this.gender, this.grade, this.major, this.address};
     }
 
     public String getSin() {

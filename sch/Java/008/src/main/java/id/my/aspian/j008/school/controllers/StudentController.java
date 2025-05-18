@@ -25,7 +25,7 @@ import javax.swing.plaf.basic.BasicInternalFrameUI;
 public class StudentController {
 
     private final StudentTableModel tableModel = new StudentTableModel();
-    public boolean saveButtonStatus; // true if add else false
+    public boolean saveButtonStatus = true; // if add else false
 
     public void setMaximumFrame(StudentView sv) {
         try {
@@ -40,23 +40,8 @@ public class StudentController {
         ((BasicInternalFrameUI) sv.getUI()).setNorthPane(null);
     }
 
-    public List<Student> getAllStudent() {
-        List<Student> students = new ArrayList<>();
-        String query = "SELECT * FROM " + Student.TABLE_NAME + " ORDER BY sin ASC";
-        try (Statement stmt = DBConnection.getDatabaseConnection().createStatement()) {
-            ResultSet rs = stmt.executeQuery(query);
-            while (rs.next()) {
-                students.add(Student.newInstance(rs));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return students;
-    }
-
     public void refresh() {
-        this.tableModel.setList(getAllStudent());
+        this.tableModel.setList(Student.getAll());
         for (JTextField field : new JTextField[]{
             StudentView.inputSin,
             StudentView.inputName,
@@ -76,12 +61,13 @@ public class StudentController {
         String searchBy = StudentView.inputSearchBy.getSelectedItem().toString();
         String searchInput = StudentView.inputSearch.getText().toString();
 
-        String query = "SELECT * FROM ? WHERE ? LIKE %?%";
-        String[] params = new String[]{Student.TABLE_NAME, searchBy.toLowerCase(), searchInput};
+        String query = "SELECT * FROM " + Student.TABLE_NAME + " WHERE " + searchBy.toLowerCase() + " LIKE ?";
+        String[] params = new String[]{"%" + searchInput "%"};
 
         List<Student> students = new ArrayList<>();
         try (PreparedStatement stmt = DBConnection.getDatabaseConnection().prepareStatement(query, params)) {
             ResultSet results = stmt.executeQuery();
+
             while (results.next()) {
                 students.add(Student.newInstance(results));
             }
@@ -89,6 +75,23 @@ public class StudentController {
             this.tableModel.setList(students);
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void save() {
+        Student student = new Student(
+                StudentView.inputSin.getText().toString(),
+                StudentView.inputName.getText().toString(),
+                (StudentView.inputGenderMan.isSelected() ? "Man" : "Woman"),
+                StudentView.inputClass.getSelectedItem().toString(),
+                StudentView.inputMajor.getSelectedItem().toString(),
+                StudentView.inputAddress.getText().toString()
+        );
+
+        if (this.saveButtonStatus) {
+            student.insert();
+        } else {
+            student.update();
         }
     }
 }
