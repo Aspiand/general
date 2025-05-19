@@ -96,14 +96,7 @@ public class StudentController {
     }
 
     public void save() {
-        Student student = new Student(
-                StudentView.inputSin.getText().toString(),
-                StudentView.inputName.getText().toString(),
-                (StudentView.inputGenderMan.isSelected() ? "Man" : "Woman"),
-                StudentView.inputClass.getSelectedItem().toString(),
-                StudentView.inputMajor.getSelectedItem().toString(),
-                StudentView.inputAddress.getText().toString()
-        );
+        Student student = Student.newInstanceByView();
 
         if (this.saveButtonStatus) {
             student.insert();

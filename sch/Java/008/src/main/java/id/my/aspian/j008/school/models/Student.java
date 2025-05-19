@@ -5,11 +5,13 @@
 package id.my.aspian.j008.school.models;
 
 import id.my.aspian.j008.school.utils.DBConnection;
+import id.my.aspian.j008.school.view.StudentView;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import javax.swing.JTable;
 
 /**
  *
@@ -42,6 +44,17 @@ public class Student {
                 rs.getString("grade"),
                 rs.getString("major"),
                 rs.getString("address")
+        );
+    }
+
+    public static Student newInstanceByView() {
+        return new Student(
+                StudentView.inputSin.getText().toString(),
+                StudentView.inputName.getText().toString(),
+                (StudentView.inputGenderMan.isSelected() ? "Man" : "Woman"),
+                StudentView.inputClass.getSelectedItem().toString(),
+                StudentView.inputMajor.getSelectedItem().toString(),
+                StudentView.inputAddress.getText().toString()
         );
     }
 
@@ -83,6 +96,20 @@ public class Student {
             }
 
             System.out.println(stmt.executeUpdate());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void delete() {
+        if (this.sin == null) {
+            throw new RuntimeException("sin is null while trying to delete data.");
+        }
+        
+        String query = "DELETE FROM " + Student.TABLE_NAME + " WHERE sin = ?";
+        try (PreparedStatement stmt = DBConnection.getDatabaseConnection().prepareStatement(query)) {
+            stmt.setString(1, this.sin);
+            stmt.execute();
         } catch (SQLException e) {
             e.printStackTrace();
         }

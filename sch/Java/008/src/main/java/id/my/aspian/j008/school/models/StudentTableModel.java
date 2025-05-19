@@ -26,25 +26,26 @@ public class StudentTableModel extends AbstractTableModel {
         fireTableDataChanged();
     }
 
-    public Student get(int row) {
-        return this.students.get(row);
-    }
-
-    public void insert(Student s) {
-        this.students.add(s);
-        fireTableDataChanged();
-    }
-
-    public void update(int row, Student s) {
-        this.students.set(row, s);
-        fireTableDataChanged();
-    }
-
-    public void delete(int row) {
-        this.students.remove(row);
-        fireTableDataChanged();
-    }
-
+//    public Student get(int row) {
+//        return this.students.get(row);
+//    }
+//    public void reload() {
+//        this.fireTableDataChanged();
+//    }
+//    public void insert(Student s) {
+//        this.students.add(s);
+//        fireTableDataChanged();
+//    }
+//
+//    public void update(int row, Student s) {
+//        this.students.set(row, s);
+//        fireTableDataChanged();
+//    }
+//
+//    public void delete(int row) {
+//        this.students.remove(row);
+//        fireTableDataChanged();
+//    }
     @Override
     public int getRowCount() {
         return this.students.size();
