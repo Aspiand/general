@@ -62,7 +62,7 @@ public class StudentController {
         String searchInput = StudentView.inputSearch.getText().toString();
 
         String query = "SELECT * FROM " + Student.TABLE_NAME + " WHERE " + searchBy.toLowerCase() + " LIKE ?";
-        String[] params = new String[]{"%" + searchInput "%"};
+        String[] params = new String[]{"%" + searchInput + "%"};
 
         List<Student> students = new ArrayList<>();
         try (PreparedStatement stmt = DBConnection.getDatabaseConnection().prepareStatement(query, params)) {
