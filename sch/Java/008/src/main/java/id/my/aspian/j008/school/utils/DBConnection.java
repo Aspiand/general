@@ -21,8 +21,8 @@ public class DBConnection {
                         "jdbc:mysql://localhost:3306/j008",
                         "root", "root");
             } catch (SQLException e) {
-//                showErrorDialog("Can't connect to database");
-                e.printStackTrace();
+                System.out.println("Can't connect to database");
+                // e.printStackTrace();
                 System.exit(1);
             }
         }

@@ -18,6 +18,7 @@ public class HomeView extends javax.swing.JFrame {
      */
     public HomeView() {
         initComponents();
+        controller.showStudentViewAction();
     }
 
     /**

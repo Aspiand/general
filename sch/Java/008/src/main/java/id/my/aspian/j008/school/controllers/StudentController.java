@@ -12,11 +12,12 @@ import java.beans.PropertyVetoException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
+import javax.swing.table.DefaultTableCellRenderer;
 
 /**
  *
@@ -24,24 +25,38 @@ import javax.swing.plaf.basic.BasicInternalFrameUI;
  */
 public class StudentController {
 
-    private final StudentTableModel tableModel = new StudentTableModel();
+    private StudentTableModel tableModel;
+    private StudentView viewModel;
     public boolean saveButtonStatus = true; // if add else false
 
-    public void setMaximumFrame(StudentView sv) {
+    public StudentController(StudentView v) {
+        this.tableModel = new StudentTableModel();
+        this.viewModel = v;
+
+        // Center text in table
+        DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
+        renderer.setHorizontalAlignment(JLabel.CENTER);
+        this.viewModel.studentTable.setDefaultRenderer(String.class, renderer);
+        this.viewModel.studentTable.setModel(tableModel);
+
+    }
+
+    public void setMaximumFrame() {
         try {
-            sv.setMaximum(true);
-        } catch (PropertyVetoException ex) {
-            ex.printStackTrace();
+            viewModel.setMaximum(true);
+        } catch (PropertyVetoException e) {
+            e.printStackTrace();
         }
     }
 
-    public void setUndecorated(StudentView sv) {
-        sv.putClientProperty("JInternalFrame.isPallete", Boolean.TRUE);
-        ((BasicInternalFrameUI) sv.getUI()).setNorthPane(null);
+    public void setUndecorated() {
+        viewModel.putClientProperty("JInternalFrame.isPallete", Boolean.TRUE);
+        ((BasicInternalFrameUI) viewModel.getUI()).setNorthPane(null);
     }
 
     public void refresh() {
         this.tableModel.setList(Student.getAll());
+
         for (JTextField field : new JTextField[]{
             StudentView.inputSin,
             StudentView.inputName,

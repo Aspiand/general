@@ -11,6 +11,9 @@ import id.my.aspian.j008.school.utils.DBConnection;
  * @author ao
  */
 public class School {
+    static {
+        DBConnection.getDatabaseConnection();
+    }
 
     public static void main(String[] args) {
         HomeView hv = new HomeView();

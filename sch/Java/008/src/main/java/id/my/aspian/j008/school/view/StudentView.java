@@ -12,13 +12,16 @@ import id.my.aspian.j008.school.controllers.StudentController;
  */
 public class StudentView extends javax.swing.JInternalFrame {
 
-    StudentController controller = new StudentController();
+    StudentController controller;
 
     /**
      * Creates new form StudentView
      */
     public StudentView() {
         initComponents();
+        this.controller = new StudentController(this);
+
+        controller.refresh();
     }
 
     /**
@@ -55,7 +58,7 @@ public class StudentView extends javax.swing.JInternalFrame {
         inputSearch = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        studentTable = new javax.swing.JTable();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
@@ -152,18 +155,26 @@ public class StudentView extends javax.swing.JInternalFrame {
 
         jLabel8.setText("Search by");
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        studentTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "No", "Name", "Gender", "Class", "Major", "Address"
             }
-        ));
-        jScrollPane2.setViewportView(jTable2);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane2.setViewportView(studentTable);
 
         jButton4.setText("Add");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
@@ -355,8 +366,8 @@ public class StudentView extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_inputSearchActionPerformed
 
     private void formInternalFrameOpened(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameOpened
-        controller.setMaximumFrame(this);
-        controller.setUndecorated(this);
+        controller.setMaximumFrame();
+        controller.setUndecorated();
     }//GEN-LAST:event_formInternalFrameOpened
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
@@ -401,6 +412,6 @@ public class StudentView extends javax.swing.JInternalFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTable jTable1;
-    public static javax.swing.JTable jTable2;
+    public static javax.swing.JTable studentTable;
     // End of variables declaration//GEN-END:variables
 }

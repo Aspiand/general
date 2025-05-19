@@ -5,13 +5,11 @@
 package id.my.aspian.j008.school.models;
 
 import id.my.aspian.j008.school.utils.DBConnection;
-import id.my.aspian.j008.school.view.StudentView;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
@@ -47,8 +45,8 @@ public class Student {
         );
     }
 
-    public static List<Student> getAll() {
-        List<Student> students = new ArrayList<>();
+    public static ArrayList<Student> getAll() {
+        ArrayList<Student> students = new ArrayList<>();
         String query = "SELECT * FROM " + Student.TABLE_NAME + " ORDER BY sin ASC";
         try (Statement stmt = DBConnection.getDatabaseConnection().createStatement()) {
             ResultSet rs = stmt.executeQuery(query);

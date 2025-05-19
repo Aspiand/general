@@ -15,6 +15,10 @@ import javax.swing.table.AbstractTableModel;
  */
 public class StudentTableModel extends AbstractTableModel {
 
+    private final String[] headers = {
+        "No", "SIN", "Name", "Gender", "Class", "Major", "Address"
+    };
+
     private List<Student> students = new ArrayList<>();
 
     public void setList(List<Student> ls) {
@@ -48,14 +52,14 @@ public class StudentTableModel extends AbstractTableModel {
 
     @Override
     public int getColumnCount() {
-        return 7;
+        return this.headers.length;
     }
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         switch (columnIndex) {
             case 0:
-                return rowIndex++;
+                return ++rowIndex;
             case 1:
                 return students.get(rowIndex).getSin();
             case 2:
@@ -63,7 +67,7 @@ public class StudentTableModel extends AbstractTableModel {
             case 3:
                 return students.get(rowIndex).getGender();
             case 4:
-                return students.get(rowIndex).getClass();
+                return students.get(rowIndex).getGrade();
             case 5:
                 return students.get(rowIndex).getMajor();
             case 6:
@@ -75,16 +79,6 @@ public class StudentTableModel extends AbstractTableModel {
 
     @Override
     public String getColumnName(int column) {
-        return new HashMap<String, String>() {
-            {
-                put("0", "No");
-                put("1", "SIN");
-                put("2", "Name");
-                put("3", "Gender");
-                put("4", "Class");
-                put("5", "Major");
-                put("6", "Address");
-            }
-        }.get(column);
+        return this.headers[column];
     }
 }
