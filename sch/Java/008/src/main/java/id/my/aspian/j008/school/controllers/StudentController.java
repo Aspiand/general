@@ -15,6 +15,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JLabel;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -37,8 +38,9 @@ public class StudentController {
         DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
         renderer.setHorizontalAlignment(JLabel.CENTER);
         this.viewModel.studentTable.setDefaultRenderer(String.class, renderer);
-        this.viewModel.studentTable.setModel(tableModel);
 
+        // Set model
+        this.viewModel.studentTable.setModel(tableModel);
     }
 
     public void setMaximumFrame() {
@@ -76,7 +78,7 @@ public class StudentController {
         String searchBy = StudentView.inputSearchBy.getSelectedItem().toString();
         String searchInput = StudentView.inputSearch.getText().toString();
 
-        String query = "SELECT * FROM " + Student.TABLE_NAME + " WHERE " + searchBy.toLowerCase() + " LIKE ?";
+        String query = "SELECT * FROM " + Student.TABLE_NAME + " WHERE " + searchBy.toLowerCase() + " LIKE ? ORDER BY sin ASC";
 
         List<Student> students = new ArrayList<>();
         try (PreparedStatement stmt = DBConnection.getDatabaseConnection().prepareStatement(query)) {
@@ -108,5 +110,23 @@ public class StudentController {
         } else {
             student.update();
         }
+    }
+
+    public void setInputs() {
+        StudentView v = viewModel;
+        JTable table = viewModel.studentTable;
+        int row = table.getSelectedRow();
+
+        if (row == -1) {
+            return;
+        }
+
+        v.inputSin.setText(table.getValueAt(row, 1).toString());
+        v.inputName.setText(table.getValueAt(row, 2).toString());
+        v.inputGenderMan.setSelected(table.getValueAt(row, 3).toString().equals("Man"));
+        v.inputGenderWoman.setSelected(table.getValueAt(row, 3).toString().equals("Woman"));
+        v.inputClass.setSelectedItem(table.getValueAt(row, 4).toString());
+        v.inputMajor.setSelectedItem(table.getValueAt(row, 5).toString());
+        v.inputAddress.setText(table.getValueAt(row, 6).toString());
     }
 }

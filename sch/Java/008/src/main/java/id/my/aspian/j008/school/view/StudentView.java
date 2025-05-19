@@ -174,6 +174,11 @@ public class StudentView extends javax.swing.JInternalFrame {
                 return canEdit [columnIndex];
             }
         });
+        studentTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                studentTableMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(studentTable);
 
         jButton4.setText("Add");
@@ -377,6 +382,10 @@ public class StudentView extends javax.swing.JInternalFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         controller.refresh();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void studentTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_studentTableMouseClicked
+        controller.setInputs();
+    }//GEN-LAST:event_studentTableMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
