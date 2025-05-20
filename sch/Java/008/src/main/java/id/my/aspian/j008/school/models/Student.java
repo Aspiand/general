@@ -88,12 +88,15 @@ public class Student {
     }
 
     public void update() {
-        String query = "UPDATE " + this.TABLE_NAME + " SET name = ?, gender = ?, grade = ?, major = ?, address = ?";
+        String query = "UPDATE " + this.TABLE_NAME + " SET name = ?, gender = ?, grade = ?, major = ?, address = ? WHERE sin = ?";
         String[] params = getArray();
         try (PreparedStatement stmt = DBConnection.getDatabaseConnection().prepareCall(query)) {
-            for (int i = 0; i < params.length; i++) {
-                stmt.setString(i + 1, params[i]);
-            }
+            stmt.setString(1, this.name);
+            stmt.setString(2, this.gender);
+            stmt.setString(3, this.grade);
+            stmt.setString(4, this.major);
+            stmt.setString(5, this.address);
+            stmt.setString(6, this.sin);
 
             System.out.println(stmt.executeUpdate());
         } catch (SQLException e) {
@@ -105,11 +108,11 @@ public class Student {
         if (this.sin == null) {
             throw new RuntimeException("sin is null while trying to delete data.");
         }
-        
+
         String query = "DELETE FROM " + Student.TABLE_NAME + " WHERE sin = ?";
         try (PreparedStatement stmt = DBConnection.getDatabaseConnection().prepareStatement(query)) {
             stmt.setString(1, this.sin);
-            stmt.execute();
+            stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
