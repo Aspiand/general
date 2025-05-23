@@ -64,6 +64,9 @@ class StudentResource extends Resource
                     ->label("Grade")
                     ->searchable()
                     ->sortable(),
+                TextColumn::make("address")
+                    ->searchable()
+                    ->sortable(),
             ])
             ->filters([
                 //
