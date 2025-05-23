@@ -26,7 +26,8 @@ class StudentResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make("name")->required()
+                TextInput::make("name")
+                    ->required()
                     ->label("Student Name")
                     ->placeholder("Enter student name")
                     ->maxLength(255),
@@ -42,6 +43,10 @@ class StudentResource extends Resource
                     ])
                     ->placeholder("Select grade")
                     ->required(),
+                TextInput::make("address")
+                    ->required()
+                    ->label("Address")
+                    ->placeholder("Enter address")
             ]);
     }
 
