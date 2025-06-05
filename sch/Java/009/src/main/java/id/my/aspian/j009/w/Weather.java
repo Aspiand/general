@@ -1,5 +1,7 @@
 package id.my.aspian.j009.w;
 
+// Response
+
 public class Weather {
 
     CurrentWeather current_weather;

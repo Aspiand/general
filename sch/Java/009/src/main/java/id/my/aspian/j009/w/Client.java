@@ -36,6 +36,7 @@ public class Client {
     }
 
     public ArrayList<Weather> fetchAll(Map<String, double[]> src) {
+        // TODO: remove
         ArrayList<Weather> weathers = new ArrayList<>();
 
         src.entrySet().forEach((entry) -> {
@@ -43,6 +44,20 @@ public class Client {
                     entry.getKey(),
                     entry.getValue()[0],
                     entry.getValue()[1]
+            ));
+        });
+
+        return weathers;
+    }
+
+    public ArrayList<Weather> fetchAll(ArrayList<Location> src) {
+        ArrayList<Weather> weathers = new ArrayList<>();
+
+        src.forEach((t) -> {
+            weathers.add(this.fetch(
+                    t.location,
+                    t.latitude,
+                    t.longitude
             ));
         });
 

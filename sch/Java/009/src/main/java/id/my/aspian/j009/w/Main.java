@@ -5,25 +5,48 @@
 package id.my.aspian.j009.w;
 
 import java.util.ArrayList;
-import java.util.Map;
 import javax.swing.table.DefaultTableModel;
 
 public class Main extends javax.swing.JFrame {
 
     Client client;
     DefaultTableModel tableModel;
-    static Map<String, double[]> locations = Map.of(
-            "Jakarta", new double[]{-6.2, 106.8},
-            "Surabaya", new double[]{-7.25, 112.75},
-            "Bandung", new double[]{-6.91, 107.61}
-    );
+//    static Map<String, double[]> locations = Map.of(
+//            "Jakarta", new double[]{-6.2, 106.8},
+//            "Surabaya", new double[]{-7.25, 112.75},
+//            "Bandung", new double[]{-6.91, 107.61}
+//    );
+
+//    static ArrayList<Location> locations = new ArrayList<>() {
+//        {
+//            add(new Location("Jakarta", -6.2, 106.8));
+//            add(new Location("Surabaya", -7.25, 112.75));
+//            add(new Location("Bandung", -6.91, 107.61));
+//        }
+//    };
 
     public Main() {
         initComponents();
 
         client = new Client();
         tableModel = (DefaultTableModel) table.getModel();
+        Location.load();
+
         refresh();
+
+        refreshButton.addActionListener((e) -> {
+            refresh();
+        });
+
+        addButton.addActionListener((e) -> {
+            Location.locations.add(Location.newInstance(
+                    inputLocation.getText(),
+                    inputLatitude.getText(),
+                    inputLocation.getText()
+            ));
+
+            Location.save();
+        });
     }
 
     private void refresh() {
@@ -32,15 +55,13 @@ public class Main extends javax.swing.JFrame {
             tableModel.removeRow(i);
         }
 
-        ArrayList<Weather> weathers = client.fetchAll(locations);
+        ArrayList<Weather> weathers = client.fetchAll(Location.locations);
 
         weathers.forEach((t) -> {
             System.out.println(t);
             tableModel.addRow(new String[]{
                 t.getLocation(),
                 t.getTime(),
-                t.getLatitude(),
-                t.getLongitude(),
                 t.getTemperature()
             });
         });
@@ -61,11 +82,11 @@ public class Main extends javax.swing.JFrame {
         inputLatitude = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        addButton = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
         inputLocation = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
+        refreshButton = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         table = new javax.swing.JTable();
 
@@ -94,13 +115,13 @@ public class Main extends javax.swing.JFrame {
 
         jLabel3.setText("Longitude");
 
-        jButton1.setText("Add");
+        addButton.setText("Add");
 
         jLabel4.setText("Location Added");
 
-        jButton2.setText("Refresh");
-
         jLabel5.setText("Location");
+
+        refreshButton.setText("Refresh");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -112,9 +133,9 @@ public class Main extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 71, Short.MAX_VALUE)
-                        .addComponent(jButton2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1))
+                        .addComponent(refreshButton)
+                        .addGap(18, 18, 18)
+                        .addComponent(addButton))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -145,9 +166,9 @@ public class Main extends javax.swing.JFrame {
                     .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
+                    .addComponent(addButton)
                     .addComponent(jLabel4)
-                    .addComponent(jButton2))
+                    .addComponent(refreshButton))
                 .addContainerGap(18, Short.MAX_VALUE))
         );
 
@@ -157,14 +178,14 @@ public class Main extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Location", "Time", "Latitude", "Longitude", "Temperature"
+                "Location", "Date/Time", "Temperature"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -210,11 +231,10 @@ public class Main extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton addButton;
     private javax.swing.JTextField inputLatitude;
     private javax.swing.JTextField inputLocation;
     private javax.swing.JTextField inputLongitude;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JEditorPane jEditorPane1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -227,6 +247,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JButton refreshButton;
     private javax.swing.JTable table;
     // End of variables declaration//GEN-END:variables
 }
