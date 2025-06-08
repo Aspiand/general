@@ -3,6 +3,7 @@ package id.my.aspian.j009.w;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import java.io.File;
 
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -15,7 +16,6 @@ public class Location {
 
     public String location;
     public double latitude, longitude;
-
     public static ArrayList<Location> locations = new ArrayList<>();
 
     public Location(String location, double latitude, double longitude) {
@@ -28,37 +28,52 @@ public class Location {
         return new Location(location, Double.valueOf(latitude), Double.valueOf(longitude));
     }
 
-    public static void write(String path) {
-        try (FileWriter writer = new FileWriter(path)) {
-            Gson gson = new GsonBuilder().setPrettyPrinting().create();
-            gson.toJson(locations, writer);
-            System.out.println("Data saved to: " + path);
+    public static void checkFile(String path) {
+        File file = new File(path);
+
+        if (file.exists()) {
+            return;
+        }
+
+        try {
+            file.createNewFile();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static void read(String path) {
-        try (FileReader reader = new FileReader(path)) {
-            Gson gson = new Gson();
-            Type listType = new TypeToken<List<Location>>() {
-            }.getType();
-
-            locations = gson.fromJson(reader, listType);
-            System.out.println("Data loaded from: " + path);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void save() {
-        write("./db.json");
-    }
-    
-    public static void load() {
-        read("./db.json");
-    }
-
+//    public static void write(String path) {
+//        checkFile(path);
+//        try (FileWriter writer = new FileWriter(path)) {
+//            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+//            gson.toJson(locations, writer);
+//            System.out.println("Data saved to: " + path);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
+//    public static void read(String path) {
+//        checkFile(path);
+//        try (FileReader reader = new FileReader(path)) {
+//            Gson gson = new Gson();
+//            Type listType = new TypeToken<List<Location>>() {
+//            }.getType();
+//
+//            locations = gson.fromJson(reader, listType);
+//            System.out.println("Data loaded from: " + path);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
+//    public static void save() {
+//        write("./db.json");
+//    }
+//
+//    public static void load() {
+//        read("./db.json");
+//    }
     @Override
     public String toString() {
         return String.format("%s (%.4f, %.4f)", location, latitude, longitude);

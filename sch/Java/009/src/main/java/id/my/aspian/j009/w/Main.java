@@ -11,54 +11,41 @@ public class Main extends javax.swing.JFrame {
 
     Client client;
     DefaultTableModel tableModel;
-//    static Map<String, double[]> locations = Map.of(
-//            "Jakarta", new double[]{-6.2, 106.8},
-//            "Surabaya", new double[]{-7.25, 112.75},
-//            "Bandung", new double[]{-6.91, 107.61}
-//    );
 
-//    static ArrayList<Location> locations = new ArrayList<>() {
-//        {
-//            add(new Location("Jakarta", -6.2, 106.8));
-//            add(new Location("Surabaya", -7.25, 112.75));
-//            add(new Location("Bandung", -6.91, 107.61));
-//        }
-//    };
+    static ArrayList<Location> locations = new ArrayList<>() {
+        {
+            add(new Location("Jakarta", -6.2, 106.8));
+            add(new Location("Surabaya", -7.25, 112.75));
+            add(new Location("Bandung", -6.91, 107.61));
+        }
+    };
 
     public Main() {
         initComponents();
 
         client = new Client();
         tableModel = (DefaultTableModel) table.getModel();
-        Location.load();
-
-        refresh();
 
         refreshButton.addActionListener((e) -> {
             refresh();
         });
 
         addButton.addActionListener((e) -> {
-            Location.locations.add(Location.newInstance(
+            locations.add(Location.newInstance(
                     inputLocation.getText(),
                     inputLatitude.getText(),
-                    inputLocation.getText()
+                    inputLongitude.getText()
             ));
-
-            Location.save();
+            refresh();
         });
     }
 
     private void refresh() {
-
         for (int i = tableModel.getRowCount() - 1; i >= 0; i--) {
             tableModel.removeRow(i);
         }
 
-        ArrayList<Weather> weathers = client.fetchAll(Location.locations);
-
-        weathers.forEach((t) -> {
-            System.out.println(t);
+        client.fetchAll(locations).forEach((t) -> {
             tableModel.addRow(new String[]{
                 t.getLocation(),
                 t.getTime(),

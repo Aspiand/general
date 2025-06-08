@@ -1,16 +1,13 @@
 package id.my.aspian.j009.w;
 
 import com.google.gson.Gson;
-import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
-import java.util.Map;
 
 public class Client {
-
     String url = "https://api.open-meteo.com/v1/forecast?latitude=%.4f&longitude=%.4f&current_weather=true";
     HttpClient client;
     Gson gson;
@@ -33,21 +30,6 @@ public class Client {
         }
 
         return null;
-    }
-
-    public ArrayList<Weather> fetchAll(Map<String, double[]> src) {
-        // TODO: remove
-        ArrayList<Weather> weathers = new ArrayList<>();
-
-        src.entrySet().forEach((entry) -> {
-            weathers.add(this.fetch(
-                    entry.getKey(),
-                    entry.getValue()[0],
-                    entry.getValue()[1]
-            ));
-        });
-
-        return weathers;
     }
 
     public ArrayList<Weather> fetchAll(ArrayList<Location> src) {
