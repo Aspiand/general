@@ -24,74 +24,67 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 
-data class MediaItem(
-    val id: String,
-    val url: String,
-    val title: String,
-    val size: String
-)
-
-@Composable
-fun MediaCard(
-    item: MediaItem,
-    modifier: Modifier = Modifier,
-    onClick: (MediaItem) -> Unit = {}
-) {
-    Card(
-        modifier = modifier
-            .width(160.dp)
-            .clickable { onClick(item) },
-        shape = RoundedCornerShape(12.dp),
-        elevation = CardDefaults.elevatedCardElevation(defaultElevation = 4.dp)
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 8.dp)
-        ) {
-            AsyncImage(
-                model = item.url,
-                contentDescription = item.title,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .height(100.dp)
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp))
-            )
-
-            Spacer(Modifier.height(8.dp))
-
-            Column(modifier = Modifier.padding(horizontal = 8.dp)) {
-                Text(
-                    text = item.title,
-                    style = MaterialTheme.typography.titleSmall,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-                Spacer(Modifier.height(4.dp))
-                Text(
-                    text = item.size,
-                    style = MaterialTheme.typography.bodySmall
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun MediaList(
-    items: List<MediaItem>,
-    onItemClick: (MediaItem) -> Unit
-) {
-    LazyRow(
-        contentPadding = PaddingValues(horizontal = 16.dp),
-        horizontalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
-        items(items) { item ->
-            MediaCard(
-                item = item,
-                onClick = onItemClick
-            )
-        }
-    }
-}
+//@Composable
+//fun MediaCard(
+//    item: ImmichAsset,
+//    modifier: Modifier = Modifier,
+//    onClick: (ImmichAsset) -> Unit = {}
+//) {
+//    Card(
+//        modifier = modifier
+//            .width(160.dp)
+//            .clickable { onClick(item) },
+//        shape = RoundedCornerShape(12.dp),
+//        elevation = CardDefaults.elevatedCardElevation(defaultElevation = 4.dp)
+//    ) {
+//        Column(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .padding(bottom = 8.dp)
+//        ) {
+//            AsyncImage(
+//                model = item.url,
+//                contentDescription = item.,
+//                contentScale = ContentScale.Crop,
+//                modifier = Modifier
+//                    .height(100.dp)
+//                    .fillMaxWidth()
+//                    .clip(RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp))
+//            )
+//
+//            Spacer(Modifier.height(8.dp))
+//
+//            Column(modifier = Modifier.padding(horizontal = 8.dp)) {
+//                Text(
+//                    text = item.title,
+//                    style = MaterialTheme.typography.titleSmall,
+//                    maxLines = 1,
+//                    overflow = TextOverflow.Ellipsis
+//                )
+//                Spacer(Modifier.height(4.dp))
+//                Text(
+//                    text = item.size,
+//                    style = MaterialTheme.typography.bodySmall
+//                )
+//            }
+//        }
+//    }
+//}
+//
+//@Composable
+//fun MediaList(
+//    items: List<MediaItem>,
+//    onItemClick: (MediaItem) -> Unit
+//) {
+//    LazyRow(
+//        contentPadding = PaddingValues(horizontal = 16.dp),
+//        horizontalArrangement = Arrangement.spacedBy(12.dp)
+//    ) {
+//        items(items) { item ->
+//            MediaCard(
+//                item = item,
+//                onClick = onItemClick
+//            )
+//        }
+//    }
+//}

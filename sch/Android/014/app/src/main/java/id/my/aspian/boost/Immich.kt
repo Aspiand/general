@@ -1,16 +1,44 @@
 package id.my.aspian.boost
 
-public interface ImmichService {
-}
+import com.google.gson.annotations.SerializedName
+import okhttp3.ResponseBody
+import retrofit2.Response
+import retrofit2.http.GET
+import retrofit2.http.Header
+import retrofit2.http.Path
+import retrofit2.http.Streaming
 
 data class ImmichAsset(
     val id: String,
-    val checksum: String,
+
+    @SerializedName("originalFileName")
+    val name: String,
+
+    val size: Int
 )
 
 data class ImmichAlbum(
-    val id: String
+    val id: String,
+
+    @SerializedName("albumName")
+    val name: String,
+
+    val assets: List<ImmichAsset>
 )
 
-class Immich {
+interface ImmichAPI {
+    @GET("server/ping")
+    suspend fun ping()
+
+    @Streaming
+    @GET("assets/{id}/thumbnail")
+    suspend fun getThumbnail(
+        @Header("x-api-key") apiKey: String,
+        @Path("id") id: String
+    ): Response<ResponseBody>
+
+    @GET("albums")
+    suspend fun getAllAlbums(
+        @Header("x-api-key") apiKey: String
+    ): List<ImmichAlbum>
 }
