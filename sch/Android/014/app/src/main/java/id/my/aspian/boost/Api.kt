@@ -12,7 +12,7 @@ import retrofit2.http.Streaming
 import java.util.concurrent.TimeUnit
 
 object ApiClient {
-    private const val BASE_URL = "http://192.168.7.2:2283/api"
+    private const val BASE_URL = "http://192.168.7.2:2283/api/"
     private val client = OkHttpClient.Builder()
         .connectTimeout(10, TimeUnit.SECONDS)
         .readTimeout(30, TimeUnit.SECONDS)
@@ -26,6 +26,9 @@ object ApiClient {
 }
 
 interface ImmichAPI {
+    @GET("server/ping")
+    suspend fun ping()
+
     @Streaming
     @GET("assets/{id}/thumbnail")
     suspend fun getThumbnail(
@@ -33,7 +36,7 @@ interface ImmichAPI {
         @Path("id") id: String
     ): Response<ResponseBody>
 
-    @GET("/albums")
+    @GET("albums")
     suspend fun getAllAlbums(
         @Header("x-api-key") apiKey: String
     )
