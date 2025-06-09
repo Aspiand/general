@@ -1,12 +1,6 @@
 package id.my.aspian.boost
 
 import com.google.gson.annotations.SerializedName
-import okhttp3.ResponseBody
-import retrofit2.Response
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.Path
-import retrofit2.http.Streaming
 
 data class ImmichStorageInfo(
     val diskSize: String,
@@ -33,7 +27,7 @@ data class ImmichAlbum(
     val assets: List<ImmichAsset>
 )
 
-data class Immich(
-    val Url: String,
-    val Port: Int,
-)
+object Immich {
+    var url: String = "http://agarta:2283/api/"
+    var apiKey: String = "AnDl2ktiHMhesx6Q30mHBa6ytVxMB7vy9GFLbaGPOw"
+}

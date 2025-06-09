@@ -8,6 +8,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -51,12 +52,14 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import coil3.compose.AsyncImage
+import coil3.network.NetworkHeaders
+import coil3.network.httpHeaders
 import coil3.request.ImageRequest
+import coil3.request.crossfade
 import id.my.aspian.boost.ui.theme.BoostTheme
 
 class MainActivity : ComponentActivity() {
@@ -65,8 +68,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        val apiKey = "O9aApOV7tDIk25K0NT0LU0ZrYRtNxjaHmR2brTwaQ"
-        val assetId = "5381a5a1-e9e3-4283-a3a6-f3b4765444c7"
+        val assetId = "e2796a84-b4df-4010-8490-e9b354f3b941"
 
         setContent {
             BoostTheme {
@@ -75,13 +77,33 @@ class MainActivity : ComponentActivity() {
                     // rememberCoroutineScope().launch {
                     //    ApiClient.service.ping()
                     // }
+
+//                    ThumbnailViewer(assetId)
+
+                    AsyncImage(
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data("http://192.168.7.2:2283/api/assets/b5443ad6-eb78-4b05-a4ea-e0ec1339beb8/thumbnail")
+                            .crossfade(true)
+                            .httpHeaders(
+                                headers = NetworkHeaders.Builder()
+                                    .set("x-api-key", Immich.apiKey)
+                                    .build()
+                            )
+                            .build(),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(Color.Blue),
+                        contentScale = ContentScale.Crop
+                    )
+
                 }
             }
         }
     }
 }
 
-@Preview(showBackground = true)
+//@Preview(showBackground = true)
 @Composable
 fun Test() {
     ServerInfoCard(
@@ -94,47 +116,72 @@ fun Test() {
 }
 
 @Composable
-fun ThumbnailViewer(
-    apiKey: String,
-    assetId: String
-) {
-    val context = LocalContext.current
-
+fun ThumbnailViewer(assetId: String) {
     val thumbnailBytes by produceState<ByteArray?>(initialValue = null, key1 = assetId) {
         value = try {
-            val response = ApiClient.service.getThumbnail(apiKey, assetId)
-            if (response.isSuccessful) {
-                response.body()?.bytes()
-            } else null
+            val response = ApiClient.service.getThumbnail(assetId)
+            if (response.isSuccessful) response.body()?.bytes() else null
         } catch (e: Exception) {
+            e.printStackTrace()
             null
         }
     }
 
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(150.dp),
-        contentAlignment = Alignment.Center
-    ) {
-        when {
-            thumbnailBytes == null -> {
-                CircularProgressIndicator()
-            }
-
-            else -> {
-                AsyncImage(
-                    model = ImageRequest.Builder(context)
-                        .data(thumbnailBytes)
-                        .build(),
-                    contentDescription = "Thumbnail",
-                    modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Crop
-                )
-            }
+    Box(modifier = Modifier.fillMaxSize()) {
+        if (thumbnailBytes != null) {
+            AsyncImage(
+                model = thumbnailBytes,
+                contentDescription = "Thumbnail",
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop
+            )
+        } else {
+            CircularProgressIndicator(modifier = Modifier.fillMaxSize())
         }
     }
 }
+
+//@Composable
+//fun ThumbnailViewer(assetId: String) {
+//    val context = LocalContext.current
+//
+//    val thumbnailBytes by produceState<ByteArray?>(initialValue = null, key1 = assetId) {
+//        value = try {
+//            val response = ApiClient.service.getThumbnail(assetId)
+//            println("Thumbnail response: ${response.code()} - ${response.message()}")
+//            if (response.isSuccessful) {
+//                response.body()?.bytes()
+//            } else null
+//        } catch (e: Exception) {
+//            e.printStackTrace()
+//            null
+//        }
+//    }
+//
+//    Box(
+//        modifier = Modifier
+//            .fillMaxWidth()
+//            .height(150.dp),
+//        contentAlignment = Alignment.Center
+//    ) {
+//        when {
+//            thumbnailBytes == null -> {
+//                CircularProgressIndicator()
+//            }
+//
+//            else -> {
+//                AsyncImage(
+//                    model = ImageRequest.Builder(context)
+//                        .data(thumbnailBytes!!.inputStream())
+//                        .build(),
+//                    contentDescription = "Thumbnail",
+//                    modifier = Modifier.fillMaxSize(),
+//                    contentScale = ContentScale.Crop
+//                )
+//            }
+//        }
+//    }
+//}
 
 @Composable
 fun AlbumGrid(apiKey: String) {
@@ -143,7 +190,7 @@ fun AlbumGrid(apiKey: String) {
 
     LaunchedEffect(true) {
         try {
-            val albums = ApiClient.service.getAllAlbums(apiKey)
+            val albums = ApiClient.service.getAllAlbums()
             if (albums.size <= 0) {
                 Log.d("ERROR", "Tidak ada assetttt")
             }
@@ -172,7 +219,7 @@ fun AssetCard(apiKey: String, asset: ImmichAsset) {
 
     val thumbnail by produceState<ByteArray?>(initialValue = null, key1 = asset.id) {
         value = try {
-            val resp = ApiClient.service.getThumbnail(apiKey, asset.id)
+            val resp = ApiClient.service.getThumbnail(asset.id)
             if (resp.isSuccessful) resp.body()?.bytes() else null
         } catch (_: Exception) {
             null
@@ -310,8 +357,11 @@ fun InfoRow(
 }
 
 @Composable
-fun Settings() {
-    var text by remember { mutableStateOf("") }
+fun Settings(
+    initialValue: Immich = Immich,
+    onSave: (Immich) -> Unit = {}
+) {
+    var url by remember { mutableStateOf(initialValue.url) }
 
     Dialog(onDismissRequest = {}) {
         Card(
@@ -330,29 +380,27 @@ fun Settings() {
                     modifier = Modifier.fillMaxWidth()
                 )
 
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(12.dp))
 
                 OutlinedTextField(
-                    value = text,
-                    onValueChange = { text = it },
+                    value = url,
+                    onValueChange = { url = it },
                     label = { Text("URL") },
                     shape = RoundedCornerShape(58.dp),
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = true
                 )
 
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(12.dp))
 
-                OutlinedTextField(
-                    value = text,
-                    onValueChange = { text = it },
-                    label = { Text("Port") },
-                    shape = RoundedCornerShape(58.dp),
+//                Spacer(modifier = Modifier.height(20.dp))
+
+                ElevatedButton(
+                    onClick = {
+//                        if (url.isNotBlank()) {}
+                    },
                     modifier = Modifier.fillMaxWidth()
-                )
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                ElevatedButton(onClick = {}, modifier = Modifier.fillMaxWidth()) {
+                ) {
                     Text("Save")
                 }
             }
