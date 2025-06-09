@@ -1,8 +1,14 @@
 package id.my.aspian.boost
 
 import okhttp3.OkHttpClient
+import okhttp3.ResponseBody
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.GET
+import retrofit2.http.Header
+import retrofit2.http.Path
+import retrofit2.http.Streaming
 import java.util.concurrent.TimeUnit
 
 object ApiClient {
@@ -17,4 +23,24 @@ object ApiClient {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
     val service: ImmichAPI = retrofit.create(ImmichAPI::class.java)
+}
+
+interface ImmichAPI {
+    @GET("server/ping")
+    suspend fun ping()
+
+    @Streaming
+    @GET("assets/{id}/thumbnail")
+    suspend fun getThumbnail(
+        @Header("x-api-key") apiKey: String,
+        @Path("id") id: String
+    ): Response<ResponseBody>
+
+    @GET("albums")
+    suspend fun getAllAlbums(
+        @Header("x-api-key") apiKey: String
+    ): List<ImmichAlbum>
+
+    @GET("server/storage")
+    suspend fun getStorageInfo(): ImmichStorageInfo
 }

@@ -8,6 +8,13 @@ import retrofit2.http.Header
 import retrofit2.http.Path
 import retrofit2.http.Streaming
 
+data class ImmichStorageInfo(
+    val diskSize: String,
+    val diskUse: String,
+    val diskAvailable: String,
+    val diskUsagePercentage: String,
+)
+
 data class ImmichAsset(
     val id: String,
 
@@ -26,19 +33,7 @@ data class ImmichAlbum(
     val assets: List<ImmichAsset>
 )
 
-interface ImmichAPI {
-    @GET("server/ping")
-    suspend fun ping()
-
-    @Streaming
-    @GET("assets/{id}/thumbnail")
-    suspend fun getThumbnail(
-        @Header("x-api-key") apiKey: String,
-        @Path("id") id: String
-    ): Response<ResponseBody>
-
-    @GET("albums")
-    suspend fun getAllAlbums(
-        @Header("x-api-key") apiKey: String
-    ): List<ImmichAlbum>
-}
+data class Immich(
+    val Url: String,
+    val Port: Int,
+)

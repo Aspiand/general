@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,6 +30,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedButton
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -42,11 +45,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
@@ -65,17 +72,25 @@ class MainActivity : ComponentActivity() {
             BoostTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     innerPadding.hashCode()
-//                    rememberCoroutineScope().launch {
-//                        ApiClient.service.ping()
-//                    }
-
-                    ThumbnailViewer(apiKey, assetId)
-
-//                    AlbumGrid(apiKey)
+                    // rememberCoroutineScope().launch {
+                    //    ApiClient.service.ping()
+                    // }
                 }
             }
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun Test() {
+    ServerInfoCard(
+        "http://localhost:2283/api",
+        pingMs = 20,
+        storagePercent = 10,
+        immichVersion = "v1.123.0"
+    )
+//    Settings()
 }
 
 @Composable
@@ -120,37 +135,6 @@ fun ThumbnailViewer(
         }
     }
 }
-
-@Composable
-fun Settings() {
-    var text by remember { mutableStateOf("") }
-
-    Dialog(onDismissRequest = {}) {
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight()
-                .padding(16.dp),
-            shape = RoundedCornerShape(16.dp)
-        ) {
-            Column(modifier = Modifier.padding(16.dp)) {
-                OutlinedTextField(
-                    value = text,
-                    onValueChange = { text = it },
-                    label = { Text("Server URL") },
-                    modifier = Modifier.fillMaxWidth()
-                )
-
-                Spacer(modifier = Modifier.height(10.dp))
-
-                ElevatedButton(onClick = {}, modifier = Modifier.fillMaxWidth()) {
-                    Text("Save")
-                }
-            }
-        }
-    }
-}
-
 
 @Composable
 fun AlbumGrid(apiKey: String) {
@@ -248,5 +232,130 @@ fun formatSize(bytes: Int): String {
         "%.2f MB".format(kb / 1024)
     } else {
         "%.0f KB".format(kb)
+    }
+}
+
+
+///////////////////////////////////
+@Composable
+fun ServerInfoCard(
+    hostname: String,
+    pingMs: Int,
+    storagePercent: Int,
+    immichVersion: String
+) {
+    Card(
+        modifier = Modifier
+            .padding(16.dp)
+            .fillMaxWidth(),
+        elevation = CardDefaults.cardElevation(4.dp),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFFEFEFEF))
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text(
+                text = hostname,
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            )
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            InfoRow(label = "Ping", value = "$pingMs ms")
+            InfoRow(label = "Version", value = immichVersion)
+            InfoRow(label = "Storage") {
+                LinearProgressIndicator(
+                    progress = { storagePercent / 100f },
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(8.dp)
+                        .padding(14.dp, 0.dp)
+                        .clip(RoundedCornerShape(4.dp)),
+                )
+                Text(
+                    text = "$storagePercent%",
+                    style = MaterialTheme.typography.bodySmall,
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun InfoRow(
+    label: String,
+    value: String? = null,
+    content: @Composable RowScope.() -> Unit = {
+        if (value != null) {
+            Text(
+                text = value,
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.align(Alignment.CenterVertically)
+            )
+        }
+    }
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 6.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = label,
+            style = MaterialTheme.typography.bodyMedium
+        )
+        content()
+    }
+}
+
+@Composable
+fun Settings() {
+    var text by remember { mutableStateOf("") }
+
+    Dialog(onDismissRequest = {}) {
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .padding(16.dp),
+            shape = RoundedCornerShape(16.dp)
+        ) {
+            Column(modifier = Modifier.padding(28.dp)) {
+                Text(
+                    text = "Server Configuration",
+                    textAlign = TextAlign.Center,
+                    fontSize = 24.sp,
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                OutlinedTextField(
+                    value = text,
+                    onValueChange = { text = it },
+                    label = { Text("URL") },
+                    shape = RoundedCornerShape(58.dp),
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                Spacer(modifier = Modifier.height(4.dp))
+
+                OutlinedTextField(
+                    value = text,
+                    onValueChange = { text = it },
+                    label = { Text("Port") },
+                    shape = RoundedCornerShape(58.dp),
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                ElevatedButton(onClick = {}, modifier = Modifier.fillMaxWidth()) {
+                    Text("Save")
+                }
+            }
+        }
     }
 }
