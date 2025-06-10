@@ -2,11 +2,15 @@ package id.my.aspian.boost
 
 import com.google.gson.annotations.SerializedName
 
-data class ImmichStorageInfo(
+data class ServerInfo(
+    val version: String
+)
+
+data class StorageInfo(
     val diskSize: String,
     val diskUse: String,
     val diskAvailable: String,
-    val diskUsagePercentage: String,
+    val diskUsagePercentage: Float,
 )
 
 data class Asset(

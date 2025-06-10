@@ -52,5 +52,8 @@ interface ImmichAPI {
     suspend fun getAssets(): AssetsResponse
 
     @GET("server/storage")
-    suspend fun getStorageInfo(): ImmichStorageInfo
+    suspend fun getStorageInfo(): StorageInfo
+
+    @GET("server/about")
+    suspend fun getServerInfo(): ServerInfo
 }

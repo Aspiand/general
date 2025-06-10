@@ -56,6 +56,8 @@ import coil3.network.httpHeaders
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import id.my.aspian.boost.ui.theme.BoostTheme
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 
 class MainActivity : ComponentActivity() {
     @SuppressLint("CoroutineCreationDuringComposition")
@@ -68,33 +70,7 @@ class MainActivity : ComponentActivity() {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     innerPadding.hashCode()
 
-                    var assets by remember { mutableStateOf<List<Asset>>(emptyList()) }
-
-                    LaunchedEffect(true) {
-                        try {
-                            val response = ApiClient.service.getAssets()
-
-                            if (response.assets.items.isEmpty()) {
-                                Log.d("INFO", "Tidak ada asset ditemukan.")
-                            }
-
-                            assets = response.assets.items
-                        } catch (e: Exception) {
-                            Log.e("ERROR", "Gagal mengambil assets", e)
-                        }
-                    }
-
-                    LazyVerticalGrid(
-                        columns = GridCells.Fixed(2),
-                        modifier = Modifier
-                            .padding(16.dp)
-                            .background(Color.Gray),
-                        content = {
-                            items(assets) { asset ->
-                                AssetCard(asset, Modifier.padding(4.dp))
-                            }
-                        }
-                    )
+                    Home()
                 }
             }
         }
@@ -112,22 +88,79 @@ fun Test() {
 //    )
 }
 
-fun formatSize(bytes: Int): String {
-    val kb = bytes / 1024f
-    return if (kb > 1024) {
-        "%.2f MB".format(kb / 1024)
-    } else {
-        "%.0f KB".format(kb)
+@Composable
+fun Home() {
+    var assets by remember { mutableStateOf<List<Asset>>(emptyList()) }
+    var hostname by remember { mutableStateOf("Loading...") }
+    var pingMs by remember { mutableStateOf(-1) }
+    var storagePercent by remember { mutableStateOf(0f) }
+    var immichVersion by remember { mutableStateOf("Unknown") }
+
+    LaunchedEffect(Unit) {
+        Log.e("CAPE", "Start")
+        try {
+            val response = ApiClient.service.getAssets()
+
+            if (response.assets.items.isEmpty()) {
+                Log.d("INFO", "Tidak ada asset ditemukan.")
+            }
+
+            assets = response.assets.items
+        } catch (e: Exception) {
+            Log.e("ERROR", "Gagal mengambil assets", e)
+        }
+
+        while (isActive) {
+            Log.e("CAPE", "While")
+            try {
+                val startTime = System.currentTimeMillis()
+                ApiClient.service.ping()
+                val endTime = System.currentTimeMillis()
+
+                val serverInfo = ApiClient.service.getServerInfo()
+                val storageInfo = ApiClient.service.getStorageInfo()
+
+                hostname = Immich.url
+                storagePercent = storageInfo.diskUsagePercentage
+                immichVersion = serverInfo.version
+                pingMs = (endTime - startTime).toInt()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+
+            delay(1000)
+        }
+
+        Log.e("CAPE", "Ujung")
+    }
+
+    Column {
+        ServerInfoCard(
+            hostname,
+            pingMs,
+            storagePercent,
+            immichVersion
+        )
+
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            modifier = Modifier
+                .padding(16.dp)
+                .background(Color.Gray),
+            content = {
+                items(assets) { asset ->
+                    AssetCard(asset, Modifier.padding(4.dp))
+                }
+            }
+        )
     }
 }
 
-
-///////////////////////////////////
 @Composable
 fun ServerInfoCard(
     hostname: String,
     pingMs: Int,
-    storagePercent: Int,
+    storagePercent: Float,
     immichVersion: String
 ) {
     Card(
@@ -135,7 +168,7 @@ fun ServerInfoCard(
             .padding(16.dp)
             .fillMaxWidth(),
         elevation = CardDefaults.cardElevation(4.dp),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFFEFEFEF))
+//        colors = CardDefaults.cardColors(containerColor = Color(0xFFEFEFEF))
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
@@ -202,9 +235,7 @@ fun AssetCard(asset: Asset, modifier: Modifier = Modifier) {
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
-        Column(
-            modifier = Modifier.fillMaxSize()
-        ) {
+        Column {
             ImageViewer(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -238,6 +269,15 @@ fun AssetCard(asset: Asset, modifier: Modifier = Modifier) {
 //                )
             }
         }
+    }
+}
+
+fun formatSize(bytes: Int): String {
+    val kb = bytes / 1024f
+    return if (kb > 1024) {
+        "%.2f MB".format(kb / 1024)
+    } else {
+        "%.0f KB".format(kb)
     }
 }
 
