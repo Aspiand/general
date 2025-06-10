@@ -70,7 +70,70 @@ class MainActivity : ComponentActivity() {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     innerPadding.hashCode()
 
-                    Home()
+                    var assets by remember { mutableStateOf<List<Asset>>(emptyList()) }
+                    var hostname by remember { mutableStateOf("Loading...") }
+                    var pingMs by remember { mutableStateOf(-1) }
+                    var storagePercent by remember { mutableStateOf(0f) }
+                    var immichVersion by remember { mutableStateOf("Unknown") }
+
+                    LaunchedEffect(Unit) {
+                        try {
+                            val response = ApiClient.service.getAssets()
+
+                            if (response.assets.items.isEmpty()) {
+                                Log.d("INFO", "Tidak ada asset ditemukan.")
+                            }
+
+                            assets = response.assets.items
+                        } catch (e: Exception) {
+                            Log.e("ERROR", "Gagal mengambil assets", e)
+                        }
+
+                        while (isActive) {
+                            try {
+                                val startTime = System.currentTimeMillis()
+                                ApiClient.service.ping()
+                                val endTime = System.currentTimeMillis()
+
+                                val serverInfo = ApiClient.service.getServerInfo()
+                                val storageInfo = ApiClient.service.getStorageInfo()
+
+                                hostname = Immich.url
+                                storagePercent = storageInfo.diskUsagePercentage
+                                immichVersion = serverInfo.version
+                                pingMs = (endTime - startTime).toInt()
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+                            }
+
+                            delay(1000)
+                        }
+                    }
+
+                    Column {
+                        ServerInfoCard(
+                            hostname,
+                            pingMs,
+                            storagePercent,
+                            immichVersion
+                        )
+
+                        Card(
+                            shape = RoundedCornerShape(12.dp),
+                            elevation = CardDefaults.cardElevation(4.dp),
+                            modifier = Modifier
+                                .padding(horizontal = 16.dp)
+                        ) {
+                            LazyVerticalGrid(
+                                columns = GridCells.Fixed(2),
+                                content = {
+                                    items(assets) { asset ->
+                                        AssetCard(asset, Modifier.padding(8.dp))
+                                    }
+                                }
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -89,74 +152,6 @@ fun Test() {
 }
 
 @Composable
-fun Home() {
-    var assets by remember { mutableStateOf<List<Asset>>(emptyList()) }
-    var hostname by remember { mutableStateOf("Loading...") }
-    var pingMs by remember { mutableStateOf(-1) }
-    var storagePercent by remember { mutableStateOf(0f) }
-    var immichVersion by remember { mutableStateOf("Unknown") }
-
-    LaunchedEffect(Unit) {
-        Log.e("CAPE", "Start")
-        try {
-            val response = ApiClient.service.getAssets()
-
-            if (response.assets.items.isEmpty()) {
-                Log.d("INFO", "Tidak ada asset ditemukan.")
-            }
-
-            assets = response.assets.items
-        } catch (e: Exception) {
-            Log.e("ERROR", "Gagal mengambil assets", e)
-        }
-
-        while (isActive) {
-            Log.e("CAPE", "While")
-            try {
-                val startTime = System.currentTimeMillis()
-                ApiClient.service.ping()
-                val endTime = System.currentTimeMillis()
-
-                val serverInfo = ApiClient.service.getServerInfo()
-                val storageInfo = ApiClient.service.getStorageInfo()
-
-                hostname = Immich.url
-                storagePercent = storageInfo.diskUsagePercentage
-                immichVersion = serverInfo.version
-                pingMs = (endTime - startTime).toInt()
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-
-            delay(1000)
-        }
-
-        Log.e("CAPE", "Ujung")
-    }
-
-    Column {
-        ServerInfoCard(
-            hostname,
-            pingMs,
-            storagePercent,
-            immichVersion
-        )
-
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
-            modifier = Modifier
-                .padding(16.dp)
-                .background(Color.Gray),
-            content = {
-                items(assets) { asset ->
-                    AssetCard(asset, Modifier.padding(4.dp))
-                }
-            }
-        )
-    }
-}
-
-@Composable
 fun ServerInfoCard(
     hostname: String,
     pingMs: Int,
@@ -165,10 +160,9 @@ fun ServerInfoCard(
 ) {
     Card(
         modifier = Modifier
-            .padding(16.dp)
+            .padding(start = 16.dp, end = 16.dp, top = 48.dp, bottom = 12.dp)
             .fillMaxWidth(),
         elevation = CardDefaults.cardElevation(4.dp),
-//        colors = CardDefaults.cardColors(containerColor = Color(0xFFEFEFEF))
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
@@ -244,12 +238,12 @@ fun AssetCard(asset: Asset, modifier: Modifier = Modifier) {
             )
 
             Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(.25f)
                     .padding(8.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
                     text = asset.name,

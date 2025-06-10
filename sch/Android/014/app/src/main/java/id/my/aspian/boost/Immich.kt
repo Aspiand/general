@@ -47,6 +47,6 @@ data class ImmichAlbum(
 )
 
 object Immich {
-    var url: String = "http://192.168.7.2:2283/api/"
+    var url: String = "https://immich.aspian.my.id/api/"
     var apiKey: String = "AnDl2ktiHMhesx6Q30mHBa6ytVxMB7vy9GFLbaGPOw"
 }
