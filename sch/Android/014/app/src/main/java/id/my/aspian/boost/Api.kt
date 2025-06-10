@@ -7,6 +7,8 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Header
+import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Streaming
 import java.util.concurrent.TimeUnit
@@ -42,12 +44,12 @@ interface ImmichAPI {
     @Streaming
     @GET("assets/{id}/thumbnail")
     suspend fun getThumbnail(
-//        @Header("x-api-key") apiKey: String,
+        @Header("x-api-key") apiKey: String,
         @Path("id") id: String
     ): Response<ResponseBody>
 
-    @GET("albums")
-    suspend fun getAllAlbums(): List<ImmichAlbum>
+    @POST("search/metadata")
+    suspend fun getAssets(): AssetsResponse
 
     @GET("server/storage")
     suspend fun getStorageInfo(): ImmichStorageInfo

@@ -8,7 +8,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
@@ -18,9 +17,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -67,47 +63,26 @@ class MainActivity : ComponentActivity() {
             BoostTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     innerPadding.hashCode()
-                    // rememberCoroutineScope().launch {
-                    //    ApiClient.service.ping()
-                    // }
 
-//                    AsyncImage(
-//                        model = ImageRequest.Builder(LocalContext.current)
-//                            .data("http://192.168.7.2:2283/api/assets/b5443ad6-eb78-4b05-a4ea-e0ec1339beb8/thumbnail")
-//                            .crossfade(true)
-//                            .httpHeaders(
-//                                headers = NetworkHeaders.Builder()
-//                                    .set("x-api-key", Immich.apiKey)
-//                                    .build()
-//                            )
-//                            .build(),
-//                        contentDescription = null,
-//                        modifier = Modifier
-//                            .fillMaxSize()
-//                            .background(Color.Blue),
-//                        contentScale = ContentScale.Crop
-//                    )
+                    var items by remember { mutableStateOf<List<Asset>>(emptyList()) }
 
-//                    ImageViewer("b5443ad6-eb78-4b05-a4ea-e0ec1339beb8")
-
-                    var items by remember { mutableStateOf<List<ImmichAsset>>(emptyList()) }
                     LaunchedEffect(true) {
                         try {
-                            val albums = ApiClient.service.getAllAlbums()
-                            if (albums.isEmpty()) {
-                                Log.d("ERROR", "Tidak ada assetttt")
+                            val response = ApiClient.service.getAssets()
+
+                            if (response.assets.items.isEmpty()) {
+                                Log.d("INFO", "Tidak ada asset ditemukan.")
                             }
-                            items = albums.firstOrNull()?.assets ?: emptyList()
+
+                            items = response.assets.items
                         } catch (e: Exception) {
-                            e.printStackTrace()
+                            Log.e("ERROR", "Gagal mengambil assets", e)
                         }
                     }
 
-                    if (items.isEmpty()) {
-                        Log.d("EHE", "ehe")
-                    }
-                    for (item in items) {
-                        Log.d("DEBUG", item.name)
+                    for (i in items) {
+                        AssetCard(i)
+                        break
                     }
                 }
             }
@@ -127,38 +102,7 @@ fun Test() {
 }
 
 @Composable
-fun AlbumGrid() {
-    val context = LocalContext.current
-    var items by remember { mutableStateOf<List<ImmichAsset>>(emptyList()) }
-
-    LaunchedEffect(true) {
-        try {
-            val albums = ApiClient.service.getAllAlbums()
-            if (albums.isEmpty()) {
-                Log.d("ERROR", "Tidak ada assetttt")
-            }
-
-            items = albums.firstOrNull()?.assets ?: emptyList()
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
-
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
-        modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(8.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
-        horizontalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
-        items(items) { asset ->
-            AssetCard(asset = asset)
-        }
-    }
-}
-
-@Composable
-fun AssetCard(asset: ImmichAsset) {
+fun AssetCard(asset: Asset) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -276,7 +220,7 @@ fun InfoRow(
 }
 
 @Composable
-fun ImageViewer(assetId: String, size: String = "thumbnail", modifier: Modifier = Modifier) {
+fun ImageViewer(modifier: Modifier = Modifier, assetId: String, size: String = "thumbnail") {
     AsyncImage(
         model = ImageRequest.Builder(LocalContext.current)
             .data("http://192.168.7.2:2283/api/assets/${assetId}/thumbnail?size=${size}")

@@ -9,13 +9,26 @@ data class ImmichStorageInfo(
     val diskUsagePercentage: String,
 )
 
-data class ImmichAsset(
+data class Asset(
     val id: String,
 
     @SerializedName("originalFileName")
     val name: String,
 
-    val size: Int
+    val size: Int,
+
+    val type: String,
+    val originalPath: String,
+)
+
+data class AssetsWrapper(
+    val total: Int,
+    val count: Int,
+    val items: List<Asset>
+)
+
+data class AssetsResponse(
+    val assets: AssetsWrapper
 )
 
 data class ImmichAlbum(
@@ -24,7 +37,7 @@ data class ImmichAlbum(
     @SerializedName("albumName")
     val name: String,
 
-    val assets: List<ImmichAsset>
+    val assets: List<Asset>
 )
 
 object Immich {
