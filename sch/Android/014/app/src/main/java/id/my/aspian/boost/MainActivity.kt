@@ -1,16 +1,12 @@
 package id.my.aspian.boost
 
 import android.annotation.SuppressLint
-import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -21,7 +17,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -29,7 +24,6 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -40,18 +34,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -78,122 +71,73 @@ class MainActivity : ComponentActivity() {
                     //    ApiClient.service.ping()
                     // }
 
-//                    ThumbnailViewer(assetId)
+//                    AsyncImage(
+//                        model = ImageRequest.Builder(LocalContext.current)
+//                            .data("http://192.168.7.2:2283/api/assets/b5443ad6-eb78-4b05-a4ea-e0ec1339beb8/thumbnail")
+//                            .crossfade(true)
+//                            .httpHeaders(
+//                                headers = NetworkHeaders.Builder()
+//                                    .set("x-api-key", Immich.apiKey)
+//                                    .build()
+//                            )
+//                            .build(),
+//                        contentDescription = null,
+//                        modifier = Modifier
+//                            .fillMaxSize()
+//                            .background(Color.Blue),
+//                        contentScale = ContentScale.Crop
+//                    )
 
-                    AsyncImage(
-                        model = ImageRequest.Builder(LocalContext.current)
-                            .data("http://192.168.7.2:2283/api/assets/b5443ad6-eb78-4b05-a4ea-e0ec1339beb8/thumbnail")
-                            .crossfade(true)
-                            .httpHeaders(
-                                headers = NetworkHeaders.Builder()
-                                    .set("x-api-key", Immich.apiKey)
-                                    .build()
-                            )
-                            .build(),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(Color.Blue),
-                        contentScale = ContentScale.Crop
-                    )
+//                    ImageViewer("b5443ad6-eb78-4b05-a4ea-e0ec1339beb8")
 
+                    var items by remember { mutableStateOf<List<ImmichAsset>>(emptyList()) }
+                    LaunchedEffect(true) {
+                        try {
+                            val albums = ApiClient.service.getAllAlbums()
+                            if (albums.isEmpty()) {
+                                Log.d("ERROR", "Tidak ada assetttt")
+                            }
+                            items = albums.firstOrNull()?.assets ?: emptyList()
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
+                    }
+
+                    if (items.isEmpty()) {
+                        Log.d("EHE", "ehe")
+                    }
+                    for (item in items) {
+                        Log.d("DEBUG", item.name)
+                    }
                 }
             }
         }
     }
 }
 
-//@Preview(showBackground = true)
+@Preview(showBackground = true)
 @Composable
 fun Test() {
-    ServerInfoCard(
-        "http://localhost:2283/api",
-        pingMs = 20,
-        storagePercent = 10,
-        immichVersion = "v1.123.0"
-    )
-//    Settings()
+//    ServerInfoCard(
+//        "http://localhost:2283/api",
+//        pingMs = 20,
+//        storagePercent = 10,
+//        immichVersion = "v1.123.0"
+//    )
 }
 
 @Composable
-fun ThumbnailViewer(assetId: String) {
-    val thumbnailBytes by produceState<ByteArray?>(initialValue = null, key1 = assetId) {
-        value = try {
-            val response = ApiClient.service.getThumbnail(assetId)
-            if (response.isSuccessful) response.body()?.bytes() else null
-        } catch (e: Exception) {
-            e.printStackTrace()
-            null
-        }
-    }
-
-    Box(modifier = Modifier.fillMaxSize()) {
-        if (thumbnailBytes != null) {
-            AsyncImage(
-                model = thumbnailBytes,
-                contentDescription = "Thumbnail",
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.Crop
-            )
-        } else {
-            CircularProgressIndicator(modifier = Modifier.fillMaxSize())
-        }
-    }
-}
-
-//@Composable
-//fun ThumbnailViewer(assetId: String) {
-//    val context = LocalContext.current
-//
-//    val thumbnailBytes by produceState<ByteArray?>(initialValue = null, key1 = assetId) {
-//        value = try {
-//            val response = ApiClient.service.getThumbnail(assetId)
-//            println("Thumbnail response: ${response.code()} - ${response.message()}")
-//            if (response.isSuccessful) {
-//                response.body()?.bytes()
-//            } else null
-//        } catch (e: Exception) {
-//            e.printStackTrace()
-//            null
-//        }
-//    }
-//
-//    Box(
-//        modifier = Modifier
-//            .fillMaxWidth()
-//            .height(150.dp),
-//        contentAlignment = Alignment.Center
-//    ) {
-//        when {
-//            thumbnailBytes == null -> {
-//                CircularProgressIndicator()
-//            }
-//
-//            else -> {
-//                AsyncImage(
-//                    model = ImageRequest.Builder(context)
-//                        .data(thumbnailBytes!!.inputStream())
-//                        .build(),
-//                    contentDescription = "Thumbnail",
-//                    modifier = Modifier.fillMaxSize(),
-//                    contentScale = ContentScale.Crop
-//                )
-//            }
-//        }
-//    }
-//}
-
-@Composable
-fun AlbumGrid(apiKey: String) {
+fun AlbumGrid() {
     val context = LocalContext.current
     var items by remember { mutableStateOf<List<ImmichAsset>>(emptyList()) }
 
     LaunchedEffect(true) {
         try {
             val albums = ApiClient.service.getAllAlbums()
-            if (albums.size <= 0) {
+            if (albums.isEmpty()) {
                 Log.d("ERROR", "Tidak ada assetttt")
             }
+
             items = albums.firstOrNull()?.assets ?: emptyList()
         } catch (e: Exception) {
             e.printStackTrace()
@@ -208,24 +152,13 @@ fun AlbumGrid(apiKey: String) {
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         items(items) { asset ->
-            AssetCard(apiKey = apiKey, asset = asset)
+            AssetCard(asset = asset)
         }
     }
 }
 
 @Composable
-fun AssetCard(apiKey: String, asset: ImmichAsset) {
-    val context = LocalContext.current
-
-    val thumbnail by produceState<ByteArray?>(initialValue = null, key1 = asset.id) {
-        value = try {
-            val resp = ApiClient.service.getThumbnail(asset.id)
-            if (resp.isSuccessful) resp.body()?.bytes() else null
-        } catch (_: Exception) {
-            null
-        }
-    }
-
+fun AssetCard(asset: ImmichAsset) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -234,27 +167,13 @@ fun AssetCard(apiKey: String, asset: ImmichAsset) {
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
         Column(modifier = Modifier.padding(8.dp)) {
-            if (thumbnail == null) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(100.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator(modifier = Modifier.size(24.dp))
-                }
-            } else {
-                Image(
-                    bitmap = BitmapFactory.decodeByteArray(thumbnail, 0, thumbnail!!.size)
-                        .asImageBitmap(),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(100.dp)
-                        .clip(RoundedCornerShape(8.dp)),
-                    contentScale = ContentScale.Crop
-                )
-            }
+            ImageViewer(
+                assetId = asset.id,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(100.dp)
+                    .clip(RoundedCornerShape(8.dp))
+            )
 
             Spacer(Modifier.height(8.dp))
 
@@ -354,6 +273,23 @@ fun InfoRow(
         )
         content()
     }
+}
+
+@Composable
+fun ImageViewer(assetId: String, size: String = "thumbnail", modifier: Modifier = Modifier) {
+    AsyncImage(
+        model = ImageRequest.Builder(LocalContext.current)
+            .data("http://192.168.7.2:2283/api/assets/${assetId}/thumbnail?size=${size}")
+            .crossfade(true)
+            .httpHeaders(
+                headers = NetworkHeaders.Builder()
+                    .set("x-api-key", Immich.apiKey)
+                    .build()
+            ).build(),
+        contentDescription = null,
+        modifier = modifier,
+        contentScale = ContentScale.Crop
+    )
 }
 
 @Composable

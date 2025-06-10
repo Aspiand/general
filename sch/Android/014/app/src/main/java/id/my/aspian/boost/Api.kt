@@ -23,8 +23,8 @@ class AuthInterceptor : Interceptor {
 
 object ApiClient {
     private val client = OkHttpClient.Builder()
-        .connectTimeout(10, TimeUnit.SECONDS)
-        .readTimeout(10, TimeUnit.SECONDS)
+        .connectTimeout(60, TimeUnit.SECONDS)
+        .readTimeout(60, TimeUnit.SECONDS)
         .addInterceptor(AuthInterceptor())
         .build()
     private val retrofit: Retrofit = Retrofit.Builder()
