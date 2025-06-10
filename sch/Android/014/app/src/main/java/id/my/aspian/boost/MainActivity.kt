@@ -6,6 +6,8 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,7 +18,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -64,7 +71,7 @@ class MainActivity : ComponentActivity() {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     innerPadding.hashCode()
 
-                    var items by remember { mutableStateOf<List<Asset>>(emptyList()) }
+                    var assets by remember { mutableStateOf<List<Asset>>(emptyList()) }
 
                     LaunchedEffect(true) {
                         try {
@@ -74,21 +81,30 @@ class MainActivity : ComponentActivity() {
                                 Log.d("INFO", "Tidak ada asset ditemukan.")
                             }
 
-                            items = response.assets.items
+                            assets = response.assets.items
                         } catch (e: Exception) {
                             Log.e("ERROR", "Gagal mengambil assets", e)
                         }
                     }
 
-                    for (i in items) {
-                        AssetCard(i)
-                        break
-                    }
+                    LazyVerticalGrid(
+                        columns = GridCells.Fixed(2),
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .background(Color.Gray),
+                        content = {
+                            items(assets) { asset ->
+                                AssetCard(asset, Modifier.padding(4.dp))
+                            }
+                        }
+                    )
                 }
             }
         }
     }
 }
+
+// TODO: Tidur?, fix size
 
 @Preview(showBackground = true)
 @Composable
@@ -99,41 +115,6 @@ fun Test() {
 //        storagePercent = 10,
 //        immichVersion = "v1.123.0"
 //    )
-}
-
-@Composable
-fun AssetCard(asset: Asset) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .aspectRatio(1f),
-        shape = RoundedCornerShape(12.dp),
-        elevation = CardDefaults.cardElevation(4.dp)
-    ) {
-        Column(modifier = Modifier.padding(8.dp)) {
-            ImageViewer(
-                assetId = asset.id,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(100.dp)
-                    .clip(RoundedCornerShape(8.dp))
-            )
-
-            Spacer(Modifier.height(8.dp))
-
-            Text(
-                text = asset.name,
-                style = MaterialTheme.typography.titleSmall,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-
-            Text(
-                text = formatSize(asset.size),
-                style = MaterialTheme.typography.bodySmall
-            )
-        }
-    }
 }
 
 fun formatSize(bytes: Int): String {
@@ -216,6 +197,52 @@ fun InfoRow(
             style = MaterialTheme.typography.bodyMedium
         )
         content()
+    }
+}
+
+@Composable
+fun AssetCard(asset: Asset, modifier: Modifier = Modifier) {
+    Card(
+        modifier = modifier.aspectRatio(1f),
+        shape = RoundedCornerShape(12.dp),
+        elevation = CardDefaults.cardElevation(4.dp)
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            ImageViewer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(.8f),
+                assetId = asset.id,
+            )
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(.25f)
+                    .padding(8.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = asset.name,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    style = MaterialTheme.typography.titleSmall,
+                    modifier = Modifier
+                        .weight(1f)
+                        .horizontalScroll(rememberScrollState()),
+                )
+
+                Spacer(modifier = Modifier.width(8.dp))
+
+                Text(
+                    text = formatSize(asset.size),
+                    style = MaterialTheme.typography.bodySmall
+                )
+            }
+        }
     }
 }
 

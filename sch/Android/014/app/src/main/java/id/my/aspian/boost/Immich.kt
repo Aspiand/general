@@ -16,9 +16,6 @@ data class Asset(
     val name: String,
 
     val size: Int,
-
-    val type: String,
-    val originalPath: String,
 )
 
 data class AssetsWrapper(
