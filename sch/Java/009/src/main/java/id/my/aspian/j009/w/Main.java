@@ -4,6 +4,8 @@
  */
 package id.my.aspian.j009.w;
 
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 
@@ -30,6 +32,19 @@ public class Main extends javax.swing.JFrame {
             refresh();
         });
 
+        table.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_DELETE) {
+                    int selectedRow = table.getSelectedRow();
+                    if (selectedRow != -1) {
+                        tableModel.removeRow(selectedRow);
+                        locations.remove(selectedRow);
+                    }
+                }
+            }
+        });
+
         addButton.addActionListener((e) -> {
             locations.add(Location.newInstance(
                     inputLocation.getText(),
@@ -38,7 +53,7 @@ public class Main extends javax.swing.JFrame {
             ));
             refresh();
         });
-        
+
         refresh();
     }
 
@@ -75,7 +90,6 @@ public class Main extends javax.swing.JFrame {
         inputLocation = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         refreshButton = new javax.swing.JButton();
-        deleteButton = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         table = new javax.swing.JTable();
 
@@ -110,8 +124,6 @@ public class Main extends javax.swing.JFrame {
 
         refreshButton.setText("Refresh");
 
-        deleteButton.setText("Delete");
-
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -131,8 +143,6 @@ public class Main extends javax.swing.JFrame {
                             .addComponent(inputLatitude)
                             .addComponent(inputLocation)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(deleteButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(refreshButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(addButton, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -156,8 +166,7 @@ public class Main extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(refreshButton)
-                    .addComponent(addButton)
-                    .addComponent(deleteButton))
+                    .addComponent(addButton))
                 .addContainerGap(17, Short.MAX_VALUE))
         );
 
@@ -221,7 +230,6 @@ public class Main extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addButton;
-    private javax.swing.JButton deleteButton;
     private javax.swing.JTextField inputLatitude;
     private javax.swing.JTextField inputLocation;
     private javax.swing.JTextField inputLongitude;
