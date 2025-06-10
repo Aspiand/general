@@ -15,7 +15,12 @@ data class Asset(
     @SerializedName("originalFileName")
     val name: String,
 
-    val size: Int,
+    val exifInfo: ExifInfo
+)
+
+data class ExifInfo(
+    val latitude: Int,
+    val longitude: Int,
 )
 
 data class AssetsWrapper(

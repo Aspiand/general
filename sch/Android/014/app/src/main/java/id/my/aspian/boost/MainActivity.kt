@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -64,8 +63,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        val assetId = "e2796a84-b4df-4010-8490-e9b354f3b941"
-
         setContent {
             BoostTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
@@ -103,8 +100,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
-// TODO: Tidur?, fix size
 
 @Preview(showBackground = true)
 @Composable
@@ -235,12 +230,12 @@ fun AssetCard(asset: Asset, modifier: Modifier = Modifier) {
                         .horizontalScroll(rememberScrollState()),
                 )
 
-                Spacer(modifier = Modifier.width(8.dp))
-
-                Text(
-                    text = formatSize(asset.size),
-                    style = MaterialTheme.typography.bodySmall
-                )
+//                Spacer(modifier = Modifier.width(8.dp))
+//
+//                Text(
+//                    text = formatSize(asset.exifInfo.size),
+//                    style = MaterialTheme.typography.bodySmall
+//                )
             }
         }
     }
@@ -250,7 +245,7 @@ fun AssetCard(asset: Asset, modifier: Modifier = Modifier) {
 fun ImageViewer(modifier: Modifier = Modifier, assetId: String, size: String = "thumbnail") {
     AsyncImage(
         model = ImageRequest.Builder(LocalContext.current)
-            .data("http://192.168.7.2:2283/api/assets/${assetId}/thumbnail?size=${size}")
+            .data("${Immich.url}assets/${assetId}/thumbnail?size=${size}")
             .crossfade(true)
             .httpHeaders(
                 headers = NetworkHeaders.Builder()
