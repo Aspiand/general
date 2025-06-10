@@ -38,6 +38,8 @@ public class Main extends javax.swing.JFrame {
             ));
             refresh();
         });
+        
+        refresh();
     }
 
     private void refresh() {
@@ -73,7 +75,6 @@ public class Main extends javax.swing.JFrame {
         inputLocation = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         refreshButton = new javax.swing.JButton();
-        editButton = new javax.swing.JButton();
         deleteButton = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         table = new javax.swing.JTable();
@@ -109,8 +110,6 @@ public class Main extends javax.swing.JFrame {
 
         refreshButton.setText("Refresh");
 
-        editButton.setText("Edit");
-
         deleteButton.setText("Delete");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -132,10 +131,8 @@ public class Main extends javax.swing.JFrame {
                             .addComponent(inputLatitude)
                             .addComponent(inputLocation)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(deleteButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(editButton, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(deleteButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(refreshButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(addButton, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -160,8 +157,7 @@ public class Main extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(refreshButton)
                     .addComponent(addButton)
-                    .addComponent(deleteButton)
-                    .addComponent(editButton))
+                    .addComponent(deleteButton))
                 .addContainerGap(17, Short.MAX_VALUE))
         );
 
@@ -171,7 +167,7 @@ public class Main extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Location", "Date/Time", "Temperature"
+                "Location", "Datetime", "Temperature"
             }
         ) {
             Class[] types = new Class [] {
@@ -226,7 +222,6 @@ public class Main extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addButton;
     private javax.swing.JButton deleteButton;
-    private javax.swing.JButton editButton;
     private javax.swing.JTextField inputLatitude;
     private javax.swing.JTextField inputLocation;
     private javax.swing.JTextField inputLongitude;
