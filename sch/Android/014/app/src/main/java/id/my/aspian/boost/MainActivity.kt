@@ -6,7 +6,6 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -41,7 +40,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
@@ -88,6 +86,19 @@ class MainActivity : ComponentActivity() {
                         } catch (e: Exception) {
                             Log.e("ERROR", "Gagal mengambil assets", e)
                         }
+
+//                        try {
+//                            val response = ApiClient.service.getAlbum("a8a5a5b2-1b40-4a32-81db-30dac270f2a8")
+//
+//                            if (response.assets.isEmpty()) {
+//                                Log.d("INFO", "Tidak ada asset ditemukan.")
+//                            }
+//
+//                            assets = response.assets
+//                        } catch (e: Exception) {
+//                            Log.e("ERROR", "Gagal mengambil assets", e)
+//                        }
+
 
                         while (isActive) {
                             try {

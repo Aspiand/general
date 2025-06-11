@@ -48,6 +48,11 @@ interface ImmichAPI {
         @Path("id") id: String
     ): Response<ResponseBody>
 
+    @GET("/albums/{id}")
+    suspend fun getAlbum(
+        @Path("id") id: String
+    ): AlbumResponse
+
     @POST("search/metadata")
     suspend fun getAssets(): AssetsResponse
 

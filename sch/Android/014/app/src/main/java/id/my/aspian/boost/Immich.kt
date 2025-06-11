@@ -37,16 +37,15 @@ data class AssetsResponse(
     val assets: AssetsWrapper
 )
 
-data class ImmichAlbum(
-    val id: String,
-
-    @SerializedName("albumName")
-    val name: String,
-
-    val assets: List<Asset>
+data class AlbumResponse(
+    @SerializedName("id") val id: String,
+    @SerializedName("albumName") val name: String,
+    @SerializedName("albumThumbnailAssetId") val thumbnailId: String? = null,
+    @SerializedName("assetCount") val assetCount: Int,
+    @SerializedName("assets") val assets: List<Asset>
 )
 
 object Immich {
-    var url: String = "https://immich.aspian.my.id/api/"
-    var apiKey: String = "AnDl2ktiHMhesx6Q30mHBa6ytVxMB7vy9GFLbaGPOw"
+    var url: String = "http://100.64.1.222:2283/api/"
+    var apiKey: String = "UIa0nF2czcf0snSbjaInYjAWiAhNPzOCF7OB0IYLrHRk"
 }
