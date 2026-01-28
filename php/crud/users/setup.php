@@ -3,20 +3,20 @@
 require __DIR__ . "/../core/init.php";
 
 // debug
-echo "GET: ";
-var_dump($_GET);
+// echo "GET: ";
+// var_dump($_GET);
 
-echo "<br>";
-echo "<br>";
+// echo "<br>";
+// echo "<br>";
 
-echo "POST: ";
-var_dump($_POST);
+// echo "POST: ";
+// var_dump($_POST);
 // end debug
 
 $users = new Users($db);
 
 if (isset($_SESSION["login"])) {
-    header("Location:../shop");
+    header("Location: ../shop");
     exit;
 }
 

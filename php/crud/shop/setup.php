@@ -6,14 +6,14 @@ if (!isset($_SESSION["login"])) {
 }
 
 // debug
-echo "GET: ";
-var_dump($_GET);
+// echo "GET: ";
+// var_dump($_GET);
 
-echo "<br>";
-echo "<br>";
+// echo "<br>";
+// echo "<br>";
 
-echo "POST: ";
-var_dump($_POST);
+// echo "POST: ";
+// var_dump($_POST);
 // end debug
 
 $edit = Utils::isset("mode", "edit") && Users::is("admin");

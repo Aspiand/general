@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login/Register Page</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/users/style.css">
 </head>
 
 <body <?=(Utils::isset("hehe", "true") ? "class='hehe'" : null)?>>
@@ -24,6 +24,6 @@
             </form>
         </div>
     </main>
-<?php var_dump($users->message) ?>
+<?php // var_dump($users->message) ?>
 </body>
 </html>
