@@ -13,37 +13,3 @@ try {
 } catch (Exception $e) {
     die($e->getMessage());
 }
-
-function add_scanned_keywords(
-    string $url,
-    string $trigger,
-    int $pages_visited,
-): array {
-    global $db;
-
-    $db->beginTransaction();
-
-    $stmt = $db->prepare("
-        INSERT INTO scans (url, trigger, pages_visited)
-        VALUES (:url, :trigger, :pages_visited)
-    ");
-
-    $binds = [
-        ":url" => $url,
-        ":trigger" => $trigger,
-        ":pages_visited" => $pages_visited,
-    ];
-
-    foreach ($binds as $k => $v) {
-        $stmt->bindValue($k, $v);
-    }
-
-    try {
-        $stmt->execute();
-    } catch (Exception $e) {
-        error_log($e);
-        return [false, "Failed to create record: $e"];
-    }
-
-    return [true, "Record Created"];
-}
