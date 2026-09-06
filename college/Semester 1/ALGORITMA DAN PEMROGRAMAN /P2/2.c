@@ -70,5 +70,14 @@ int main()
     z = 9;
     printf("Nilai dibagi 2 = %f float\n", z / 2);
 
+    printf("\n");
+
+    float jumlah_pertemuan, kehadiran;
+    printf("Masukkan jumlah pertemuan = ");
+    // scanf("%f", &jumlah_pertemuan);
+    jumlah_pertemuan = 8;
+    kehadiran = (jumlah_pertemuan / 16) * 100;
+    printf("Kehadiran anda = %3.2f%%\n", kehadiran);
+
     return 0;
 }
