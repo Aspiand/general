@@ -87,7 +87,9 @@ int main()
     int a, b;
     puts("Memastikan kedua input positif");
     printf("Masukkan dua bilangan dipisah spasi = ");
-    scanf("%i %i", &a, &b);
+    // scanf("%i %i", &a, &b);
+    a = 10;
+    b = 20;
     if (a > 0 && b > 0)
     {
         puts("Kedua input positif");
