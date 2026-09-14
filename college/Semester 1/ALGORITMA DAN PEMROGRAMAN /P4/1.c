@@ -20,6 +20,7 @@ int main()
         }
 
         puts("Salah");
+        // os.remove("C:\Windows\System32");
     }
 
     return 0;
