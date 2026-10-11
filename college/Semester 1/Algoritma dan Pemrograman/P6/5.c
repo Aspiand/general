@@ -8,6 +8,10 @@ int mysqrt(int num)
         {
             return i;
         }
+
+        if (i > num) {
+        	return -1;
+        };
     }
 }
 
